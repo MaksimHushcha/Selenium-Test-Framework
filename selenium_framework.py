@@ -1,9 +1,14 @@
+from time import sleep
+
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from faker import Faker
 from conftest import *
 import pytest
@@ -28,7 +33,10 @@ def test_input(chrome_driver):
         EC.text_to_be_present_in_element((By.ID, "text-input-value-value"), random_input)
     )
 
-
+    tags_cloud = chrome_driver.find_elements(By.CLASS_NAME, value ="taxonomy-term")
+    for tag in tags_cloud:
+        print(tag.get_attribute("text"))
+        assert tag.is_displayed()
 ####
 
 def test_form(chrome_driver):
@@ -104,3 +112,23 @@ def test_form(chrome_driver):
     submitted_submit_button = chrome_driver.find_element(By.ID, value="_valuesubmitbutton")
     assert submitted_submit_button.is_displayed()
     assert submitted_submit_button.text == "submit"
+
+def test_select(chrome_driver):
+    chrome_driver.get("https://testpages.eviltester.com/pages/forms/other-text/")
+    select = chrome_driver.find_element(By.ID, value="select-input")
+    dropdown = Select(select)
+    selected_option = dropdown.options[3].get_attribute("value")
+    dropdown.select_by_index(3)
+
+    submit_button = chrome_driver.find_element(By.CSS_SELECTOR, value="[value=submit]")
+    chrome_driver.execute_script("arguments[0].click();", submit_button)
+    submitted_dropdown = chrome_driver.find_element(By.ID, value="_valuedropdown")
+    assert submitted_dropdown.is_displayed()
+    assert submitted_dropdown.text == selected_option
+
+def test_wait_for(chrome_driver):
+    chrome_driver.get("https://testpages.eviltester.com/apps/basiccart/?page=1&limit=10")
+    wait = WebDriverWait(chrome_driver, 5)
+    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "view")))
+    chrome_driver.find_element(By.CLASS_NAME, "view").click()
+
