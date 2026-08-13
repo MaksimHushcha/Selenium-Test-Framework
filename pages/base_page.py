@@ -1,3 +1,4 @@
+from selenium.webdriver.support.color import Color
 
 class BasePage:
     base_url = "http://www.uitestingplayground.com/"
@@ -15,9 +16,19 @@ class BasePage:
         assert actual_url == expected_url, f"URL mismatch! Expected: '{expected_url}', Actual: '{actual_url}'"
         return self
 
+    def check_page_title(self, expected_title):
+        actual_title = self.driver.title
+        assert expected_title == actual_title
+        return self
+
     def locate_element(self, locator):
         return self.driver.find_element(*locator)
 
     def click_element(self, locator):
         self.driver.find_element(*locator).click()
         return self
+
+    def get_hex_color_of_element(self, locator, element):
+        rgba_value_of_element = self.driver.find_element(*locator).value_of_css_property(element)
+        hex_color_of_element = Color.from_string(rgba_value_of_element).hex
+        return hex_color_of_element
