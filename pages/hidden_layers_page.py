@@ -1,5 +1,4 @@
 from pages.locators import hidden_layers_locators as loc
-
 from pages.base_page import BasePage
 
 

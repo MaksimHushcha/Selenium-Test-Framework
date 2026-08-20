@@ -36,3 +36,7 @@ def test_green_button_cannot_be_hit_twice(hidden_layers_page):
     hidden_layers_page.click_hidden_button()
     with pytest.raises(ElementClickInterceptedException):
         hidden_layers_page.click_button_on_top_layer()
+
+def test_click_button_that_appears_after_delay(load_delay_page):
+    load_delay_page.load()
+    load_delay_page.click_button_appearing_after_delay()

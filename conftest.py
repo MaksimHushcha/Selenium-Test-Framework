@@ -4,6 +4,7 @@ from selenium import webdriver
 from pages.class_attribute_page import ClassAttributePage
 from pages.dynamic_id_page import DynamicIdBasePage
 from pages.hidden_layers_page import HiddenLatersPage
+from pages.load_delay_page import LoadDelayPage
 from pages.main_page import MainBasePage
 from tests.selenium_framework import Options
 
@@ -34,3 +35,7 @@ def class_attribute_page(driver):
 @pytest.fixture
 def hidden_layers_page(driver):
     return HiddenLatersPage(driver)
+
+@pytest.fixture
+def load_delay_page(driver):
+    return LoadDelayPage(driver)
