@@ -17,8 +17,6 @@ import pytest
 faker = Faker()
 
 
-
-
 def test_input(driver):
     driver.get("https://testpages.eviltester.com/")
     assert driver.current_url == "https://testpages.eviltester.com/"
