@@ -42,3 +42,6 @@ class BasePage:
     def get_hex_color_of_element(self, locator, css_property):
         rgba_value_of_css_property = self.locate_element(locator).value_of_css_property(css_property)
         return Color.from_string(rgba_value_of_css_property).hex
+
+    def verify_list_is_sorted(self, list_to_sort: list, reverse_order: bool) -> bool:
+        return list_to_sort == sorted(list_to_sort, reverse=reverse_order)
