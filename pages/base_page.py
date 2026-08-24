@@ -32,7 +32,7 @@ class BasePage:
     def locate_element(self, locator: tuple):
         return self.driver.find_element(*locator)
 
-    def locate_elements(self, locator: tuple):
+    def locate_multiple_elements(self, locator: tuple):
         return self.driver.find_elements(*locator)
 
     def click_element(self, locator: tuple):
