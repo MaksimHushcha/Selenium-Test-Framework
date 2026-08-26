@@ -13,6 +13,7 @@ SORTING_COMPLETED_LOCATOR = (By.CSS_SELECTOR, "[data-test=sorting_completed]")
 
 #card locators
 CARD_LOCATOR = (By.CLASS_NAME, "card")
+CARD_GRID_LOCATOR = (By.CLASS_NAME, "container")
 CARD_TITLES_LOCATOR = (By.CLASS_NAME, "card-title")
 CARD_PRICE_LOCATOR = (By.CSS_SELECTOR, "[data-test=product-price]")
 CARD_CO2_RATING = (By.XPATH, "//span[contains(@class, 'co2-letter') and contains(@class, 'active')]")
@@ -21,4 +22,7 @@ ECO_BADGE_LOCATOR = (By.CSS_SELECTOR, "[data-test=eco-badge]")
 #filter locators
 ECO_FRIENDLY_CHECKBOX_LOCATOR = (By.CSS_SELECTOR, "[data-test=eco-friendly-filter]")
 MIN_PRICE_SLIDER_LOCATOR = (By.CLASS_NAME, "ngx-slider-pointer-min")
+MAX_PRICE_SLIDER_LOCATOR = (By.CLASS_NAME, "ngx-slider-pointer-max")
+MINPRICE_VALUE_CURRENT_LOCATOR = (By.CLASS_NAME, "ngx-slider-model-value")
+MAXPRICE_VALUE_CURRENT_LOCATOR = (By.CLASS_NAME, "ngx-slider-model-high")
 PRICE_SLIDER_LOCATOR = (By.CLASS_NAME, "ngx-slider-full-bar")

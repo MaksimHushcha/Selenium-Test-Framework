@@ -3,6 +3,7 @@ from selenium.common import TimeoutException, ElementClickInterceptedException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from time import sleep
+import random
 
 
 def test_card_items_sorted_by_title_asc_with_filter(main_page):
@@ -55,6 +56,14 @@ def test_only_eco_friendly_are_displayed_when_filter_is_applied(main_page):
     assert len(containers) == len(eco_badges), \
         f"Expected every card to have ECO badge ({len(eco_badges)}, but got {len(containers)} instead"
 
-def test_price_slider(main_page):
+def test_only_prices_of_selected_items_are_displayed(main_page):
+    min_price = random.randint(0, 30)
+    max_price = random.randint(70, 170)
+
     main_page.load()
-    main_page.move_min_price_slider_to_price(55)
+    main_page.move_min_price_slider_to_price(min_price)
+    main_page.move_max_price_slider_to_price(max_price)
+    sleep(2)
+    prices = main_page.get_list_of_prices_on_cards()
+    assert len(prices) == len([price for price in prices if min_price <= price <= max_price]), \
+        f"Expected prices to be in filter range, but {prices} are not in {min_price}, {max_price} range"
