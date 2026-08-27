@@ -57,13 +57,17 @@ def test_only_eco_friendly_are_displayed_when_filter_is_applied(main_page):
         f"Expected every card to have ECO badge ({len(eco_badges)}, but got {len(containers)} instead"
 
 def test_only_prices_of_selected_items_are_displayed(main_page):
-    min_price = random.randint(0, 30)
+    min_price = random.randint(5, 50)
     max_price = random.randint(70, 170)
 
     main_page.load()
-    main_page.move_min_price_slider_to_price(min_price)
-    main_page.move_max_price_slider_to_price(max_price)
-    sleep(2)
+    main_page.set_price_filter(min_price, max_price)
     prices = main_page.get_list_of_prices_on_cards()
-    assert len(prices) == len([price for price in prices if min_price <= price <= max_price]), \
+    assert all(min_price <= price <= max_price for price in prices), \
         f"Expected prices to be in filter range, but {prices} are not in {min_price}, {max_price} range"
+
+def test_pagination(main_page):
+    main_page.load()
+    main_page.go_to_all_page_till_last()
+
+

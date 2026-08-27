@@ -1,3 +1,4 @@
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -38,6 +39,29 @@ class MainBasePage(BasePage):
         self.click_element(loc.SORT_CO2_RATING_DESC_LOCATOR)
         self._wait_for_sorting()
 
+    def go_to_next_page(self):
+        self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
+
+    #max_pages is a safeguard against endless loop. App has normally only 5 pages
+    def go_to_all_page_till_last(self, max_pages=10):
+        page_count = 0
+        while page_count < max_pages:
+            try:
+                buttons = self.driver.find_elements(*loc.PAGINATION_BUTTONS)
+                if not buttons:
+                    break
+                last_button = buttons[-1]
+                if 'disabled' in last_button.get_attribute('class').split(' '):
+                    return
+                self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
+                page_count += 1
+            except StaleElementReferenceException:
+                continue
+        raise TimeoutError("Pagination clicks exceeded the maximum allowed number of pages.")
+
+    def go_to_previous_page(self):
+        self.click_element(loc.PREV_PAGE_BUTTON_LOCATOR)
+
     def select_eco_friendly_products(self):
         self.click_element(loc.ECO_FRIENDLY_CHECKBOX_LOCATOR)
 
@@ -65,22 +89,14 @@ class MainBasePage(BasePage):
         items_with_eco_badge = self.locate_multiple_elements(loc.ECO_BADGE_LOCATOR)
         return [element for element in items_with_eco_badge if element.is_displayed()]
 
-    # DO NOT SET MIN PRICE ABOVE MAX PRICE, LOCATORS BEHAVING UNPREDICTABLY
-    def move_min_price_slider_to_price(self, target_price: int):
-        current_price = int(self.locate_element(loc.MINPRICE_VALUE_CURRENT_LOCATOR).text)
-        old_product = self.driver.find_element(
-            *loc.CARD_LOCATOR
-        )
-        self._queue_price_slider_key_presses(current_price, target_price, loc.MIN_PRICE_SLIDER_LOCATOR)
-        WebDriverWait(self.driver, 10).until(EC.staleness_of(old_product))
-
-    def move_max_price_slider_to_price(self, target_price: int):
-        current_price = int(self.locate_element(loc.MAXPRICE_VALUE_CURRENT_LOCATOR).text)
-        old_product = self.driver.find_element(
-            *loc.CARD_LOCATOR
-        )
-        self._queue_price_slider_key_presses(current_price, target_price, loc.MAX_PRICE_SLIDER_LOCATOR)
-        WebDriverWait(self.driver, 10).until(EC.staleness_of(self.driver.find_element(*loc.CARD_LOCATOR)))
+    def set_price_filter(self, target_min_price: int, target_max_price: int):
+        min_price_slider_element = self.locate_element(loc.MINPRICE_VALUE_CURRENT_LOCATOR)
+        max_price_slider_element = self.locate_element(loc.MAXPRICE_VALUE_CURRENT_LOCATOR)
+        current_min_price = int(min_price_slider_element.text)
+        current_max_price = int(max_price_slider_element.text)
+        self._queue_price_slider_key_presses(current_min_price, target_min_price, loc.MIN_PRICE_SLIDER_LOCATOR)
+        self._queue_price_slider_key_presses(current_max_price, target_max_price, loc.MAX_PRICE_SLIDER_LOCATOR)
+        self._wait_for_prices_to_be_in_range(target_min_price, target_max_price)
 
     def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple):
         if target_price == current_price:
@@ -95,3 +111,18 @@ class MainBasePage(BasePage):
         for _ in range(number_of_key_presses):
             actions.send_keys(key_to_press)
         actions.perform()
+
+    def _wait_for_prices_to_be_in_range(self, min_price: int, max_price: int, timeout=5):
+        def _prices_are_filtered(driver):
+            try:
+                price_elements = driver.find_elements(*loc.CARD_PRICE_LOCATOR)
+                if not price_elements:
+                    return False
+                else:
+                    prices = [float(element.text.replace("$", "")) for element in price_elements]
+                    if len(prices) == len([price for price in prices if min_price <= price <= max_price]):
+                        return True
+            except StaleElementReferenceException:
+                return False
+
+        WebDriverWait(self.driver, timeout).until(_prices_are_filtered)

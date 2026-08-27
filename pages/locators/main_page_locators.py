@@ -18,6 +18,7 @@ CARD_TITLES_LOCATOR = (By.CLASS_NAME, "card-title")
 CARD_PRICE_LOCATOR = (By.CSS_SELECTOR, "[data-test=product-price]")
 CARD_CO2_RATING = (By.XPATH, "//span[contains(@class, 'co2-letter') and contains(@class, 'active')]")
 ECO_BADGE_LOCATOR = (By.CSS_SELECTOR, "[data-test=eco-badge]")
+CARD_PRODUCT_LOCATOR = (By.CSS_SELECTOR, 'a.card[data-test^="product-"]')
 
 #filter locators
 ECO_FRIENDLY_CHECKBOX_LOCATOR = (By.CSS_SELECTOR, "[data-test=eco-friendly-filter]")
@@ -26,3 +27,8 @@ MAX_PRICE_SLIDER_LOCATOR = (By.CLASS_NAME, "ngx-slider-pointer-max")
 MINPRICE_VALUE_CURRENT_LOCATOR = (By.CLASS_NAME, "ngx-slider-model-value")
 MAXPRICE_VALUE_CURRENT_LOCATOR = (By.CLASS_NAME, "ngx-slider-model-high")
 PRICE_SLIDER_LOCATOR = (By.CLASS_NAME, "ngx-slider-full-bar")
+
+#navigation locators
+PREV_PAGE_BUTTON_LOCATOR = (By.CSS_SELECTOR, "[data-test=pagination-prev]")
+NEXT_PAGE_BUTTON_LOCATOR = (By.CSS_SELECTOR, "[data-test=pagination-next]")
+PAGINATION_BUTTONS = (By.CLASS_NAME, "page-item")
