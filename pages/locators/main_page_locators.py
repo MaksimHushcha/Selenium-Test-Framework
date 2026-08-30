@@ -32,3 +32,5 @@ PRICE_SLIDER_LOCATOR = (By.CLASS_NAME, "ngx-slider-full-bar")
 PREV_PAGE_BUTTON_LOCATOR = (By.CSS_SELECTOR, "[data-test=pagination-prev]")
 NEXT_PAGE_BUTTON_LOCATOR = (By.CSS_SELECTOR, "[data-test=pagination-next]")
 PAGINATION_BUTTONS = (By.CLASS_NAME, "page-item")
+ACTIVE_PAGE_LOCATOR = (By.XPATH, "//li[contains(@class, 'page-item') and contains(@class, 'active')]")
+

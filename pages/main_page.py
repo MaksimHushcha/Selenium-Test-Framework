@@ -1,4 +1,7 @@
-from selenium.common import StaleElementReferenceException
+from time import sleep
+from typing import Any
+
+from selenium.common import StaleElementReferenceException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -40,22 +43,45 @@ class MainBasePage(BasePage):
         self._wait_for_sorting()
 
     def go_to_next_page(self):
+        old_card = self.driver.find_element(*loc.CARD_LOCATOR)
+        buttons = self.driver.find_elements(*loc.PAGINATION_BUTTONS)
+        if not buttons:
+            return
+        last_button = buttons[-1]
+        if 'disabled' in last_button.get_attribute('class').split(' '):
+            return
         self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
+        wait = WebDriverWait(self.driver, 10)
+        wait.until(EC.staleness_of(old_card))
+        wait.until(EC.presence_of_element_located(loc.CARD_LOCATOR))
 
-    #max_pages is a safeguard against endless loop. App has normally only 5 pages
-    def go_to_all_page_till_last(self, max_pages=10):
+    # max_pages is a safeguard against endless loop. App has normally only 5 pages
+    def go_to_all_page_till_last(self, max_pages=10, function=None):
         page_count = 0
         while page_count < max_pages:
             try:
+                self.wait.until(
+                    EC.presence_of_all_elements_located(loc.PAGINATION_BUTTONS)
+                )
                 buttons = self.driver.find_elements(*loc.PAGINATION_BUTTONS)
                 if not buttons:
                     break
                 last_button = buttons[-1]
+                old_card = self.driver.find_element(*loc.CARD_LOCATOR)
+
+                if function is not None:
+                    function()
+
                 if 'disabled' in last_button.get_attribute('class').split(' '):
                     return
                 self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
                 page_count += 1
-            except StaleElementReferenceException:
+
+                wait = WebDriverWait(self.driver, 10)
+                wait.until(EC.staleness_of(old_card))
+                wait.until(EC.presence_of_element_located(loc.CARD_LOCATOR))
+
+            except (StaleElementReferenceException, TimeoutException):
                 continue
         raise TimeoutError("Pagination clicks exceeded the maximum allowed number of pages.")
 
@@ -69,23 +95,38 @@ class MainBasePage(BasePage):
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(loc.SORTING_COMPLETED_LOCATOR))
 
-    def get_cards_on_the_page(self):
+    def get_current_page_number(self) -> int:
+        current_page = self.driver.find_element(*loc.ACTIVE_PAGE_LOCATOR).text
+        return current_page
+
+    def get_cards_on_the_page(self) -> list:
         located_elements = self.locate_multiple_elements(loc.CARD_LOCATOR)
         return [element for element in located_elements if element.is_displayed()]
 
-    def get_list_of_card_titles(self):
-        located_elements = self.locate_multiple_elements(loc.CARD_TITLES_LOCATOR)
-        return [element.text for element in located_elements]
+    def get_list_of_card_titles(self)-> list[Any] | None:
+        for attempt in range (50):
+            try:
+                located_elements = self.locate_multiple_elements(loc.CARD_TITLES_LOCATOR)
+                if not located_elements:
+                    continue
 
-    def get_list_of_prices_on_cards(self):
+                if not located_elements[0].get_attribute("textContent").strip():
+                    continue
+                return [element.get_attribute("textContent").strip() for element in located_elements]
+            except (StaleElementReferenceException, TimeoutException):
+                if attempt == 49:
+                    raise
+        return None
+
+    def get_list_of_prices_on_cards(self)-> list:
         located_elements = self.locate_multiple_elements(loc.CARD_PRICE_LOCATOR)
         return [float(element.text.replace("$", "")) for element in located_elements]
 
-    def get_list_of_co2_values_on_cards(self):
+    def get_list_of_co2_values_on_cards(self)-> list:
         located_elements = self.locate_multiple_elements(loc.CARD_CO2_RATING)
         return [element.text for element in located_elements]
 
-    def get_cards_with_eco_badge(self):
+    def get_cards_with_eco_badge(self)-> list:
         items_with_eco_badge = self.locate_multiple_elements(loc.ECO_BADGE_LOCATOR)
         return [element for element in items_with_eco_badge if element.is_displayed()]
 
@@ -126,3 +167,5 @@ class MainBasePage(BasePage):
                 return False
 
         WebDriverWait(self.driver, timeout).until(_prices_are_filtered)
+
+
