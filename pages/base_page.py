@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 from selenium.common import TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.color import Color
@@ -13,18 +15,13 @@ class BasePage:
         self.wait = WebDriverWait(self.driver, 10)
 
     def load(self):
-        timeout = 10
+        target_url = urljoin(self.base_url, self.page_endpoint) if self.page_endpoint else self.base_url
         try:
-            if self.page_endpoint is None:
-                self.driver.get(f"{self.base_url}")
-                return self
-            else:
-                self.driver.get(f"{self.base_url}{self.page_endpoint}")
-                return self
+            self.driver.get(target_url)
+            self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
         except TimeoutException:
-            print(f"Didn't load the page in {timeout} seconds")
-
-
+            print("Page failed to load within the timeout period.")
+        return self
 
     def check_current_url_is(self, expected_url):
         actual_url = self.driver.current_url
@@ -36,33 +33,41 @@ class BasePage:
         assert expected_title == actual_title, f"Expected page title to be '{expected_title}', Actual: '{actual_title}'"
         return self
 
-    def locate_element(self, locator: tuple):
-        return self.driver.find_element(*locator)
+    def locate_element(self, locator: tuple[str,str]) -> WebElement:
+        return self.wait.until(EC.visibility_of_element_located(locator))
 
-    def locate_multiple_elements(self, locator: tuple):
-        return self.driver.find_elements(*locator)
+    def locate_multiple_elements(self, locator: tuple[str,str]) -> list[WebElement]:
+        return self.wait.until(EC.presence_of_all_elements_located(locator))
 
-    def click_element(self, locator: tuple):
-        self.locate_element(locator).click()
+    def click_element(self, locator: tuple[str,str]):
+        self.wait.until(EC.element_to_be_clickable(locator)).click()
         return self
 
-    def get_hex_color_of_element(self, css_property, locator=None, element=None):
+    def fill_field(self, locator: tuple[str,str], text: str):
+        self.locate_element(locator).send_keys(text)
+        return self
+
+    def get_hex_color_of_element(self, css_property: str, locator: tuple[str,str] = None,
+                                 element: WebElement = None) -> str | None:
         if locator is not None:
-            rgba_value_of_css_property = self.locate_element(locator).value_of_css_property(css_property)
-            return Color.from_string(rgba_value_of_css_property).hex
+            target_element = self.locate_element(locator)
+            rgba_value = target_element.value_of_css_property(css_property)
+            return Color.from_string(rgba_value).hex
+
         if element is not None:
-            rgba_value_of_css_property = element.value_of_css_property(css_property)
-            return Color.from_string(rgba_value_of_css_property).hex
+            rgba_value = element.value_of_css_property(css_property)
+            return Color.from_string(rgba_value).hex
+
         return None
 
     def verify_list_is_sorted(self, list_to_sort: list, reverse_order: bool) -> bool:
         return list_to_sort == sorted(list_to_sort, reverse=reverse_order)
 
-    def wait_for_element_presence(self, locator: tuple):
+    def wait_for_element_presence(self, locator: tuple[str,str]):
         self.wait.until(EC.presence_of_element_located(locator))
         return self
 
-    def wait_for_text_presence(self, locator: tuple):
+    def wait_for_text_presence(self, locator: tuple[str,str]):
         self.wait_for_element_presence(locator)
         self.wait.until_not(EC.text_to_be_present_in_element(locator, ""))
         return self

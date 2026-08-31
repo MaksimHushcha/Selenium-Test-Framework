@@ -1,23 +1,43 @@
 import pytest
-from selenium.common import TimeoutException, ElementClickInterceptedException
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 from time import sleep
 import random
 
-from pages import main_page
-
-def test_pagination_displays_different_items(main_page):
+@pytest.mark.parametrize('search_item', ["hammer", "pliers", "chisels", "Drill", "Screwdriver"])
+def test_search_returns_relevant_items(main_page, search_item):
     main_page.load()
-    titles = main_page.get_list_of_card_titles()
-    print(titles)
+    main_page.search_an_item(search_item)
+    search_result_cards = main_page.get_list_of_card_titles()
+    search_result_count = main_page.get_search_result_count()
+    search_result_term = main_page.get_search_term_value()
+    assert search_result_term == search_item
+    assert search_result_count >= len(search_result_cards), \
+        f"Expected search result count to be {search_result_count} above {len(search_result_cards)}"
+    for card in search_result_cards:
+        assert search_item.lower() in card.lower(), \
+            f"Expected all search items to carry {search_item}, but got {search_result_cards} instead"
+
+def test_invalid_search_returns_no_products_message(main_page):
+    expected_message = "There are no products found."
+    main_page.load()
+    main_page.search_an_item("HarcodedSearchDataToRemove")
+    receive_message = main_page.get_no_products_found_message()
+    assert receive_message == expected_message, \
+        f"Expected no products found message to be {expected_message}, but got {receive_message}"
+
+def test_reset_search_reverts_search(main_page):
+    main_page.load()
+    initial_wares = main_page.get_list_of_card_titles()
+    main_page.search_an_item("Pliers")
+    main_page.reset_search()
+    wares_after_reset = main_page.get_list_of_card_titles()
+    assert initial_wares == wares_after_reset, \
+        f"Expected search to revert, but got {wares_after_reset} instead of {initial_wares}"
 
 
 def test_card_items_sorted_by_title_asc_with_filter(main_page):
     main_page.load()
     main_page.sort_items_by_name_asc()
     titles = main_page.get_list_of_card_titles()
-    print(titles)
     assert main_page.verify_list_is_sorted(list_to_sort=titles, reverse_order=False), \
         f"Expected titles to be sorted in ascending order, but got {titles} instead"
 

@@ -3,8 +3,6 @@ from typing import Any
 
 from selenium.common import StaleElementReferenceException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
-from selenium.webdriver.remote.webelement import WebElement
-
 from pages.base_page import BasePage
 from pages.locators import main_page_locators as loc
 from selenium.webdriver.support.wait import WebDriverWait
@@ -12,58 +10,68 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class MainBasePage(BasePage):
 
-    def sort_items_by_name_desc(self):
+    def _sort_by(self, sorting_option_locator: tuple[str,str]):
         self.click_element(loc.SORT_DROPDOWN_LOCATOR)
-        self.click_element(loc.SORT_NAME_DESC_LOCATOR)
+        self.click_element(sorting_option_locator)
         self._wait_for_sorting()
+
+    def sort_items_by_name_desc(self):
+        self._sort_by(loc.SORT_NAME_DESC_LOCATOR)
 
     def sort_items_by_name_asc(self):
-        self.click_element(loc.SORT_DROPDOWN_LOCATOR)
-        self.click_element(loc.SORT_NAME_ASC_LOCATOR)
-        self._wait_for_sorting()
+        self._sort_by(loc.SORT_NAME_ASC_LOCATOR)
 
     def sort_items_by_price_asc(self):
-        self.click_element(loc.SORT_DROPDOWN_LOCATOR)
-        self.click_element(loc.SORT_PRICE_ASC_LOCATOR)
-        self._wait_for_sorting()
+        self._sort_by(loc.SORT_PRICE_ASC_LOCATOR)
 
     def sort_items_by_price_desc(self):
-        self.click_element(loc.SORT_DROPDOWN_LOCATOR)
-        self.click_element(loc.SORT_PRICE_DESC_LOCATOR)
-        self._wait_for_sorting()
+        self._sort_by(loc.SORT_PRICE_DESC_LOCATOR)
 
     def sort_items_by_co2_asc(self):
-        self.click_element(loc.SORT_DROPDOWN_LOCATOR)
-        self.click_element(loc.SORT_CO2_RATING_ASC_LOCATOR)
-        self._wait_for_sorting()
+        self._sort_by(loc.SORT_CO2_RATING_ASC_LOCATOR)
 
     def sort_items_by_co2_desc(self):
-        self.click_element(loc.SORT_DROPDOWN_LOCATOR)
-        self.click_element(loc.SORT_CO2_RATING_DESC_LOCATOR)
-        self._wait_for_sorting()
+        self._sort_by(loc.SORT_CO2_RATING_DESC_LOCATOR)
 
-    def go_to_next_page(self):
+    def _wait_for_sorting(self):
+        self.wait.until(EC.presence_of_element_located(loc.SORTING_COMPLETED_LOCATOR))
+
+    def _pagination_helper(self, last_button=False, first_button=False):
         old_card = self.driver.find_element(*loc.CARD_LOCATOR)
         buttons = self.driver.find_elements(*loc.PAGINATION_BUTTONS)
         if not buttons:
             return
-        last_button = buttons[-1]
-        if 'disabled' in last_button.get_attribute('class').split(' '):
-            return
-        self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
-        wait = WebDriverWait(self.driver, 10)
-        wait.until(EC.staleness_of(old_card))
-        wait.until(EC.presence_of_element_located(loc.CARD_LOCATOR))
+        if last_button:
+            button_to_click = buttons[-1]
+            if 'disabled' in button_to_click.get_attribute('class').split(' '):
+                return
+            self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
+
+        elif first_button:
+            button_to_click = buttons[0]
+            if 'disabled' in button_to_click.get_attribute('class').split(' '):
+                return
+            self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
+
+        self.wait.until(EC.staleness_of(old_card))
+        self.wait.until(EC.presence_of_element_located(loc.CARD_LOCATOR))
+
+    def go_to_next_page(self):
+        self._pagination_helper(last_button=True, first_button=False)
+
+    def go_to_previous_page(self):
+        self._pagination_helper(last_button=False, first_button=True)
+
+    def get_current_page_number(self) -> int:
+        current_page = self.driver.find_element(*loc.ACTIVE_PAGE_LOCATOR).text
+        return int(current_page)
 
     # max_pages is a safeguard against endless loop. App has normally only 5 pages
     def go_to_all_page_till_last(self, max_pages=10, function=None):
         page_count = 0
         while page_count < max_pages:
             try:
-                self.wait.until(
-                    EC.presence_of_all_elements_located(loc.PAGINATION_BUTTONS)
-                )
-                buttons = self.driver.find_elements(*loc.PAGINATION_BUTTONS)
+                buttons = self.locate_multiple_elements(loc.PAGINATION_BUTTONS)
                 if not buttons:
                     break
                 last_button = buttons[-1]
@@ -77,27 +85,15 @@ class MainBasePage(BasePage):
                 self.click_element(loc.NEXT_PAGE_BUTTON_LOCATOR)
                 page_count += 1
 
-                wait = WebDriverWait(self.driver, 10)
-                wait.until(EC.staleness_of(old_card))
-                wait.until(EC.presence_of_element_located(loc.CARD_LOCATOR))
+                self.wait.until(EC.staleness_of(old_card))
+                self.wait.until(EC.presence_of_element_located(loc.CARD_LOCATOR))
 
             except (StaleElementReferenceException, TimeoutException):
                 continue
         raise TimeoutError("Pagination clicks exceeded the maximum allowed number of pages.")
 
-    def go_to_previous_page(self):
-        self.click_element(loc.PREV_PAGE_BUTTON_LOCATOR)
-
     def select_eco_friendly_products(self):
         self.click_element(loc.ECO_FRIENDLY_CHECKBOX_LOCATOR)
-
-    def _wait_for_sorting(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(loc.SORTING_COMPLETED_LOCATOR))
-
-    def get_current_page_number(self) -> int:
-        current_page = self.driver.find_element(*loc.ACTIVE_PAGE_LOCATOR).text
-        return current_page
 
     def get_cards_on_the_page(self) -> list:
         located_elements = self.locate_multiple_elements(loc.CARD_LOCATOR)
@@ -139,7 +135,27 @@ class MainBasePage(BasePage):
         self._queue_price_slider_key_presses(current_max_price, target_max_price, loc.MAX_PRICE_SLIDER_LOCATOR)
         self._wait_for_prices_to_be_in_range(target_min_price, target_max_price)
 
-    def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple):
+    def search_an_item(self, search_query):
+        self.fill_field(locator=loc.SEARCH_INPUT_FIELD_LOCATOR, text=search_query)
+        self.click_element(loc.SEARCH_SUBMIT_BUTTON_LOCATOR)
+        self.wait.until(EC.presence_of_element_located(loc.SEARCH_COMPLETED_LOCATOR))
+
+    def get_search_result_count(self) -> int:
+        search_result_count = self.locate_element(loc.SEARCH_RESULT_COUNT_LOCATOR)
+        return int(search_result_count.text[0])
+
+    def get_search_term_value(self) -> str:
+        searched_for_value = self.locate_element(loc.SEARCH_TERM_LOCATOR)
+        return searched_for_value.text
+
+    def reset_search(self):
+        self.click_element(loc.SEARCH_RESET_BUTTON_LOCATOR)
+        self.wait.until_not(EC.presence_of_element_located(loc.SEARCH_SUBMITTED_LOCATOR))
+
+    def get_no_products_found_message(self) -> str:
+        return self.locate_element(loc.NO_RESULT_MESSAGE_LOCATOR).text
+
+    def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple[str,str]):
         if target_price == current_price:
             return
         key_to_press = (Keys.ARROW_RIGHT if target_price > current_price else Keys.ARROW_LEFT)
