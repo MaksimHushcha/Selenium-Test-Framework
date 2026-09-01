@@ -8,14 +8,14 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class BasePage:
     base_url = "https://practicesoftwaretesting.com/"
-    page_endpoint = None
+    path = None
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 10)
 
-    def load(self):
-        target_url = urljoin(self.base_url, self.page_endpoint) if self.page_endpoint else self.base_url
+    def load(self, *args):
+        target_url = f"{self.base_url.rstrip('/')}/{self.path}/"
         try:
             self.driver.get(target_url)
             self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")

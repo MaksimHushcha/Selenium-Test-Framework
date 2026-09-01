@@ -1,7 +1,13 @@
+from itertools import product
+
 import pytest
 from selenium import webdriver
 from pages.main_page import MainBasePage
+from pages.product_page import ProductPage
+
 from selenium.webdriver.chrome.options import Options
+
+
 
 
 @pytest.fixture
@@ -19,3 +25,8 @@ def driver():
 @pytest.fixture
 def main_page(driver):
     return MainBasePage(driver)
+
+@pytest.fixture
+def product_page(driver):
+    return ProductPage(driver)
+
