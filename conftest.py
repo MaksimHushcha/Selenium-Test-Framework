@@ -2,6 +2,8 @@ from itertools import product
 
 import pytest
 from selenium import webdriver
+
+from components import Components
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 
@@ -30,3 +32,6 @@ def main_page(driver):
 def product_page(driver):
     return ProductPage(driver)
 
+@pytest.fixture
+def components(driver):
+    return Components(driver)

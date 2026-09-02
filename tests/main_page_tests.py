@@ -109,8 +109,3 @@ def test_only_prices_of_selected_items_are_displayed(main_page):
     prices = main_page.get_list_of_prices_on_cards()
     assert all(min_price <= price <= max_price for price in prices), \
         f"Expected prices to be in filter range, but {prices} are not in {min_price}, {max_price} range"
-
-
-def test(product_page):
-    product_page.load("123")
-    print(product_page.get_item_title())

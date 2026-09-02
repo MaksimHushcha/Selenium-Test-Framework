@@ -6,6 +6,11 @@ from selenium.webdriver.support.color import Color
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
+def verify_list_is_sorted(list_to_sort: list, reverse_order: bool) -> bool:
+    return list_to_sort == sorted(list_to_sort, reverse=reverse_order)
+
+
 class BasePage:
     base_url = "https://practicesoftwaretesting.com/"
     path = None
@@ -28,10 +33,9 @@ class BasePage:
         assert actual_url == expected_url, f"URL mismatch! Expected: '{expected_url}', Actual: '{actual_url}'"
         return self
 
-    def check_page_title(self, expected_title):
-        actual_title = self.driver.title
-        assert expected_title == actual_title, f"Expected page title to be '{expected_title}', Actual: '{actual_title}'"
-        return self
+    def get_page_title(self):
+        page_title = self.driver.title
+        return page_title
 
     def locate_element(self, locator: tuple[str,str]) -> WebElement:
         return self.wait.until(EC.visibility_of_element_located(locator))
@@ -59,9 +63,6 @@ class BasePage:
             return Color.from_string(rgba_value).hex
 
         return None
-
-    def verify_list_is_sorted(self, list_to_sort: list, reverse_order: bool) -> bool:
-        return list_to_sort == sorted(list_to_sort, reverse=reverse_order)
 
     def wait_for_element_presence(self, locator: tuple[str,str]):
         self.wait.until(EC.presence_of_element_located(locator))
