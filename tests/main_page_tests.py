@@ -109,3 +109,7 @@ def test_only_prices_of_selected_items_are_displayed(main_page):
     prices = main_page.get_list_of_prices_on_cards()
     assert all(min_price <= price <= max_price for price in prices), \
         f"Expected prices to be in filter range, but {prices} are not in {min_price}, {max_price} range"
+
+def test_open_a_random_product_page(main_page):
+    main_page.load()
+    main_page.open_a_random_product_page_with_available_product()

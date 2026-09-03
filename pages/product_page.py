@@ -8,10 +8,10 @@ from pages.locators import product_page_locators as loc, product_page_locators
 
 
 class ProductPage(BasePage):
-    path = "product"
+    endpoint = "product"
 
     def load(self, product_id):
-        target_url = f"{self.base_url}/{self.path}/{product_id}"
+        target_url = f"{self.base_url}/{self.endpoint}/{product_id}"
         try:
             self.driver.get(target_url)
             self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")

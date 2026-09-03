@@ -1,8 +1,6 @@
-from itertools import product
-
 import pytest
 from selenium import webdriver
-
+from api_helpers.api_utils import get_a_random_valid_product_id
 from components import Components
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
@@ -35,3 +33,8 @@ def product_page(driver):
 @pytest.fixture
 def components(driver):
     return Components(driver)
+
+@pytest.fixture
+def get_available_product_id(driver):
+    product_id = get_a_random_valid_product_id()
+    return product_id

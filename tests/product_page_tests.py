@@ -2,9 +2,8 @@ import pytest
 
 # ids are generated randomly and update at a certain interval - to investigate the strategy here
 
-def test_page_title_starts_with_product_name(product_page):
-    product_id = "01M1HYRGJF6BKJM8C8A33E212B"
-    product_page.load(product_id)
+def test_page_title_starts_with_product_name(product_page, get_available_product_id):
+    product_page.load(get_available_product_id)
     product_title = product_page.get_item_title()
     page_title = product_page.get_page_title()
     assert page_title.startswith(product_title), f"Expected page title to start with {product_title}, but got {page_title}"

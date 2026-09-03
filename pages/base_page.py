@@ -1,3 +1,4 @@
+import os
 from urllib.parse import urljoin
 
 from selenium.common import TimeoutException
@@ -5,24 +6,26 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.color import Color
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def verify_list_is_sorted(list_to_sort: list, reverse_order: bool) -> bool:
     return list_to_sort == sorted(list_to_sort, reverse=reverse_order)
 
 
 class BasePage:
-    base_url = "https://practicesoftwaretesting.com/"
-    path = None
+    endpoint = ""
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 10)
+        self.base_url = os.getenv("BASE_URL")
 
     def load(self, *args):
-        target_url = f"{self.base_url.rstrip('/')}/{self.path}/"
+        full_url = f"{self.base_url}{self.endpoint}"
         try:
-            self.driver.get(target_url)
+            self.driver.get(full_url)
             self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
         except TimeoutException:
             print("Page failed to load within the timeout period.")

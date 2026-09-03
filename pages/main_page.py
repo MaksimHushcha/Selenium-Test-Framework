@@ -1,8 +1,11 @@
+import random
 from time import sleep
 from typing import Any
 
 from selenium.common import StaleElementReferenceException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
+
+import base_page
 from pages.base_page import BasePage
 from pages.locators import main_page_locators as loc
 from selenium.webdriver.support.wait import WebDriverWait
@@ -155,6 +158,11 @@ class MainBasePage(BasePage):
     def get_no_products_found_message(self) -> str:
         return self.locate_element(loc.NO_RESULT_MESSAGE_LOCATOR).text
 
+    def open_a_random_product_page_with_available_product(self):
+        available_products = self.locate_multiple_elements(loc.AVAILABLE_PRODUCT_LINK_LOCATOR)
+        random_choice = random.choice(available_products)
+        self.click_element(random_choice)
+
     def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple[str,str]):
         if target_price == current_price:
             return
@@ -183,5 +191,6 @@ class MainBasePage(BasePage):
                 return False
 
         WebDriverWait(self.driver, timeout).until(_prices_are_filtered)
+
 
 
