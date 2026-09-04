@@ -19,8 +19,25 @@ class ProductPage(BasePage):
             print("Page failed to load within the timeout period.")
         return self
 
-    def get_item_title(self):
-        return self.locate_element(loc.PRODUCT_NAME_LOCATOR).text
+    # Actions with products
 
     def add_to_favourites(self):
-        self.click_element(loc.ADD_TO_FAVOURITS_BUTTON_LOCATOR)
+        self.click_element(loc.ADD_TO_FAVOURITES_BUTTON_LOCATOR)
+
+    def add_to_cart(self):
+        self.click_element(loc.ADD_TO_CARD_BUTTON_LOCATOR)
+
+    def increase_quantity(self):
+        self.click_element(loc.INCREASE_QUANTITY_LOCATOR)
+
+    def decrease_quantity(self):
+        self.click_element(loc.DECREASE_QUANTITY_LOCATOR)
+
+    def add_to_comparison(self):
+        self.click_element(loc.ADD_TO_COMPARISON_LOCATOR)
+
+    # Getting info
+
+    def get_item_specs(self) -> list:
+        specs = self.locate_multiple_elements(loc.SPECS_LOCATOR)
+        return [spec.text for spec in specs]
