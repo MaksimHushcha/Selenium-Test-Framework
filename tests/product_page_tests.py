@@ -16,6 +16,11 @@ def test_user_is_unable_to_add_to_favourites_unauthorized(product_page, componen
     assert toast_text == expected_toast_text, \
         f"Toast text: {toast_text}, Expected: {expected_toast_text}"
 
+# TODO - implement asserts
+def test_add_to_favourites(product_page, components, get_available_product_id, authenticated_user):
+    product_page.load(get_available_product_id)
+    product_page.add_to_favourites()
+
 def test_adding_multiple_items_to_card(product_page, components, get_available_product_id, checkout):
     product_page.load(get_available_product_id)
     random_amount_to_add = random.randint(2, 6)
@@ -30,9 +35,15 @@ def test_adding_multiple_items_to_card(product_page, components, get_available_p
     components.open_cart()
     assert checkout.get_quantity_of_an_item_in_cart() == random_amount_to_add + 1
 
-
-# TODO - idea to implement full spec verification
-def test_items_have_a_spec(product_page, get_available_product_id):
+def test_items_has_a_full_spec(product_page, get_available_product_id):
     product_page.load(get_available_product_id)
     specs = product_page.get_item_specs()
+    tags = product_page.get_item_tags()
+    description = product_page.get_item_description()
+    co2_rating, co2_rating_color = product_page.get_co_2_rating()
+
     assert None not in specs, f"Expected specs to be not empty, but got {specs}"
+    assert description is not None, f"Expected description to be not empty, but got {description}"
+    assert any(char in co2_rating for char in {"A", "B", "C", "D", "E" })
+    assert co2_rating_color == "#f97316", f"Expected color to be #f97316, but: {co2_rating_color}"
+    assert None not in tags, f"Expected tags to be not empty, but got {tags}"

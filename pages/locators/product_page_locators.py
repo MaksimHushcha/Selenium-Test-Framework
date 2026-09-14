@@ -7,6 +7,7 @@ PRODUCT_PRICE_LOCATOR = (By.CSS_SELECTOR, "[data-test=unit-price]")
 SORT_CO2_RATING_BADGE_LOCATOR = (By.CSS_SELECTOR, "[data-test=co2-rating-badge]")
 PRODUCT_PICTURE = (By.CLASS_NAME, "figure-img")
 SPECS_LOCATOR = (By.CSS_SELECTOR, "[data-test=spec-value-text]")
+TAGS_LOCATOR = (By.CLASS_NAME, "rounded-pill")
 
 # navigation locators
 ADD_TO_FAVOURITES_BUTTON_LOCATOR = (By.CSS_SELECTOR, "[data-test=add-to-favorites]")

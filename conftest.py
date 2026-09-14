@@ -1,15 +1,16 @@
+import os
+
 import pytest
 from selenium import webdriver
-from api_helpers.api_utils import get_a_random_valid_product_id
+from api_helpers.api_utils import get_a_random_valid_product_id, AuthManager
 from checkout import Checkout
 from components import Components
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
-
 from selenium.webdriver.chrome.options import Options
+import dotenv
 
-
-
+dotenv.load_dotenv()
 
 @pytest.fixture
 def driver():
@@ -43,3 +44,9 @@ def checkout(driver):
 def get_available_product_id(driver):
     product_id = get_a_random_valid_product_id()
     return product_id
+
+@pytest.fixture
+def authenticated_user(driver):
+    token = AuthManager.get_access_token()
+    driver.get(f"{os.getenv('BASE_URL')}/contact")
+    driver.execute_script(f"window.localStorage.setItem('auth-token', '{token}')")
