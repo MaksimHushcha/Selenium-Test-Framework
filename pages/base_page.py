@@ -32,8 +32,11 @@ class BasePage:
             print("Page failed to load within the timeout period.")
         return self
 
+    def get_current_url(self) -> str:
+        return self.driver.current_url
+
     def check_current_url_is(self, expected_url):
-        actual_url = self.driver.current_url
+        actual_url = self.get_current_url()
         assert actual_url == expected_url, f"URL mismatch! Expected: '{expected_url}', Actual: '{actual_url}'"
         return self
 

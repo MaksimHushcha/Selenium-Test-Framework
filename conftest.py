@@ -5,9 +5,11 @@ from selenium import webdriver
 from api_helpers.api_utils import get_a_random_valid_product_id, AuthManager
 from checkout import Checkout
 from components import Components
+
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 from selenium.webdriver.chrome.options import Options
+from api_helpers import api_utils as api
 import dotenv
 
 dotenv.load_dotenv()
@@ -50,3 +52,12 @@ def authenticated_user(driver):
     token = AuthManager.get_access_token()
     driver.get(f"{os.getenv('BASE_URL')}/contact")
     driver.execute_script(f"window.localStorage.setItem('auth-token', '{token}')")
+
+@pytest.fixture
+def queue_clear_favorites(request, driver):
+    api.clear_favorites()
+
+    def _register_removal_from_favorites():
+        request.addfinalizer(lambda: api.clear_favorites())
+
+    return _register_removal_from_favorites

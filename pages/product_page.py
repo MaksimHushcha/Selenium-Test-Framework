@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 from urllib.parse import urljoin
 
 from selenium.common import TimeoutException
@@ -55,3 +56,11 @@ class ProductPage(BasePage):
     def get_product_tags(self) -> list:
         tags = self.locate_multiple_elements(product_page_locator.TAGS_LOCATOR)
         return [tag.text for tag in tags]
+
+    def get_item_id(self) -> str | None:
+        current_url = self.get_current_url()
+        try:
+            item_id = current_url.split("/")[-1]
+        except IndexError:
+            return None
+        return item_id

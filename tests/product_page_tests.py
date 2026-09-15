@@ -1,5 +1,5 @@
 import random
-
+from api_helpers import api_utils as api
 import pytest
 
 def test_page_title_starts_with_product_name(product_page, get_available_product_id):
@@ -17,9 +17,17 @@ def test_user_is_unable_to_add_to_favourites_unauthorized(product_page, componen
         f"Toast text: {toast_text}, Expected: {expected_toast_text}"
 
 # TODO - implement asserts
-def test_add_to_favourites(product_page, components, get_available_product_id, authenticated_user):
+def test_add_to_favourites(product_page, components, get_available_product_id, authenticated_user, queue_clear_favorites):
     product_page.load(get_available_product_id)
+    queue_clear_favorites()
     product_page.add_to_favourites()
+
+    toast_text = components.get_toast_text()
+
+    current_favorites = api.get_products_in_favorites()
+
+    assert toast_text == "Product added to your favorites list."
+    assert get_available_product_id in current_favorites
 
 def test_adding_multiple_items_to_card(product_page, components, get_available_product_id, checkout):
     product_page.load(get_available_product_id)
