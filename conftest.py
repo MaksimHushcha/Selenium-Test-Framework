@@ -2,7 +2,7 @@ import os
 
 import pytest
 from selenium import webdriver
-from api_helpers.api_utils import get_a_random_valid_product_id, AuthManager
+from api_helpers.api_utils import get_a_random_valid_product_id, AuthManager, FavoritesAPI
 from checkout import Checkout
 from components import Components
 
@@ -43,8 +43,14 @@ def checkout(driver):
     return Checkout(driver)
 
 @pytest.fixture
-def get_available_product_id(driver):
-    product_id = get_a_random_valid_product_id()
+def get_available_product_id():
+    product_id = get_a_random_valid_product_id(amount_of_items=1)
+    product_id = product_id[0]
+    return product_id
+
+@pytest.fixture
+def get_two_product_ids() -> list:
+    product_id = get_a_random_valid_product_id(amount_of_items=2)
     return product_id
 
 @pytest.fixture
@@ -54,10 +60,14 @@ def authenticated_user(driver):
     driver.execute_script(f"window.localStorage.setItem('auth-token', '{token}')")
 
 @pytest.fixture
-def queue_clear_favorites(request, driver):
-    api.clear_favorites()
+def seeded_product(clear_favorites, get_available_product_id):
+    favorites = FavoritesAPI()
+    favorites.add_item_to_favorites(get_available_product_id)
+    return get_available_product_id
 
-    def _register_removal_from_favorites():
-        request.addfinalizer(lambda: api.clear_favorites())
-
-    return _register_removal_from_favorites
+@pytest.fixture
+def clear_favorites():
+    favorites = FavoritesAPI()
+    favorites.clear_favorites()
+    yield
+    favorites.clear_favorites()

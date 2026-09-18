@@ -16,7 +16,11 @@ class ApiRequest:
 
     def _request(self, method, endpoint, **kwargs):
         full_url = f"{self.base_url}{endpoint}"
-        response = self.session.request(method, full_url, **kwargs)
+        try:
+            response = self.session.request(method, full_url, **kwargs)
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"Error: {e}")
+        response.raise_for_status()
         return ApiResponse(response)
 
     def get(self, endpoint, **kwargs):
@@ -42,4 +46,3 @@ class ApiResponse:
             self.json_data = response.json()
         except ValueError:
             self.json_data = None
-

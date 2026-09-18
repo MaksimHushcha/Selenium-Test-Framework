@@ -40,6 +40,9 @@ class ProductPage(BasePage):
 
     # Getting info
 
+    def get_product_name(self) -> str:
+        return self.locate_element(product_page_locator.PRODUCT_NAME_LOCATOR).text
+
     def get_item_specs(self) -> list:
         specs = self.locate_multiple_elements(product_page_locator.SPECS_LOCATOR)
         return [spec.text for spec in specs]
@@ -64,3 +67,7 @@ class ProductPage(BasePage):
         except IndexError:
             return None
         return item_id
+
+    def is_picture_displayed(self) -> bool:
+        item_picture = self.locate_element(product_page_locator.ITEM_PICTURE_LOCATOR)
+        return item_picture.is_displayed()
