@@ -1,7 +1,6 @@
 import random
-import pytest
 
-from api_helpers.api_utils import FavoritesAPI
+from utils.api_utils import FavoritesAPI
 
 
 def test_page_title_starts_with_product_name(product_page, get_available_product_id):
@@ -69,14 +68,18 @@ def test_items_has_a_full_spec(product_page, get_available_product_id):
     assert co2_rating_color == "#f97316", f"Expected color to be #f97316, but: {co2_rating_color}"
     assert None not in tags, f"Expected tags to be not empty, but got {tags}"
 
-# TODO add assertion
-def test_compared_item_have_correct_specs(product_page, get_two_product_ids):
+def test_adding_items_to_comparison_from_product_page(
+        product_page, get_two_product_ids, comparison_page):
     product_id_1, product_id_2 = get_two_product_ids
     product_page.load(product_id_1)
     product_page.add_to_comparison()
 
     product_page.load(product_id_2)
     product_page.add_to_comparison()
+
+    session_storage = product_page.get_item_from_session_storage("compare_ids")
+    assert product_id_1 in session_storage and product_id_2 in session_storage
+    assert comparison_page.comparison_bar_is_displayed()
 
 
 def test_item_picture_is_loaded(product_page, get_available_product_id):

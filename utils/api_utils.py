@@ -5,10 +5,11 @@ import json
 import jwt
 from selenium.webdriver.common.bidi import Network
 from requests import ConnectionError
-from api_helpers.api_router import ApiRequest
+from utils.api_router import ApiRequest
 from dotenv import load_dotenv
 
 load_dotenv()
+
 
 def get_a_random_valid_product_id(amount_of_items) -> list:
     api = ApiRequest()
@@ -23,7 +24,6 @@ def get_a_random_valid_product_id(amount_of_items) -> list:
     except Network:
         raise Exception("Network error")
 
-# TODO - MERGE INTO THE CLASS
 
 class FavoritesAPI:
 
@@ -64,6 +64,7 @@ class FavoritesAPI:
                 json={"product_id": f"{product_id}"})
         except ConnectionError as e:
             raise Exception(f"Error adding favorites: {e}")
+
 
 class AuthManager:
     _token = None
