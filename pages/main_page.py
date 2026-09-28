@@ -188,6 +188,9 @@ class MainBasePage(BasePage):
         random_choice = random.choice(available_products)
         self.click_element(random_choice)
 
+    def add_to_comparison_main(self):
+        self.click_element(product_page_locators.ADD_TO_COMPARISON_LOCATOR_MAIN)
+
 
     def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple[str,str]):
         if target_price == current_price:

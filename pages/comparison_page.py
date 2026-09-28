@@ -3,19 +3,21 @@ from locators import comparison_page_locators as loc
 
 
 class ComparisonPage(BasePage):
-
+    endpoint = "comparison"
 
     def clear_comparison(self):
         self.click_element(loc.CLEAR_COMPARISON_BUTTON)
 
+    def press_browse_products(self):
+        self.click_element(loc.BROWSE_PRODUCTS_BUTTON)
 
-    def go_to_compare_screen(self):
-        self.click_element(loc.COMPARE_NOW_BUTTON)
+    def click_comparison_image(self):
+        self.click_element(loc.COMPARISON_IMAGE)
+
+    def is_comparison_empty_visible(self):
+        return self.wait_for_element_visibility(loc.COMPARISON_EMPTY)
+
+    def get_comparison_item_title(self):
+        return self.locate_element(loc.COMPARISON_ITEM_TITLE).text
 
 
-    def comparison_bar_is_not_visible(self):
-        return self.check_element_is_not_visible(loc.COMPARISON_BAR)
-
-
-    def comparison_bar_is_displayed(self):
-        return self.wait_for_element_presence(loc.COMPARISON_BAR)

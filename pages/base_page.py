@@ -25,6 +25,8 @@ class BasePage:
             print("Page failed to load within the timeout period.")
         return self
 
+    def get_expected_page_url(self):
+        return f"{self.base_url}{self.endpoint}"
 
     def get_current_url(self) -> str:
         return self.driver.current_url
@@ -66,19 +68,29 @@ class BasePage:
         return None
 
 
-    def wait_for_element_presence(self, locator: tuple[str,str]):
-        self.wait.until(EC.presence_of_element_located(locator))
+    def wait_for_element_visibility(self, locator: tuple[str,str]):
+        self.wait.until(EC.visibility_of_element_located(locator))
         return self
 
 
     def wait_for_text_presence(self, locator: tuple[str,str]):
-        self.wait_for_element_presence(locator)
+        self.wait_for_element_visibility(locator)
         self.wait.until_not(EC.text_to_be_present_in_element(locator, ""))
         return self
 
+    def is_element_visible(self, locator: tuple[str,str]):
+        try:
+            self.wait.until(EC.visibility_of_element_located(locator))
+            return True
+        except TimeoutException:
+            return False
 
-    def check_element_is_not_visible(self, locator):
-        return self.wait.until_not(EC.visibility_of_element_located(locator))
+    def is_element_not_visible(self, locator: tuple[str,str]):
+        try:
+            self.wait.until_not(EC.visibility_of_element_located(locator))
+            return self
+        except TimeoutException:
+            return False
 
     # --- SESSION STORAGE HELPERS ---
 

@@ -14,7 +14,7 @@ load_dotenv()
 def get_a_random_valid_product_id(amount_of_items) -> list:
     api = ApiRequest()
     try:
-        response_body = api.get(endpoint="/products").json_data
+        response_body = api.get(endpoint="products").json_data
         available_product_ids = []
         for list_item in response_body["data"]:
             # Thor Hammer is one per customer, which may ruin some tests if a random item is chosen
@@ -32,7 +32,7 @@ class FavoritesAPI:
         self.token = AuthManager.get_access_token()
 
     def get_favorites(self):
-        favorites_list = self.api.get(endpoint="/favorites",
+        favorites_list = self.api.get(endpoint="favorites",
                                       headers={"Authorization": f"Bearer {self.token}"}).json_data
         return favorites_list
 
@@ -43,7 +43,7 @@ class FavoritesAPI:
             if not ids_for_deletion:
                 return
             for deletion_id in ids_for_deletion:
-                self.api.delete(endpoint=f"/favorites/{deletion_id}",
+                self.api.delete(endpoint=f"favorites/{deletion_id}",
                                 headers={"Authorization": f"Bearer {self.token}"})
         except ConnectionError as e:
             raise Exception(f"Error deleting favorites: {e}")
@@ -59,7 +59,7 @@ class FavoritesAPI:
     def add_item_to_favorites(self, product_id):
         try:
             self.api.post(
-                endpoint="/favorites",
+                endpoint="favorites",
                 headers={"Authorization": f"Bearer {self.token}"},
                 json={"product_id": f"{product_id}"})
         except ConnectionError as e:
@@ -84,7 +84,7 @@ class AuthManager:
         request_body = {"email":f"{os.getenv('USER_EMAIL')}","password":f"{os.getenv("USER_PASSWORD")}"}
         request_body = json.dumps(request_body)
         try:
-            response_body = api.post(endpoint="/users/login", data=request_body).json_data
+            response_body = api.post(endpoint="users/login", data=request_body).json_data
             cls._token = response_body.get("access_token")
             decoded_token = jwt.decode(cls._token, options={"verify_signature": False})
             cls._expires_on = decoded_token["exp"]

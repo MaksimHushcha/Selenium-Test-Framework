@@ -71,7 +71,7 @@ def get_two_product_ids() -> list:
 @pytest.fixture
 def authenticated_user(driver):
     token = AuthManager.get_access_token()
-    driver.get(f"{os.getenv('BASE_URL')}/contact")
+    driver.get(f"{os.getenv('BASE_URL')}contact")
     driver.execute_script(f"window.localStorage.setItem('auth-token', '{token}')")
 
 
