@@ -40,6 +40,7 @@ def test_same_item_cannot_be_added_to_favourites_twice(
     toast_text_error = components.get_toast_text()
     assert toast_text_error == "Product already in your favorites list."
 
+
 def test_adding_multiple_items_to_card(product_page, components, get_available_product_id, checkout):
 
     product_page.load(get_available_product_id)

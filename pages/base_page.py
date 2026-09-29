@@ -44,9 +44,18 @@ class BasePage:
         return self.wait.until(EC.presence_of_all_elements_located(locator))
 
 
-    def click_element(self, locator: tuple[str,str]):
+    def click_by_locator(self, locator: tuple[str, str]):
         self.wait.until(EC.element_to_be_clickable(locator)).click()
         return self
+
+
+    def click_by_web_element(self, element: WebElement):
+        self.wait.until(EC.element_to_be_clickable(element)).click()
+        return self
+    
+    
+    def click__element_from_multiple(self, element: WebElement):
+        self.wait.until(EC.element_to_be_clickable(element)).click()
 
 
     def fill_field(self, locator: tuple[str,str], text: str):

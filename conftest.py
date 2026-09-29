@@ -91,6 +91,10 @@ def seeded_product(clear_favorites, get_available_product_id):
     favorites.add_item_to_favorites(get_available_product_id)
     return get_available_product_id
 
+@pytest.fixture
+def seed_comparison_2_items(main_page, add_two_items_to_comparison):
+    main_page.load()
+    add_two_items_to_comparison()
 
 @pytest.fixture
 def clear_favorites():

@@ -11,7 +11,7 @@ class Components(BasePage):
 
 
     def open_cart(self):
-        self.click_element(loc.CARD_BUTTON_LOCATOR)
+        self.click_by_locator(loc.CARD_BUTTON_LOCATOR)
 
 
     def get_number_of_items_on_cart_icon(self):
@@ -19,14 +19,14 @@ class Components(BasePage):
 
 
     def dismiss_toast(self):
-        self.click_element(loc.TOP_RIGHT_TOST_NOTIFICATION_LOCATOR)
+        self.click_by_locator(loc.TOP_RIGHT_TOST_NOTIFICATION_LOCATOR)
 
     def clear_comparison(self):
-        self.click_element(loc.CLEAR_COMPARISON_BUTTON)
+        self.click_by_locator(loc.CLEAR_COMPARISON_BUTTON)
 
 
     def go_to_compare_screen(self):
-        self.click_element(loc.COMPARE_NOW_BUTTON)
+        self.click_by_locator(loc.COMPARE_NOW_BUTTON)
 
 
     def comparison_bar_is_not_visible(self):

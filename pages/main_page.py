@@ -14,8 +14,8 @@ class MainBasePage(BasePage):
 
 
     def _sort_by(self, sorting_option_locator: tuple[str,str]):
-        self.click_element(product_page_locators.SORT_DROPDOWN_LOCATOR)
-        self.click_element(sorting_option_locator)
+        self.click_by_locator(product_page_locators.SORT_DROPDOWN_LOCATOR)
+        self.click_by_locator(sorting_option_locator)
         self._wait_for_sorting()
 
 
@@ -56,13 +56,13 @@ class MainBasePage(BasePage):
             button_to_click = buttons[-1]
             if 'disabled' in button_to_click.get_attribute('class').split(' '):
                 return
-            self.click_element(product_page_locators.NEXT_PAGE_BUTTON_LOCATOR)
+            self.click_by_locator(product_page_locators.NEXT_PAGE_BUTTON_LOCATOR)
 
         elif first_button:
             button_to_click = buttons[0]
             if 'disabled' in button_to_click.get_attribute('class').split(' '):
                 return
-            self.click_element(product_page_locators.NEXT_PAGE_BUTTON_LOCATOR)
+            self.click_by_locator(product_page_locators.NEXT_PAGE_BUTTON_LOCATOR)
 
         self.wait.until(EC.staleness_of(old_card))
         self.wait.until(EC.presence_of_element_located(product_page_locators.CARD_LOCATOR))
@@ -97,7 +97,7 @@ class MainBasePage(BasePage):
 
                 if 'disabled' in last_button.get_attribute('class').split(' '):
                     return
-                self.click_element(product_page_locators.NEXT_PAGE_BUTTON_LOCATOR)
+                self.click_by_locator(product_page_locators.NEXT_PAGE_BUTTON_LOCATOR)
                 page_count += 1
 
                 self.wait.until(EC.staleness_of(old_card))
@@ -109,7 +109,7 @@ class MainBasePage(BasePage):
 
 
     def select_eco_friendly_products(self):
-        self.click_element(product_page_locators.ECO_FRIENDLY_CHECKBOX_LOCATOR)
+        self.click_by_locator(product_page_locators.ECO_FRIENDLY_CHECKBOX_LOCATOR)
 
 
     def get_cards_on_the_page(self) -> list:
@@ -160,7 +160,7 @@ class MainBasePage(BasePage):
 
     def search_an_item(self, search_query):
         self.fill_field(locator=product_page_locators.SEARCH_INPUT_FIELD_LOCATOR, text=search_query)
-        self.click_element(product_page_locators.SEARCH_SUBMIT_BUTTON_LOCATOR)
+        self.click_by_locator(product_page_locators.SEARCH_SUBMIT_BUTTON_LOCATOR)
         self.wait.until(EC.presence_of_element_located(product_page_locators.SEARCH_COMPLETED_LOCATOR))
 
 
@@ -175,7 +175,7 @@ class MainBasePage(BasePage):
 
 
     def reset_search(self):
-        self.click_element(product_page_locators.SEARCH_RESET_BUTTON_LOCATOR)
+        self.click_by_locator(product_page_locators.SEARCH_RESET_BUTTON_LOCATOR)
         self.wait.until_not(EC.presence_of_element_located(product_page_locators.SEARCH_SUBMITTED_LOCATOR))
 
 
@@ -183,14 +183,11 @@ class MainBasePage(BasePage):
         return self.locate_element(product_page_locators.NO_RESULT_MESSAGE_LOCATOR).text
 
 
-    def open_a_random_product_page_with_available_product(self):
-        available_products = self.locate_multiple_elements(product_page_locators.AVAILABLE_PRODUCT_LINK_LOCATOR)
-        random_choice = random.choice(available_products)
-        self.click_element(random_choice)
-
     def add_to_comparison_main(self):
-        self.click_element(product_page_locators.ADD_TO_COMPARISON_LOCATOR_MAIN)
+        self.click_by_locator(product_page_locators.ADD_TO_COMPARISON_LOCATOR_MAIN)
 
+    def remove_from_comparison_main(self):
+        self.click_by_locator(product_page_locators.ADD_TO_COMPARISON_LOCATOR_MAIN)
 
     def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple[str,str]):
         if target_price == current_price:

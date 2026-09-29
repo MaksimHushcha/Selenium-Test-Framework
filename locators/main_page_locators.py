@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+from locators.comparison_page_locators import REMOVE_FROM_COMPARISON_BUTTON
 from locators.product_page_locators import ADD_TO_COMPARISON_LOCATOR
 
 # sorting locators
@@ -21,6 +22,7 @@ ECO_BADGE_LOCATOR = (By.CSS_SELECTOR, "[data-test=eco-badge]")
 CARD_PRODUCT_LOCATOR = (By.CSS_SELECTOR, 'a.card[data-test^="product-"]')
 AVAILABLE_PRODUCT_LINK_LOCATOR = (By.CSS_SELECTOR, 'a.card[href^="/product"]:not(:has([data-test="out-of-stock"])')
 ADD_TO_COMPARISON_LOCATOR_MAIN = (By.CLASS_NAME, "compare-btn")
+REMOVE_FROM_COMPARISON_MAIN = (By.CLASS_NAME, "compare-btn-active")
 
 # filter locators
 ECO_FRIENDLY_CHECKBOX_LOCATOR = (By.CSS_SELECTOR, "[data-test=eco-friendly-filter]")
