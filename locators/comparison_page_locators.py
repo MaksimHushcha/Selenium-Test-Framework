@@ -7,6 +7,7 @@ REMOVE_FROM_COMPARISON_BUTTON = (By.CSS_SELECTOR, "[data-test=remove-product]")
 
 COMPARISON_EMPTY = (By.CSS_SELECTOR, "[data-test=comparison-empty]")
 COMPARISON_IMAGE = (By.CLASS_NAME, "comparison-img")
+COMPARISON_SPECS = (By.CSS_SELECTOR, "[data-test=compare-spec]")
 
 BROWSE_PRODUCTS_BUTTON = (By.XPATH, "//a[contains(@href, '/') and contains(@class, 'btn-primary')]")
 COMPARISON_ITEM_TITLE = (By.CSS_SELECTOR, "[data-test=product-name]")

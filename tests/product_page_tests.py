@@ -33,9 +33,9 @@ def test_add_to_favourites(product_page, components, get_available_product_id, a
 
 
 def test_same_item_cannot_be_added_to_favourites_twice(
-        product_page, components, authenticated_user, seeded_product):
+        product_page, components, authenticated_user, seeded_favorite_product):
 
-    product_page.load(seeded_product)
+    product_page.load(seeded_favorite_product)
     product_page.add_to_favourites()
     toast_text_error = components.get_toast_text()
     assert toast_text_error == "Product already in your favorites list."

@@ -1,3 +1,4 @@
+import json
 import os
 
 from selenium.common import TimeoutException
@@ -35,6 +36,8 @@ class BasePage:
         page_title = self.driver.title
         return page_title
 
+    def set_compare_ids_session_storage(self, ids_list):
+        self.set_item_in_session_storage('compare_ids', json.dumps(ids_list))
 
     def locate_element(self, locator: tuple[str,str]) -> WebElement:
         return self.wait.until(EC.visibility_of_element_located(locator))

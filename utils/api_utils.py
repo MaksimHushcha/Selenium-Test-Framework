@@ -11,6 +11,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def get_two_product_ids() -> list:
+    product_id = get_a_random_valid_product_id(amount_of_items=2)
+    return product_id
+
+def get_two_comparison_ids() -> list:
+    product_id = get_measuring_items_for_comparison()
+    return product_id
+
 def get_a_random_valid_product_id(amount_of_items) -> list:
     api = ApiRequest()
     try:
@@ -21,9 +29,23 @@ def get_a_random_valid_product_id(amount_of_items) -> list:
             if list_item.get("in_stock") is True and list_item.get("name") != "Thor Hammer":
                 available_product_ids.append(list_item.get("id"))
         return random.sample(available_product_ids, amount_of_items)
-    except Network:
-        raise Exception("Network error")
+    except (KeyError, TypeError) as e:
+        raise Exception(f"API data structure error: missing or invalid keys. Details: {e}")
 
+# Measuring items fit for show unique items in comparison, but category is likely dynamic so likely to fail
+# to investigate
+def get_measuring_items_for_comparison() -> list:
+    api = ApiRequest()
+    try:
+        query = '{"q":"Tape"}'
+        response_body = api.query(endpoint="products/search", data=query).json_data
+        measurement_items = []
+        for list_item in response_body["data"]:
+            if list_item.get("name") == "Measuring Tape" or list_item.get("name") == "Tape Measure 5m":
+                measurement_items.append(list_item.get("id"))
+        return measurement_items
+    except (KeyError, TypeError) as e:
+        raise Exception(f"API data structure error: missing or invalid keys. Details: {e}")
 
 class FavoritesAPI:
 
