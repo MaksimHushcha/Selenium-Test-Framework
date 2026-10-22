@@ -3,7 +3,7 @@ import os
 
 import pytest
 from selenium import webdriver
-from utils.api_utils import get_a_random_valid_product_id, get_measuring_items_for_comparison, get_two_product_ids, get_two_comparison_ids, AuthManager, FavoritesAPI
+from utils.api_utils import get_a_random_valid_product_id, get_measuring_items_for_comparison, get_random_product_ids, AuthManager, FavoritesAPI
 from checkout_page import Checkout
 from components import Components
 from comparison_page import ComparisonPage
@@ -70,7 +70,7 @@ def authenticated_user(driver):
 
 @pytest.fixture
 def seeded_two_comparison_items(main_page):
-    ids_list = get_two_product_ids()
+    ids_list = get_random_product_ids(number_of_ids=2)
     main_page.load()
     main_page.set_compare_ids_session_storage(ids_list)
 

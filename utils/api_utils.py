@@ -11,9 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def get_two_product_ids() -> list:
-    product_id = get_a_random_valid_product_id(amount_of_items=2)
-    return product_id
+def get_random_product_ids(number_of_ids) -> list:
+    product_ids = get_a_random_valid_product_id(amount_of_items=number_of_ids)
+    return product_ids
 
 def get_two_comparison_ids() -> list:
     product_id = get_measuring_items_for_comparison()

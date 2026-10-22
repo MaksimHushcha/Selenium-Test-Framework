@@ -1,3 +1,4 @@
+from utils import helpers
 
 def test_go_to_comparison_from_a_component(components, seeded_two_comparison_items, comparison_page, main_page):
     assert components.comparison_bar_is_displayed()
@@ -55,5 +56,13 @@ def test_remove_comparison_on_comparison_page(comparison_page, seeded_two_compar
 
 def test_show_differences_only(comparison_page, seeded_two_measurements_items):
     comparison_page.load()
-    # comparison_page.show_differences_only()
-    comparison_page.get_comparison_specs(number_of_items_in_comparison=2)
+    specs_with_differences = comparison_page.get_comparison_specs(number_of_items_in_comparison=2)
+    first_spec, second_spec = specs_with_differences
+    comparison_page.show_differences_only()
+    actual_value = comparison_page.get_comparison_specs(number_of_items_in_comparison=2)
+
+    expected_values = helpers.create_list_of_matching_values_ordered(first_spec, second_spec)
+    assert expected_values == actual_value, \
+        (f"Expected toggle to show differences only, received {actual_value}, "
+         f"expected {expected_values}, spec: {specs_with_differences}")
+

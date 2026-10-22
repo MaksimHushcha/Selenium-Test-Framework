@@ -28,13 +28,17 @@ class ComparisonPage(BasePage):
         self.click_by_locator(loc.SHOW_DIFFERENT_ONLY_CHECKBOX)
 
     def get_comparison_specs(self, number_of_items_in_comparison: int):
+        if not isinstance(number_of_items_in_comparison, int) or isinstance(number_of_items_in_comparison, bool):
+            raise TypeError("number_of_items_in_comparison must be an integer")
+        if number_of_items_in_comparison <= 0:
+            raise ValueError("number_of_items_in_comparison must be a positive integer")
         specs = self.locate_multiple_elements(loc.COMPARISON_SPECS)
-        list_of_specs = []
-        for index, item in enumerate(specs):
-            inner_list = []
-            if index % number_of_items_in_comparison == 0:
-                inner_list.append(item.text)
-            list_of_specs.append(inner_list)
+
+        return [
+            [item.text for item in specs[slice_index::number_of_items_in_comparison]]
+            for slice_index in range(number_of_items_in_comparison)
+        ]
+
 
     def remove_comparison_item(self, order_of_item_to_remove: int):
         if not isinstance(order_of_item_to_remove, int) or order_of_item_to_remove < 1:
