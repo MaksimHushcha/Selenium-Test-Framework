@@ -1,4 +1,3 @@
-import random
 from typing import Any
 
 from selenium.common import StaleElementReferenceException, TimeoutException

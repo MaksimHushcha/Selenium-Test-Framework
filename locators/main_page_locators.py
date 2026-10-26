@@ -1,8 +1,5 @@
 from selenium.webdriver.common.by import By
 
-from locators.comparison_page_locators import REMOVE_FROM_COMPARISON_BUTTON
-from locators.product_page_locators import ADD_TO_COMPARISON_LOCATOR
-
 # sorting locators
 SORT_DROPDOWN_LOCATOR = (By.CSS_SELECTOR, "[data-test=sort]")
 SORT_NAME_ASC_LOCATOR = (By.CSS_SELECTOR, "[value*='name,asc']")

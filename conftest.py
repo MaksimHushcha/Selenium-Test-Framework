@@ -10,6 +10,8 @@ from comparison_page import ComparisonPage
 
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
+from pages.contact_page import ContactPage
+
 from selenium.webdriver.chrome.options import Options
 import dotenv
 
@@ -52,6 +54,11 @@ def checkout(driver):
 @pytest.fixture
 def comparison_page(driver):
     return ComparisonPage(driver)
+
+@pytest.fixture
+def contact_page(driver):
+    return ContactPage(driver)
+
 
 
 @pytest.fixture
