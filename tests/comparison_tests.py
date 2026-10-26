@@ -1,6 +1,6 @@
 from utils import helpers
 
-def test_go_to_comparison_from_a_component(components, seeded_two_comparison_items, comparison_page, main_page):
+def test_go_to_comparison_from_a_comparison_bar_open_comparison_page(components, seeded_two_comparison_items, comparison_page, main_page):
     assert components.comparison_bar_is_displayed()
     components.go_to_compare_screen()
     current_url = main_page.get_current_url()
@@ -9,25 +9,26 @@ def test_go_to_comparison_from_a_component(components, seeded_two_comparison_ite
     assert current_title == "Product Comparison - Practice Software Testing - Toolshop - v5.0"
 
 
-def test_add_to_comparison_on_main_page(main_page, components):
+def test_add_to_comparison_on_main_page_displays_comparison_bar(main_page, components):
     main_page.load()
     main_page.add_to_comparison_main()
     assert components.comparison_bar_is_displayed
 
-def test_remove_from_comparison_on_main_page(main_page, components):
+# TODO ADD session store assert
+def test_remove_last_item_from_comparison_from_main_page_removes_comparison_bar(main_page, components):
     main_page.load()
     main_page.add_to_comparison_main()
     assert components.comparison_bar_is_displayed()
     main_page.remove_from_comparison_main()
     assert components.comparison_bar_is_not_visible()
 
-def test_clear_comparison_from_comparison_bar(comparison_page, seeded_two_comparison_items, components):
+def test_clear_comparison_button_from_comparison_bar_removes_all_items_from_comparison(comparison_page, seeded_two_comparison_items, components):
     assert components.comparison_bar_is_displayed()
     components.clear_comparison()
     assert components.comparison_bar_is_not_visible()
 
 
-def test_clear_comparison_from_comparison_page(comparison_page, seeded_two_comparison_items):
+def test_clear_comparison_from_comparison_page_clear_comparison_on_the_page(comparison_page, seeded_two_comparison_items):
     comparison_page.load()
     comparison_page.clear_comparison()
     assert comparison_page.is_comparison_empty_visible()
@@ -48,21 +49,20 @@ def test_clicking_on_product_picture_opens_product_page(comparison_page, product
     product_page_item_title = product_page.get_product_name()
     assert comparison_page_item_title == product_page_item_title
 
-def test_remove_comparison_on_comparison_page(comparison_page, seeded_two_comparison_items):
+def test_remove_comparison_on_comparison_page_removes_item_from_comparison(comparison_page, seeded_two_comparison_items):
     comparison_page.load()
     comparison_page.remove_comparison_item(order_of_item_to_remove=1)
     pictures_on_the_page = len(comparison_page.get_all_comparison_pictures())
     assert  pictures_on_the_page == 1, f"Expected only 1 picture on the page remaining"
 
-def test_show_differences_only(comparison_page, seeded_two_measurements_items):
+def test_show_differences_only_hides_different_specs_on_items(comparison_page, seeded_two_measurements_items):
     comparison_page.load()
-    specs_with_differences = comparison_page.get_comparison_specs(number_of_items_in_comparison=2)
-    first_spec, second_spec = specs_with_differences
+    first_spec, second_spec  = comparison_page.get_comparison_specs(number_of_items_in_comparison=2)
     comparison_page.show_differences_only()
     actual_value = comparison_page.get_comparison_specs(number_of_items_in_comparison=2)
 
     expected_values = helpers.create_list_of_matching_values_ordered(first_spec, second_spec)
     assert expected_values == actual_value, \
         (f"Expected toggle to show differences only, received {actual_value}, "
-         f"expected {expected_values}, spec: {specs_with_differences}")
+         f"expected {expected_values}")
 

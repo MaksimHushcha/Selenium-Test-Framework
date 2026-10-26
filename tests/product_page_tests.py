@@ -4,7 +4,7 @@ from conftest import components
 from utils.api_utils import FavoritesAPI
 
 
-def test_page_title_starts_with_product_name(product_page, get_available_product_id):
+def test_product_page_title_starts_with_product_name(product_page, get_available_product_id):
     product_page.load(get_available_product_id)
     product_title = product_page.get_product_name()
     page_title = product_page.get_page_title()
@@ -21,7 +21,7 @@ def test_user_is_unable_to_add_to_favourites_unauthorized(product_page, componen
         f"Toast text: {toast_text}, Expected: {expected_toast_text}"
 
 
-def test_add_to_favourites(product_page, components, get_available_product_id, authenticated_user, clear_favorites):
+def test_add_to_favourites_from_product_page(product_page, components, get_available_product_id, authenticated_user, clear_favorites):
 
     product_page.load(get_available_product_id)
     product_page.add_to_favourites()
@@ -41,7 +41,7 @@ def test_same_item_cannot_be_added_to_favourites_twice(
     assert toast_text_error == "Product already in your favorites list."
 
 
-def test_adding_multiple_items_to_card(product_page, components, get_available_product_id, checkout):
+def test_adding_multiple_items_to_cart_adds_all_of_them(product_page, components, get_available_product_id, checkout):
 
     product_page.load(get_available_product_id)
     random_amount_to_add = random.randint(2, 6)
@@ -57,7 +57,7 @@ def test_adding_multiple_items_to_card(product_page, components, get_available_p
     assert checkout.get_quantity_of_an_item_in_cart() == random_amount_to_add + 1
 
 
-def test_items_has_a_full_spec(product_page, get_available_product_id):
+def test_items_on_product_page_display_their_full_specs(product_page, get_available_product_id):
     product_page.load(get_available_product_id)
     specs = product_page.get_item_specs()
     tags = product_page.get_product_tags()
@@ -70,7 +70,7 @@ def test_items_has_a_full_spec(product_page, get_available_product_id):
     assert co2_rating_color == "#f97316", f"Expected color to be #f97316, but: {co2_rating_color}"
     assert None not in tags, f"Expected tags to be not empty, but got {tags}"
 
-def test_adding_items_to_comparison_from_product_page(
+def test_items_added_to_comparison_from_main_page_are_visible_in_comparison_page_when_visited_directly(
         product_page, get_two_product_ids, components):
     product_id_1, product_id_2 = get_two_product_ids
     product_page.load(product_id_1)
@@ -84,6 +84,6 @@ def test_adding_items_to_comparison_from_product_page(
     assert components.comparison_bar_is_displayed()
 
 
-def test_item_picture_is_loaded(product_page, get_available_product_id):
+def test_products_on_product_page_have_a_picture(product_page, get_available_product_id):
     product_page.load(get_available_product_id)
     assert product_page.is_picture_displayed()
