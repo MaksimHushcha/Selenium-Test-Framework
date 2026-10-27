@@ -71,7 +71,7 @@ class ContactPage(BasePage):
         file_input = self.locate_element(loc.ATTACHMENT_FIELD_LOCATOR)
         if not isinstance(file_name, str):
             raise ValueError("Invalid input for upload_file")
-        absolute_path = os.path.abspath(f"test_data/{file_name}")
+        absolute_path = os.path.abspath(f"test_data/files/{file_name}")
         if not os.path.exists(absolute_path):
             raise ValueError("Invalid file for upload_file")
         file_input.send_keys(absolute_path)
@@ -97,7 +97,15 @@ class ContactPage(BasePage):
         return self.locate_element(loc.EMAIL_ERROR).text
 
 
-    def fill_and_submit_all_contact_data(self, fields_to_exclude=None):
+    def get_file_upload_error(self):
+        return self.locate_element(loc.ATTACHMENT_ERROR).text
+
+
+    def get_help_block_error(self):
+        return self.locate_element(loc.HELP_BLOCK).text
+
+
+    def fill_all_contact_data(self, fields_to_exclude=None):
         if fields_to_exclude is None:
             fields_to_exclude = []
         if not isinstance(fields_to_exclude, list):
@@ -110,8 +118,8 @@ class ContactPage(BasePage):
             self.fill_email(fake.email())
         if "Message" not in  fields_to_exclude:
             self.fill_message(fake.text())
-
-        self.upload_file('empty_file.txt')
-        random_subject = random.choice(["Customer Service", "Webmaster", "Payments", "Warranty", "Status of my order" ])
-        self.select_subject(random_subject)
-        self.send_message()
+        if "File" not in fields_to_exclude:
+            self.upload_file('empty_file.txt')
+        if "Subject" not in fields_to_exclude:
+            random_subject = random.choice(["Customer Service", "Webmaster", "Payments", "Warranty", "Status of my order" ])
+            self.select_subject(random_subject)

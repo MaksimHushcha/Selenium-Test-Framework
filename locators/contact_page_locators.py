@@ -28,6 +28,9 @@ LAST_NAME_ERROR = (By.CSS_SELECTOR, "[data-test=last-name-error]")
 EMAIL_ERROR = (By.CSS_SELECTOR, "[data-test=email-error]")
 SUBJECT_ERROR = (By.CSS_SELECTOR, "[data-test=subject-error]")
 MESSAGE_ERROR = (By.CSS_SELECTOR, "[data-test=message-error]")
+ATTACHMENT_ERROR = (By.CSS_SELECTOR, "[data-test=attachment-error]")
+HELP_BLOCK = (By.CLASS_NAME, "help-block")
+
 
 ALERT_SUCCESS = (By.CLASS_NAME, "alert-success")
 
