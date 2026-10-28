@@ -30,6 +30,9 @@ jobs:
       - name: Run tests with Allure
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
         run: pytest -v --tb=short --durations=10 --maxfail=5 -n auto --alluredir=allure-results
         continue-on-error: true
