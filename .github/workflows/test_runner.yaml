@@ -1,10 +1,11 @@
-name: Run Pytest Manually
+name: UI tests
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+
 permissions:
   contents: write
 
@@ -35,7 +36,7 @@ jobs:
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=10 --maxfail=5 -n auto --alluredir=allure-results tests/
+        run: pytest -v --tb=short --durations=10 --maxfail=5 --alluredir=allure-results tests/
         continue-on-error: true
 
       - name: Generate Allure Environment File
@@ -83,19 +84,15 @@ jobs:
       - name: Generate Allure Report Natively
         if: always()
         run: |
-          # Install Allure command-line tool globally using npm
           npm install -g allure-commandline --save-dev
   
-          # Restore history if it exists
           if [ -d "gh-pages-dir/history" ]; then
             mkdir -p allure-results/history
             cp -r gh-pages-dir/history/* allure-results/history/
           fi
   
-          # Generate the report
           allure generate allure-results --clean -o allure-report
   
-          # Prepare history for the next run
           mkdir -p allure-history
           if [ -d "allure-report/history" ]; then
             cp -r allure-report/history/* allure-history/
@@ -112,15 +109,7 @@ jobs:
           keep_files: true
           commit_message: "Update Allure report for run ${{ github.run_number }}"
 
-      - name: Deploy Allure Report to .github Pages
-        uses: peaceiris/actions-gh-pages@v4
-        if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: allure-history
-
-      - name: Wait for .github Pages deployment
+      - name: Wait for GitHub Pages deployment
         if: always()
         run: sleep 60
 
