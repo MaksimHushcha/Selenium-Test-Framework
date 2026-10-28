@@ -1,4 +1,4 @@
-from conftest import contact_page
+from tests.conftest import contact_page
 from faker import Faker
 fake = Faker()
 

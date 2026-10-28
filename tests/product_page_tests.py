@@ -1,6 +1,6 @@
 import random
 
-from conftest import components
+from tests.conftest import components
 from utils.api_utils import FavoritesAPI
 
 
