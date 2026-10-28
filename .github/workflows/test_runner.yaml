@@ -89,7 +89,7 @@ jobs:
           allure_history: allure-history
           keep_reports: 20  # Keeps the last 20 runs and cleans up older ones automatically
 
-      - name: Deploy Allure Report to GitHub Pages
+      - name: Deploy Allure Report to .github Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
@@ -97,7 +97,7 @@ jobs:
           publish_branch: gh-pages
           publish_dir: allure-history
 
-      - name: Wait for GitHub Pages deployment
+      - name: Wait for .github Pages deployment
         if: always()
         run: sleep 60
 
