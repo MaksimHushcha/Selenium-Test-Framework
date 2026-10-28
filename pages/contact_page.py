@@ -101,6 +101,10 @@ class ContactPage(BasePage):
         return self.locate_element(loc.ATTACHMENT_ERROR).text
 
 
+    def get_message_upload_error(self):
+        return self.locate_element(loc.MESSAGE_ERROR).text
+
+
     def get_help_block_error(self):
         return self.locate_element(loc.HELP_BLOCK).text
 

@@ -1,0 +1,114 @@
+name: Run Pytest Manually
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest allure-pytest pytest-xdist
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run tests with Allure
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          PYTEST_ADDOPTS: "--color=yes"
+        run: pytest -v --tb=short --durations=10 --maxfail=5 -n auto --alluredir=allure-results
+        continue-on-error: true
+
+      - name: Generate Allure Environment File
+        if: always()
+        run: |
+          mkdir -p allure-results
+          echo "Platform=GitHub Actions" > allure-results/environment.properties
+          echo "Python_Version=3.11" >> allure-results/environment.properties
+          echo "Base_URL=${{ secrets.BASE_URL }}" >> allure-results/environment.properties
+          echo "Branch=${{ github.ref_name }}" >> allure-results/environment.properties
+          echo "Runner_OS=Ubuntu Latest" >> allure-results/environment.properties
+          echo "Execution_ID=${{ github.run_id }}" >> allure-results/environment.properties
+
+      - name: Generate Custom Allure Categories
+        if: always()
+        run: |
+          mkdir -p allure-results
+          cat << 'EOF' > allure-results/categories.json
+          [
+            {
+              "name": "Ignored/Skipped Tests",
+              "matchedStatuses": ["skipped"]
+            },
+            {
+              "name": "Infrastructure & Gateway Defects",
+              "matchedStatuses": ["broken"],
+              "messageRegex": ".*(TimeoutError|502 Bad Gateway|504 Gateway Timeout|ConnectionRefusedError).*"
+            },
+            {
+              "name": "Product Defects (Assertion Failures)",
+              "matchedStatuses": ["failed"],
+              "messageRegex": ".*AssertionError.*"
+            }
+          ]
+          EOF
+
+      - name: Load Allure history from gh-pages
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages-dir
+
+      - name: Build Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        id: allure-report
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages-dir
+          allure_history: allure-history
+          keep_reports: 20  # Keeps the last 20 runs and cleans up older ones automatically
+
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      - name: Wait for GitHub Pages deployment
+        if: always()
+        run: sleep 60
+
+      - name: Send Telegram Notification
+        if: always()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Workflow: ${{ github.workflow }}
+            Status: ${{ job.status }} 
+            Actor: ${{ github.actor }}
+            Commit: ${{ github.event.head_commit && github.event.head_commit.message || 'Manual run' }}
+            Repository: ${{ github.repository }}
+            Link: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            View report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ github.run_number }}/index.html

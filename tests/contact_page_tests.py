@@ -93,7 +93,7 @@ def test_email_address_is_mandatory_when_sending_contact_message(contact_page):
     assert received_message == expected_message, \
             f"Expected to see {expected_message}, but got {received_message}"
 
-
+# In theory, we can add more email validation tests
 def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.fill_all_contact_data(fields_to_exclude=["Email"])
@@ -119,6 +119,17 @@ def test_long_email_address_are_rejected_when_sending_contact_message(contact_pa
         f"Expected to see {expected_message}, but got {received_message}"
 
 
+def test_message_is_mandatory_when_sending_contact_message(contact_page):
+    contact_page.load()
+    contact_page.fill_all_contact_data(fields_to_exclude=["Message"])
+    contact_page.send_message()
+
+    expected_message = "Message is required"
+    received_message = contact_page.get_message_upload_error()
+    assert received_message == expected_message, \
+            f"Expected to see {expected_message}, but got {received_message}"
+
+
 def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.upload_file("non_empty_file.txt")
@@ -129,6 +140,7 @@ def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_
     received_message = contact_page.get_file_upload_error()
     assert received_message == expected_message, \
             f"Expected to see {expected_message}, but got {received_message}"
+
 
 
 def test_non_txt_are_not_accepted_when_sending_contact_message(contact_page):
