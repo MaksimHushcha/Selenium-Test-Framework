@@ -14,8 +14,62 @@ from pages.contact_page import ContactPage
 from selenium.webdriver.chrome.options import Options
 import dotenv
 
+###
+import os
+import re
+from pathlib import Path
+###
 dotenv.load_dotenv()
 
+
+import pytest
+
+#### GENERATED FOR TROUBLESHOOTING_REWRITE_BY_HAND_LATER
+ARTIFACTS_DIR = Path("test-artifacts")
+
+
+def safe_filename(name: str) -> str:
+    """Convert a test node ID into a filesystem-safe filename."""
+    return re.sub(r"[^a-zA-Z0-9_.-]+", "_", name)[:180]
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """Capture browser diagnostics when a test fails."""
+    outcome = yield
+    report = outcome.get_result()
+
+    # Capture failures during the test body, not setup or teardown.
+    if report.when != "call" or not report.failed:
+        return
+
+    driver = item.funcargs.get("driver")
+    if driver is None:
+        return
+
+    # Separate artifacts by test and xdist worker.
+    worker = os.environ.get("PYTEST_XDIST_WORKER", "local")
+    test_name = safe_filename(item.nodeid)
+    artifact_dir = ARTIFACTS_DIR / worker / test_name
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        (artifact_dir / "url.txt").write_text(
+            driver.current_url, encoding="utf-8"
+        )
+        (artifact_dir / "title.txt").write_text(
+            driver.title, encoding="utf-8"
+        )
+        driver.save_screenshot(str(artifact_dir / "screenshot.png"))
+        (artifact_dir / "page.html").write_text(
+            driver.page_source, encoding="utf-8"
+        )
+
+        print(f"\nBrowser diagnostics saved to: {artifact_dir}")
+
+    except Exception as exc:
+        print(f"\nCould not capture browser diagnostics: {exc}")
+###
 
 @pytest.fixture
 def driver():
