@@ -1,6 +1,5 @@
-from base_page import BasePage
+from pages.base_page import BasePage
 from locators import comparison_page_locators as loc
-import random
 
 
 class ComparisonPage(BasePage):
