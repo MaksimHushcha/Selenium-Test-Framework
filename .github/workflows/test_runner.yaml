@@ -36,7 +36,7 @@ jobs:
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=10 --maxfail=5 -n 2 --alluredir=allure-results
+        run: pytest -v --tb=short --durations=10 --maxfail=5 -n 1 --alluredir=allure-results
         continue-on-error: true
 
       - name: Generate Allure Environment File
