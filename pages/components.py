@@ -1,6 +1,6 @@
 from locators import components_locators as loc
 
-from base_page import BasePage
+from pages.base_page import BasePage
 
 
 class Components(BasePage):
@@ -20,6 +20,7 @@ class Components(BasePage):
 
     def dismiss_toast(self):
         self.click_by_locator(loc.TOP_RIGHT_TOST_NOTIFICATION_LOCATOR)
+
 
     def clear_comparison(self):
         self.click_by_locator(loc.CLEAR_COMPARISON_BUTTON)
