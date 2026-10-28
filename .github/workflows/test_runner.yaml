@@ -80,7 +80,7 @@ jobs:
           path: gh-pages-dir
 
       - name: Build Allure Report
-        uses: simple-elf/allure-report-action@v2.17.1  # Pin to a stable version instead of @master
+        uses: simple-elf/allure-report-action@master  # Pin to a stable version instead of @master
         if: always()
         id: allure-report
         with:
