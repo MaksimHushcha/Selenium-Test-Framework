@@ -1,13 +1,12 @@
-import json
 import os
 
 import pytest
 from selenium import webdriver
 from utils.api_utils import get_a_random_valid_product_id, get_measuring_items_for_comparison, get_random_product_ids, AuthManager, FavoritesAPI
-from checkout_page import Checkout
-from components import Components
-from comparison_page import ComparisonPage
 
+from pages.components import Components
+from pages.comparison_page import ComparisonPage
+from pages.checkout_page import Checkout
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 from pages.contact_page import ContactPage
@@ -54,6 +53,7 @@ def checkout(driver):
 @pytest.fixture
 def comparison_page(driver):
     return ComparisonPage(driver)
+
 
 @pytest.fixture
 def contact_page(driver):
