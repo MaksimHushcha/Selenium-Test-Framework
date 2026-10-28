@@ -80,14 +80,14 @@ jobs:
           path: gh-pages-dir
 
       - name: Build Allure Report
-        uses: simple-elf/allure-report-action@master
+        uses: simple-elf/allure-report-action@v2.17.1  # Pin to a stable version instead of @master
         if: always()
         id: allure-report
         with:
           allure_results: allure-results
           gh_pages: gh-pages-dir
           allure_history: allure-history
-          keep_reports: 20  # Keeps the last 20 runs and cleans up older ones automatically
+          keep_reports: 20
 
       - name: Deploy Allure Report to .github Pages
         uses: peaceiris/actions-gh-pages@v4
