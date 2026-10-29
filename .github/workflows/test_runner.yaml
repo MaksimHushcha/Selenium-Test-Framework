@@ -42,7 +42,8 @@ jobs:
           docker compose up -d
           sleep 15
       
-          docker compose exec -u 0 -T laravel-api bash -c "
+          # 1. Use sh instead of bash to configure permissions as root
+          docker compose exec -u 0 -T laravel-api sh -c "
             if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
             touch .env
             chmod 666 .env
@@ -51,7 +52,7 @@ jobs:
           docker compose exec -T laravel-api php artisan key:generate
           docker compose exec -T laravel-api php artisan config:clear
           docker compose exec -T laravel-api php artisan cache:clear
-          docker compose exec -T laravel-api php artisan migrate:fresh --seed
+          docker compose exec -T laravel-api php artisan migrate:fresh --seed --force
 
       - name: Debug Docker Containers and Logs
         if: always()
