@@ -34,23 +34,16 @@ jobs:
           repository: 'testsmith-io/practice-software-testing'
           path: 'practice-app'
 
-      - name: Spin Up App Containers and Initialize Database
+
+      - name: Spin Up App Containers from Source
         run: |
           cd practice-app
-          docker compose -f docker-compose.prod.yml up --pull missing -d
-          echo "Waiting for services to initialize..."
-          sleep 15
-          echo "Migrating and seeding database..."
-          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan migrate:fresh --seed
-          echo "Verifying API responsiveness..."
-          for i in {1..20}; do
-            if curl -s http://127.0.0.1:8091/products > /dev/null; then
-              echo "API is live, seeded, and responding!"
-              break
-            fi
-            echo "Waiting for API endpoint... attempt $i/20"
-            sleep 3
-          done
+          echo "SPRINT=sprint5" > .env
+          docker compose up -d
+          echo "Waiting for MariaDB to initialize..."
+          sleep 20
+          echo "Running database migrations and seeding..."
+          docker compose exec -T laravel-api php artisan migrate:fresh --seed
 
       - name: Debug Docker Containers and Logs
         if: always()
