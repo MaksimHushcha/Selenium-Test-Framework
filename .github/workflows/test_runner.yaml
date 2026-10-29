@@ -52,6 +52,19 @@ jobs:
             sleep 3
           done
 
+      - name: Debug Docker Containers and Logs
+        if: always()
+        run: |
+          cd practice-app
+          echo "=== CONTAINER STATUS ==="
+          docker compose -f docker-compose.prod.yml ps
+          
+          echo "=== LARAVEL API LOGS ==="
+          docker compose -f docker-compose.prod.yml logs laravel-api
+          
+          echo "=== NGINX WEB LOGS ==="
+          docker compose -f docker-compose.prod.yml logs web
+
       - name: Run tests with Allure
         env:
           BASE_URL: ${{ secrets.BASE_URL}}
