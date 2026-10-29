@@ -34,17 +34,21 @@ jobs:
           repository: 'testsmith-io/practice-software-testing'
           path: 'practice-app'
 
-      - name: Set up Docker Compose & Spin up Toolshop App
+      - name: Spin Up App Containers and Initialize Database
         run: |
           cd practice-app
           docker compose -f docker-compose.prod.yml up --pull missing -d
-          echo "Waiting for backend API and frontend to become active..."
-          for i in {1..30}; do
+          echo "Waiting for services to initialize..."
+          sleep 15
+          echo "Migrating and seeding database..."
+          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan migrate:fresh --seed
+          echo "Verifying API responsiveness..."
+          for i in {1..20}; do
             if curl -s http://127.0.0.1:8091/products > /dev/null; then
-              echo "API is live and responding!"
+              echo "API is live, seeded, and responding!"
               break
             fi
-            echo "Waiting for services... attempt $i/30"
+            echo "Waiting for API endpoint... attempt $i/20"
             sleep 3
           done
 
