@@ -38,8 +38,15 @@ jobs:
         run: |
           cd practice-app
           docker compose -f docker-compose.prod.yml up --pull missing -d
-          echo "Waiting for application to start..."
-          sleep 30
+          echo "Waiting for backend API and frontend to become active..."
+          for i in {1..30}; do
+            if nc -z localhost 8091 && nc -z localhost 4200; then
+              echo "All services are up!"
+              break
+            fi
+            echo "Waiting for services... attempt $i/30"
+            sleep 3
+          done
 
       - name: Run tests with Allure
         env:
