@@ -41,15 +41,17 @@ jobs:
           echo "SPRINT=sprint5" > .env
           docker compose up -d
           sleep 15
-          
-
+      
+          docker compose exec -u 0 -T laravel-api bash -c "
+            if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
+            touch .env
+            chmod 666 .env
+            chmod -R 777 storage bootstrap/cache
+          "
           docker compose exec -T laravel-api php artisan key:generate
           docker compose exec -T laravel-api php artisan config:clear
           docker compose exec -T laravel-api php artisan cache:clear
-          
           docker compose exec -T laravel-api php artisan migrate:fresh --seed
-          
-          docker compose exec -T laravel-api chmod -R 777 storage bootstrap/cache
 
       - name: Debug Docker Containers and Logs
         if: always()
