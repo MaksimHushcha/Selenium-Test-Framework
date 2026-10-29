@@ -40,10 +40,16 @@ jobs:
           cd practice-app
           echo "SPRINT=sprint5" > .env
           docker compose up -d
-          echo "Waiting for MariaDB to initialize..."
-          sleep 20
-          echo "Running database migrations and seeding..."
+          sleep 15
+          
+
+          docker compose exec -T laravel-api php artisan key:generate
+          docker compose exec -T laravel-api php artisan config:clear
+          docker compose exec -T laravel-api php artisan cache:clear
+          
           docker compose exec -T laravel-api php artisan migrate:fresh --seed
+          
+          docker compose exec -T laravel-api chmod -R 777 storage bootstrap/cache
 
       - name: Debug Docker Containers and Logs
         if: always()
