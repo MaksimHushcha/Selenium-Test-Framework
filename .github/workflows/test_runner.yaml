@@ -40,7 +40,7 @@ jobs:
           docker compose -f docker-compose.prod.yml up --pull missing -d
           echo "Waiting for backend API and frontend to become active..."
           for i in {1..30}; do
-            if nc -z localhost 8091 && nc -z localhost 4200; then
+            if nc -z 127.0.0.1 8091 && nc -z 127.0.0.1 4200; then
               echo "All services are up!"
               break
             fi
