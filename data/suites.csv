@@ -1,6 +1,6 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","21705","test_add_to_comparison_on_main_page_displays_comparison_bar","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
+"","21244","test_remove_last_item_from_comparison_from_main_page_removes_comparison_bar","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
 "","0","test_clear_comparison_button_from_comparison_bar_removes_all_items_from_comparison","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
-"","22573","test_add_to_comparison_on_main_page_displays_comparison_bar","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
 "","0","test_go_to_comparison_from_a_comparison_bar_open_comparison_page","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
-"","21200","test_remove_last_item_from_comparison_from_main_page_removes_comparison_bar","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
 "","0","test_clear_comparison_from_comparison_page_clear_comparison_on_the_page","tests","2026-10-29","broken","2026-10-29","","test_comparison_page","",""
