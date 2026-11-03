@@ -12,6 +12,8 @@ from pages.contact_page import ContactPage
 import datetime
 from selenium.webdriver.chrome.options import Options
 import dotenv
+import allure
+import re
 from pathlib import Path
 
 dotenv.load_dotenv()
@@ -19,10 +21,21 @@ dotenv.load_dotenv()
 ARTIFACTS_DIR = Path("test-artifacts")
 
 
-def safe_filename(name: str) -> str:
-    filename = (datetime.datetime.now().strftime('%d_%m_%y') + "_" + name).replace("::", "_")
-    return filename
+def safe_filename(nodeid: str) -> str:
+    return re.sub(r"[^\w\-_.]", "_", nodeid)
 
+def get_safe_log(driver, log_type: str):
+    try:
+        return driver.get_log(log_type)
+    except Exception:
+        return []
+
+
+def get_safe_storage(driver, storage_type: str):
+    try:
+        return driver.execute_script(f"return window.{storage_type};") or {}
+    except Exception:
+        return {}
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -34,38 +47,49 @@ def pytest_runtest_makereport(item, call):
         if driver is None:
             return
 
-        # Separate artifacts by test and xdist worker.
         worker = os.environ.get("PYTEST_XDIST_WORKER", "local")
         test_name = safe_filename(item.nodeid)
         artifact_dir = ARTIFACTS_DIR / worker / test_name
         artifact_dir.mkdir(parents=True, exist_ok=True)
 
         try:
-            driver.save_screenshot(str(artifact_dir / "screenshot.png"))
+            screenshot_path = (str(artifact_dir / "screenshot.png"))
+            driver.save_screenshot(screenshot_path)
+            allure.attach.file(screenshot_path, name="Failure Screenshot", attachment_type=allure.attachment_type.PNG)
 
-            browser_logs = driver.get_log("browser")
-            cookies = driver.get_cookies()
-            local_storage = driver.execute_script("return window.localStorage;")
-            session_storage = driver.execute_script("return window.sessionStorage;")
-            perf_logs = driver.get_log("performance")
+            html_file_path = (str(artifact_dir / "page.html"))
+            html_file_path.write_text(driver.page_source, encoding="utf-8")
+            allure.attach.file(html_file_path, name="Page Source", attachment_type=allure.attachment_type.HTML)
+
             metadata = {
-                            "current_url": driver.current_url,
-                            "page_title": driver.title,
-                            "window_size": driver.get_window_size(),
-                            "viewport_size": driver.execute_script(
-                                "return {width: window.innerWidth, height: window.innerHeight};"
-                            ),
-                            "capabilities": driver.capabilities,
-                        }
+                "current_url": driver.current_url,
+                "page_title": driver.title,
+                "window_size": driver.get_window_size(),
+                "viewport_size": driver.execute_script(
+                    "return {width: window.innerWidth, height: window.innerHeight};"
+                ),
+                "capabilities": driver.capabilities,
+            }
 
-            (artifact_dir / "console.json").write_text(json.dumps(browser_logs, indent=2))
-            (artifact_dir / "cookies.json").write_text(json.dumps(cookies, indent=2))
-            (artifact_dir / "local_storage.json").write_text(json.dumps(local_storage, indent=2))
-            (artifact_dir / "cookies.json").write_text(json.dumps(session_storage, indent=2))
-            (artifact_dir / "page.html").write_text(driver.page_source, encoding="utf-8")
-            (artifact_dir / "metadatata.json").write_text(json.dumps(metadata, indent=2))
-            (artifact_dir / "performance_raw.json").write_text(json.dumps(perf_logs, indent=2))
+            diagnostics = {
+                "Metadata": ("metadata.json", metadata),
+                "Browser Console Logs": ("console.json", get_safe_log(driver, "browser")),
+                "Performance Logs": ("performance_raw.json", get_safe_log(driver, "performance")),
+                "Cookies": ("cookies.json", driver.get_cookies()),
+                "Local Storage": ("local_storage.json", get_safe_storage(driver, "localStorage")),
+                "Session Storage": ("session_storage.json", get_safe_storage(driver, "sessionStorage")),
+            }
 
+            for title, (file, data) in diagnostics.items():
+                file_path = artifact_dir / data
+                content = json.dumps(data, indent=2)
+                file_path.write_text(content, encoding="utf-8")
+
+                allure.attach(
+                    content,
+                    name=title,
+                    attachment_type=allure.attachment_type.JSON,
+                )
             print(f"\nBrowser diagnostics saved to: {artifact_dir}")
         except Exception as exc:
             print(f"\nCould not capture browser diagnostics: {exc}")
