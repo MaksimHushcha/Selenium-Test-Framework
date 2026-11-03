@@ -90,7 +90,7 @@ jobs:
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=0 --timeout=60-n 1 --alluredir=allure-results
+        run: pytest -v --tb=short --durations=0 --timeout=60 -n 1 --alluredir=allure-results
         continue-on-error: true
 
       - name: Stop and Clean Up Docker Containers
