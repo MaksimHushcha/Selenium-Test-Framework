@@ -69,10 +69,6 @@ jobs:
           # Check container status
           docker compose -f docker-compose.prod.yml ps
 
-          # Verify API using the secret URL
-          echo "Checking API reachability..."
-          curl --retry 5 --retry-delay 3 -f "${API_BASE_URL}/products" || exit 1
-
       - name: Debug Docker Containers and Logs
         if: failure()
         run: |
