@@ -1,7 +1,7 @@
 from utils import helpers
 
 def test_go_to_comparison_from_a_comparison_bar_open_comparison_page(components, seeded_two_comparison_items, comparison_page, main_page):
-    main_page.laod()
+    main_page.load()
     assert components.comparison_bar_is_displayed()
     components.go_to_compare_screen()
     current_url = main_page.get_current_url()

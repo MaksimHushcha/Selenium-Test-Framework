@@ -85,11 +85,12 @@ def pytest_runtest_makereport(item, call):
                 content = json.dumps(data, indent=2)
                 file_path.write_text(content, encoding="utf-8")
 
-                allure.attach(
+                allure.attach.file(
                     content,
                     name=title,
                     attachment_type=allure.attachment_type.JSON,
                 )
+                
             print(f"\nBrowser diagnostics saved to: {artifact_dir}")
         except Exception as exc:
             print(f"\nCould not capture browser diagnostics: {exc}")
