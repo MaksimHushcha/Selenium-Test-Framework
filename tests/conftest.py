@@ -23,7 +23,7 @@ ARTIFACTS_DIR = Path("test-artifacts")
 
 
 def safe_filename(name: str) -> str:
-    filename = (datetime.datetime.now().strftime('%d%m%y') + "_" + name)
+    filename = (datetime.datetime.now().strftime('%d_%m_%y') + "_" + name).replace("::", "_")
     return filename
 
 
@@ -63,7 +63,7 @@ def pytest_runtest_makereport(item, call):
 
             (artifact_dir / "console.json").write_text(json.dumps(browser_logs, indent=2))
             (artifact_dir / "cookies.json").write_text(json.dumps(cookies, indent=2))
-            (artifact_dir / "cookies.json").write_text(json.dumps(local_storage, indent=2))
+            (artifact_dir / "local_storage.json").write_text(json.dumps(local_storage, indent=2))
             (artifact_dir / "cookies.json").write_text(json.dumps(session_storage, indent=2))
             (artifact_dir / "page.html").write_text(driver.page_source, encoding="utf-8")
             (artifact_dir / "metadatata.json").write_text(json.dumps(metadata, indent=2))

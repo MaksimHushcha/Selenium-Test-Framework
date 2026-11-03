@@ -13,7 +13,7 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout test code
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pytest allure-pytest pytest-xdist
@@ -33,29 +33,37 @@ jobs:
         with:
           repository: 'testsmith-io/practice-software-testing'
           path: 'practice-app'
+          fetch-depth: 1
 
-
-      - name: Spin Up App Containers from Source
+      - name: Spin Up Prebuilt App Containers
         run: |
           cd practice-app
           echo "SPRINT=sprint5" > .env
-          docker compose up -d
-          sleep 15
-      
-          # 1. Use sh instead of bash to configure permissions as root
-          docker compose exec -u 0 -T laravel-api sh -c "
+          
+          # Pull prebuilt amd64 images instead of building from source
+          docker compose -f docker-compose.prod.yml pull
+          docker compose -f docker-compose.prod.yml up -d
+
+          # Wait for MariaDB to become ready
+          echo "Waiting for MariaDB..."
+          until docker compose -f docker-compose.prod.yml exec -T mariadb mysqladmin ping -h localhost -uroot -proot --silent; do
+            sleep 2
+          done
+
+          # Configure Laravel environment & run migrations
+          docker compose -f docker-compose.prod.yml exec -u 0 -T laravel-api sh -c "
             if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
             touch .env
             chmod 666 .env
             chmod -R 777 storage bootstrap/cache
           "
-          docker compose exec -T laravel-api php artisan key:generate
-          docker compose exec -T laravel-api php artisan config:clear
-          docker compose exec -T laravel-api php artisan cache:clear
-          docker compose exec -T laravel-api php artisan migrate:fresh --seed --force
+          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan key:generate
+          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan config:clear
+          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan cache:clear
+          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan migrate:fresh --seed --force
 
       - name: Debug Docker Containers and Logs
-        if: always()
+        if: failure()
         run: |
           cd practice-app
           echo "=== CONTAINER STATUS ==="
@@ -69,20 +77,20 @@ jobs:
 
       - name: Run tests with Allure
         env:
-          BASE_URL: ${{ secrets.BASE_URL}}
+          BASE_URL: ${{ secrets.BASE_URL }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=10 --maxfail=5 -n 1 --alluredir=allure-results
+        run: pytest -v --tb=short --durations=10 -n 1 --alluredir=allure-results
         continue-on-error: true
 
       - name: Stop and Clean Up Docker Containers
         if: always()
         run: |
           cd practice-app
-          docker compose down
+          docker compose -f docker-compose.prod.yml down -v
 
       - name: Upload browser diagnostics
         if: always()
@@ -92,16 +100,19 @@ jobs:
           path: test-artifacts/
           if-no-files-found: ignore
           retention-days: 7
+
       - name: Generate Allure Environment File
         if: always()
         run: |
           mkdir -p allure-results
-          echo "Platform=GitHub Actions" > allure-results/environment.properties
-          echo "Python_Version=3.11" >> allure-results/environment.properties
-          echo "Base_URL=${{ secrets.BASE_URL }}" >> allure-results/environment.properties
-          echo "Branch=${{ github.ref_name }}" >> allure-results/environment.properties
-          echo "Runner_OS=Ubuntu Latest" >> allure-results/environment.properties
-          echo "Execution_ID=${{ github.run_id }}" >> allure-results/environment.properties
+          cat << EOF > allure-results/environment.properties
+          Platform=GitHub Actions
+          Python_Version=3.11
+          Base_URL=${{ secrets.BASE_URL }}
+          Branch=${{ github.ref_name }}
+          Runner_OS=Ubuntu Latest
+          Execution_ID=${{ github.run_id }}
+          EOF
 
       - name: Generate Custom Allure Categories
         if: always()
@@ -133,11 +144,14 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages-dir
+          fetch-depth: 1
 
       - name: Generate Allure Report Natively
         if: always()
         run: |
-          npm install -g allure-commandline --save-dev
+          if ! command -v allure &> /dev/null; then
+            npm install -g allure-commandline --save-dev
+          fi
   
           if [ -d "gh-pages-dir/history" ]; then
             mkdir -p allure-results/history
@@ -161,10 +175,6 @@ jobs:
           publish_dir: allure-history
           keep_files: true
           commit_message: "Update Allure report for run ${{ github.run_number }}"
-
-      - name: Wait for GitHub Pages deployment
-        if: always()
-        run: sleep 60
 
       - name: Send Telegram Notification
         if: always()
