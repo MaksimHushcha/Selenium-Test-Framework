@@ -90,7 +90,7 @@ jobs:
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=0 --timeout=60 -n 1 --alluredir=allure-results
+        run: pytest -v --tb=short --durations=0 --timeout=60 -n 4 --alluredir=allure-results
         continue-on-error: true
 
       - name: Stop and Clean Up Docker Containers
@@ -159,19 +159,36 @@ jobs:
           if ! command -v allure &> /dev/null; then
             npm install -g allure-commandline --save-dev
           fi
-  
+      
+          # 1. Pull previous history into results to keep trend graphs
           if [ -d "gh-pages-dir/history" ]; then
             mkdir -p allure-results/history
             cp -r gh-pages-dir/history/* allure-results/history/
           fi
-  
+      
+          # 2. Generate current report
           allure generate allure-results --clean -o allure-report
-  
-          mkdir -p allure-history
-          if [ -d "allure-report/history" ]; then
-            cp -r allure-report/history/* allure-history/
-          fi
-          cp -r allure-report/* allure-history/
+      
+          # 3. Create run directory and copy this run's report
+          mkdir -p "allure-history/${{ github.run_number }}"
+          cp -r allure-report/* "allure-history/${{ github.run_number }}/"
+      
+          # 4. Save latest history for future runs
+          mkdir -p allure-history/history
+          cp -r allure-report/history/* allure-history/history/
+      
+          # 5. Root redirect to the latest run
+          cat << 'EOF' > allure-history/index.html
+          <!DOCTYPE html>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; URL=./${{ github.run_number }}/">
+          <meta name="robots" content="noindex">
+          <title>Redirecting to latest Allure report...</title>
+          <a href="./${{ github.run_number }}/">Click here if not redirected</a>
+          EOF
+      
+          # 6. Prevent GitHub Pages from ignoring special files
+          touch allure-history/.nojekyll
 
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

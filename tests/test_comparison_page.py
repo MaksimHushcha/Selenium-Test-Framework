@@ -1,6 +1,7 @@
 from utils import helpers
 
 def test_go_to_comparison_from_a_comparison_bar_open_comparison_page(components, seeded_two_comparison_items, comparison_page, main_page):
+    main_page.laod()
     assert components.comparison_bar_is_displayed()
     components.go_to_compare_screen()
     current_url = main_page.get_current_url()
@@ -22,7 +23,8 @@ def test_remove_last_item_from_comparison_from_main_page_removes_comparison_bar(
     main_page.remove_from_comparison_main()
     assert components.comparison_bar_is_not_visible()
 
-def test_clear_comparison_button_from_comparison_bar_removes_all_items_from_comparison(comparison_page, seeded_two_comparison_items, components):
+def test_clear_comparison_button_from_comparison_bar_removes_all_items_from_comparison(comparison_page, main_page, seeded_two_comparison_items, components):
+    main_page.load()
     assert components.comparison_bar_is_displayed()
     components.clear_comparison()
     assert components.comparison_bar_is_not_visible()

@@ -126,6 +126,12 @@ def get_available_product_id():
 
 
 @pytest.fixture
+def get_two_product_ids():
+    product_id = get_a_random_valid_product_id(amount_of_items=2)
+    return product_id
+
+
+@pytest.fixture
 def authenticated_user(driver):
     token = AuthManager.get_access_token()
     driver.get(f"{os.getenv('BASE_URL')}contact")
