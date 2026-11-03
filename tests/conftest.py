@@ -1,75 +1,77 @@
+import json
 import os
-
 import pytest
 from selenium import webdriver
 from utils.api_utils import get_a_random_valid_product_id, get_measuring_items_for_comparison, get_random_product_ids, AuthManager, FavoritesAPI
-
 from pages.components import Components
 from pages.comparison_page import ComparisonPage
 from pages.checkout_page import Checkout
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 from pages.contact_page import ContactPage
-
+import datetime
 from selenium.webdriver.chrome.options import Options
 import dotenv
-
-###
-import os
-import re
 from pathlib import Path
-###
+
 dotenv.load_dotenv()
 
 
-import pytest
 
-#### GENERATED FOR TROUBLESHOOTING_REWRITE_BY_HAND_LATER
+
 ARTIFACTS_DIR = Path("test-artifacts")
 
 
 def safe_filename(name: str) -> str:
-    """Convert a test node ID into a filesystem-safe filename."""
-    return re.sub(r"[^a-zA-Z0-9_.-]+", "_", name)[:180]
+    filename = (datetime.datetime.now().strftime('%d%m%y') + "_" + name)
+    return filename
 
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Capture browser diagnostics when a test fails."""
     outcome = yield
     report = outcome.get_result()
 
-    # Capture failures during the test body, not setup or teardown.
-    if report.when != "call" or not report.failed:
-        return
+    if report.when == "call" and report.failed:
+        driver = item.funcargs.get("driver")
+        if driver is None:
+            return
 
-    driver = item.funcargs.get("driver")
-    if driver is None:
-        return
+        # Separate artifacts by test and xdist worker.
+        worker = os.environ.get("PYTEST_XDIST_WORKER", "local")
+        test_name = safe_filename(item.nodeid)
+        artifact_dir = ARTIFACTS_DIR / worker / test_name
+        artifact_dir.mkdir(parents=True, exist_ok=True)
 
-    # Separate artifacts by test and xdist worker.
-    worker = os.environ.get("PYTEST_XDIST_WORKER", "local")
-    test_name = safe_filename(item.nodeid)
-    artifact_dir = ARTIFACTS_DIR / worker / test_name
-    artifact_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            driver.save_screenshot(str(artifact_dir / "screenshot.png"))
 
-    try:
-        (artifact_dir / "url.txt").write_text(
-            driver.current_url, encoding="utf-8"
-        )
-        (artifact_dir / "title.txt").write_text(
-            driver.title, encoding="utf-8"
-        )
-        driver.save_screenshot(str(artifact_dir / "screenshot.png"))
-        (artifact_dir / "page.html").write_text(
-            driver.page_source, encoding="utf-8"
-        )
+            browser_logs = driver.get_log("browser")
+            cookies = driver.get_cookies()
+            local_storage = driver.execute_script("return window.localStorage;")
+            session_storage = driver.execute_script("return window.sessionStorage;")
+            perf_logs = driver.get_log("performance")
+            metadata = {
+                            "current_url": driver.current_url,
+                            "page_title": driver.title,
+                            "window_size": driver.get_window_size(),
+                            "viewport_size": driver.execute_script(
+                                "return {width: window.innerWidth, height: window.innerHeight};"
+                            ),
+                            "capabilities": driver.capabilities,
+                        }
 
-        print(f"\nBrowser diagnostics saved to: {artifact_dir}")
+            (artifact_dir / "console.json").write_text(json.dumps(browser_logs, indent=2))
+            (artifact_dir / "cookies.json").write_text(json.dumps(cookies, indent=2))
+            (artifact_dir / "cookies.json").write_text(json.dumps(local_storage, indent=2))
+            (artifact_dir / "cookies.json").write_text(json.dumps(session_storage, indent=2))
+            (artifact_dir / "page.html").write_text(driver.page_source, encoding="utf-8")
+            (artifact_dir / "metadatata.json").write_text(json.dumps(metadata, indent=2))
+            (artifact_dir / "performance_raw.json").write_text(json.dumps(perf_logs, indent=2))
 
-    except Exception as exc:
-        print(f"\nCould not capture browser diagnostics: {exc}")
-###
+            print(f"\nBrowser diagnostics saved to: {artifact_dir}")
+        except Exception as exc:
+            print(f"\nCould not capture browser diagnostics: {exc}")
 
 @pytest.fixture
 def driver():
@@ -79,12 +81,13 @@ def driver():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
+    options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
     options.add_experimental_option("detach", True)  # to prevent browser from closing
     chrome_driver = webdriver.Chrome(options=options)
     chrome_driver.implicitly_wait(3)
     chrome_driver.set_window_size(1280, 800)
     yield chrome_driver
-    #chrome_driver.quit()
+    chrome_driver.quit()
 
 
 @pytest.fixture

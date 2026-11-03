@@ -30,7 +30,7 @@ def test_first_name_121_char_long_is_not_accepted_when_sending_contact_info(cont
     contact_page.fill_first_name(121*"a")
     contact_page.send_message()
 
-    expected_message = "The name field must not be greater than 120 characters"
+    expected_message = "The name field must not be greater than 120 characters."
     received_message = contact_page.get_help_block_error()
     assert received_message == expected_message, \
             f"Expected to see {expected_message}, but got {received_message}"
