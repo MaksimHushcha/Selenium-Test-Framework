@@ -16,9 +16,6 @@ from pathlib import Path
 
 dotenv.load_dotenv()
 
-
-
-
 ARTIFACTS_DIR = Path("test-artifacts")
 
 

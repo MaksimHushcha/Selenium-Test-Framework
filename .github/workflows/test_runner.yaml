@@ -35,32 +35,35 @@ jobs:
           path: 'practice-app'
           fetch-depth: 1
 
-      - name: Spin Up Prebuilt App Containers
+      - name: Spin Up Containers & Verify Services
         run: |
           cd practice-app
-          echo "SPRINT=sprint5" > .env
-          
-          # Pull prebuilt amd64 images instead of building from source
-          docker compose -f docker-compose.prod.yml pull
+          if [ -f .env.example ]; then cp .env.example .env; fi
+          echo "SPRINT=sprint5" >> .env
+      
           docker compose -f docker-compose.prod.yml up -d
-
-          # Wait for MariaDB to become ready
-          echo "Waiting for MariaDB..."
+      
+          echo "Waiting for MariaDB to accept connections..."
           until docker compose -f docker-compose.prod.yml exec -T mariadb mysqladmin ping -h localhost -uroot -proot --silent; do
             sleep 2
           done
-
-          # Configure Laravel environment & run migrations
+      
           docker compose -f docker-compose.prod.yml exec -u 0 -T laravel-api sh -c "
             if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
-            touch .env
+            sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mariadb/g' .env
+            sed -i 's/DB_HOST=localhost/DB_HOST=mariadb/g' .env
             chmod 666 .env
             chmod -R 777 storage bootstrap/cache
           "
+      
           docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan key:generate
           docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan config:clear
           docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan cache:clear
           docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan migrate:fresh --seed --force
+      
+          # Sanity check host endpoints before launching Pytest
+          echo "Testing API endpoint on host..."
+          curl --retry 5 --retry-delay 3 -f http://localhost:8091/products || exit 1
 
       - name: Debug Docker Containers and Logs
         if: failure()
@@ -83,7 +86,7 @@ jobs:
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=10 -n 1 --alluredir=allure-results
+        run: pytest -v --tb=short --durations=0 --timeout=60-n 1 --alluredir=allure-results
         continue-on-error: true
 
       - name: Stop and Clean Up Docker Containers
