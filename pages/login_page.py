@@ -1,6 +1,6 @@
 import os
 
-from base_page import BasePage
+from pages.base_page import BasePage
 from locators import login_page_locators as loc
 from dotenv import load_dotenv
 
