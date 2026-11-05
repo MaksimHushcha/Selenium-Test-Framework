@@ -9,6 +9,8 @@ from pages.checkout_page import Checkout
 from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 from pages.contact_page import ContactPage
+from pages.login_page import LoginPage
+
 import datetime
 from selenium.webdriver.chrome.options import Options
 import dotenv
@@ -57,9 +59,9 @@ def pytest_runtest_makereport(item, call):
             driver.save_screenshot(screenshot_path)
             allure.attach.file(screenshot_path, name="Failure Screenshot", attachment_type=allure.attachment_type.PNG)
 
-            html_file_path = (str(artifact_dir / "page.html"))
+            html_file_path = (artifact_dir / "page.html")
             html_file_path.write_text(driver.page_source, encoding="utf-8")
-            allure.attach.file(html_file_path, name="Page Source", attachment_type=allure.attachment_type.HTML)
+            allure.attach.file(str(html_file_path), name="Page Source", attachment_type=allure.attachment_type.HTML)
 
             metadata = {
                 "current_url": driver.current_url,
@@ -81,16 +83,16 @@ def pytest_runtest_makereport(item, call):
             }
 
             for title, (file, data) in diagnostics.items():
-                file_path = artifact_dir / data
+                file_path = artifact_dir / file
                 content = json.dumps(data, indent=2)
                 file_path.write_text(content, encoding="utf-8")
 
-                allure.attach.file(
+                allure.attach(
                     content,
                     name=title,
                     attachment_type=allure.attachment_type.JSON,
                 )
-                
+
             print(f"\nBrowser diagnostics saved to: {artifact_dir}")
         except Exception as exc:
             print(f"\nCould not capture browser diagnostics: {exc}")
@@ -98,7 +100,8 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture
 def driver():
     options = Options()
-    options.add_argument("--headless=new")
+    if os.getenv("GITHUB_ACTIONS"):
+        options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
@@ -109,7 +112,8 @@ def driver():
     chrome_driver.implicitly_wait(3)
     chrome_driver.set_window_size(1280, 800)
     yield chrome_driver
-    chrome_driver.quit()
+    if os.getenv("GITHUB_ACTIONS"):
+        chrome_driver.quit()
 
 
 @pytest.fixture
@@ -141,6 +145,10 @@ def comparison_page(driver):
 def contact_page(driver):
     return ContactPage(driver)
 
+
+@pytest.fixture
+def login_page(driver):
+    return LoginPage(driver)
 
 
 @pytest.fixture

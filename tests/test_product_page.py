@@ -70,6 +70,7 @@ def test_items_on_product_page_display_their_full_specs(product_page, get_availa
     assert co2_rating_color == "#f97316", f"Expected color to be #f97316, but: {co2_rating_color}"
     assert None not in tags, f"Expected tags to be not empty, but got {tags}"
 
+
 def test_items_added_to_comparison_from_main_page_are_visible_in_comparison_page_when_visited_directly(
         product_page, get_two_product_ids, components):
     product_id_1, product_id_2 = get_two_product_ids

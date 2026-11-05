@@ -37,3 +37,6 @@ class Components(BasePage):
     def comparison_bar_is_displayed(self):
         return self.is_element_visible(loc.COMPARISON_BAR)
 
+    def get_navbar_username(self):
+        return self.locate_element(loc.NAV_MENU).text
+

@@ -9,3 +9,5 @@ CARD_CO2_RATING = (By.XPATH, "//span[contains(@class, 'co2-letter') and contains
 COMPARISON_BAR = (By.CSS_SELECTOR, "[data-test=comparison-bar]")
 CLEAR_COMPARISON_BUTTON = (By.CSS_SELECTOR, "[data-test=clear-comparison]")
 COMPARE_NOW_BUTTON = (By.CSS_SELECTOR, "[data-test=compare-link]")
+
+NAV_MENU = (By.CSS_SELECTOR, "[data-test=nav-menu]")

@@ -2,7 +2,7 @@ from tests.conftest import contact_page
 from faker import Faker
 fake = Faker()
 
-def test_sending_contact_with_correct_info_correctly_sends_info(contact_page):
+def test_sending_message_on_contact_page_with_correct_data_is_successful(contact_page):
     contact_page.load()
     contact_page.fill_all_contact_data()
     contact_page.send_message()
@@ -106,7 +106,7 @@ def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_
         f"Expected to see {expected_message}, but got {received_message}"
 
 
-# it fails with an invalid format message, so i don't know real limits
+# it fails with an invalid format message, I don't know real limits
 def test_long_email_address_are_rejected_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.fill_all_contact_data(fields_to_exclude=["Email"])
