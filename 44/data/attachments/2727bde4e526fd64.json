@@ -1,0 +1,26 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793997542078
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793997542109
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@fs/app/.angular/cache/20.0.4/Toolshop/vite/deps/chunk-QURCENYN.js?v=e1210faf 2554:18 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1793997542122
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/login - Failed to load resource: the server responded with a status of 423 (Locked)",
+    "source": "network",
+    "timestamp": 1793997543825
+  }
+]
