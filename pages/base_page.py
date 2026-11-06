@@ -40,7 +40,10 @@ class BasePage:
         self.set_item_in_session_storage('compare_ids', json.dumps(ids_list))
 
     def locate_element(self, locator: tuple[str,str]) -> WebElement:
-        return self.wait.until(EC.visibility_of_element_located(locator))
+        try:
+            return self.wait.until(EC.visibility_of_element_located(locator))
+        except TimeoutException:
+            raise AssertionError("Element couldn't be located within configured timeout")
 
 
     def locate_multiple_elements(self, locator: tuple[str,str]) -> list[WebElement]:
@@ -55,10 +58,6 @@ class BasePage:
     def click_by_web_element(self, element: WebElement):
         self.wait.until(EC.element_to_be_clickable(element)).click()
         return self
-    
-    
-    def click__element_from_multiple(self, element: WebElement):
-        self.wait.until(EC.element_to_be_clickable(element)).click()
 
 
     def fill_field(self, locator: tuple[str,str], text: str):
@@ -89,6 +88,7 @@ class BasePage:
         self.wait_for_element_visibility(locator)
         self.wait.until_not(EC.text_to_be_present_in_element(locator, ""))
         return self
+
 
     def is_element_visible(self, locator: tuple[str,str]):
         try:

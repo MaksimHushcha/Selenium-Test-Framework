@@ -10,8 +10,8 @@ dotenv.load_dotenv()
 def test_successful_login_as_user_forwards_to_user_profile(login_page, components):
     login_page.load()
     login_page.login_as_user()
-    current_user = components.get_current_user()
-    assert current_user == " Bob Smith "
+    current_user = components.get_navbar_username()
+    assert current_user == "Bob Smith"
     current_url = components.get_current_url()
     assert current_url.endswith("/account"), \
         f"Expected user to be forwarded to /account upon login, but the current url is {current_url} "
@@ -21,7 +21,7 @@ def test_successful_login_as_user_forwards_to_user_profile(login_page, component
 def test_successful_login_as_admin_forwards_to_admin_dashboard(login_page, components):
     login_page.load()
     login_page.login_as_admin()
-    current_user = components.get_current_user()
+    current_user = components.get_navbar_username()
     assert current_user == "John Doe"
     current_url = components.get_current_url()
     assert current_url.endswith("/admin/dashboard"), \
@@ -41,14 +41,14 @@ def test_login_with_incorrect_password_displays_a_correct_error(login_page):
 
 # I don't know the amount of attempts needed, temporary values, to investigate later
 def test_login_with_incorrect_password_locks_account_out(login_page):
-    number_of_attempts = 4
+    number_of_attempts = 5
     for current_attempt in range(number_of_attempts):
         login_page.load()
         login_page.input_email_address(os.getenv("USER_EMAIL"))
         login_page.input_password(faker.password())
         login_page.press_login_button()
         assert login_page.get_login_error_message() == "Invalid email or password"
-        if current_attempt == 4:
+        if current_attempt == 5:
             assert login_page.get_login_error_message() == "Account locked, too many failed attempts. Please contact the administrator."
 
 
@@ -76,6 +76,7 @@ def test_login_without_email_and_no_password_displays_both_messages(login_page):
 def test_user_gets_a_hint_when_password_is_shorter_than_2_symbols(login_page):
     login_page.load()
     login_page.input_email_address(faker.email())
+    login_page.input_email_address("ab")
     login_page.press_login_button()
     assert login_page.get_password_error_message() == "Password length is invalid"
 

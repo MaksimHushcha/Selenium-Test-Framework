@@ -100,7 +100,7 @@ def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_
 def test_long_email_address_are_rejected_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.fill_all_contact_data(fields_to_exclude=["Email"])
-    contact_page.fill_email((100*fake.word()) + fake.email())
+    contact_page.fill_email((120*"a" + "@example.com"))
     contact_page.send_message()
 
     expected_message = "Email is too long"
