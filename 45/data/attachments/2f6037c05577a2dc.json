@@ -1,0 +1,74 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998638887
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998638887
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@fs/app/.angular/cache/20.0.4/Toolshop/vite/deps/chunk-QURCENYN.js?v=ea495a09 2554:18 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1793998638910
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998639728
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998641007
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998641010
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@fs/app/.angular/cache/20.0.4/Toolshop/vite/deps/chunk-QURCENYN.js?v=ea495a09 2554:18 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1793998641021
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998642081
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998642577
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@fs/app/.angular/cache/20.0.4/Toolshop/vite/deps/chunk-QURCENYN.js?v=ea495a09 2554:18 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1793998642583
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1793998642596
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/login - Failed to load resource: the server responded with a status of 423 (Locked)",
+    "source": "network",
+    "timestamp": 1793998643647
+  }
+]
