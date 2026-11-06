@@ -13,6 +13,12 @@ class LoginPage(BasePage):
     def get_login_error_message(self):
         return self.locate_element(loc.LOGIN_ERROR).text
 
+    def get_password_error_message(self):
+        return self.locate_element(loc.PASSWORD_ERROR).text
+
+    def get_email_error_message(self):
+        return self.locate_element(loc.EMAIL_ERROR).text
+
     def input_email_address(self, email):
         self.fill_field(loc.EMAIL_ADDRESS_FIELD, email)
 
@@ -40,4 +46,11 @@ class LoginPage(BasePage):
         self.input_email_address(os.getenv("ADMIN_EMAIL"))
         self.input_password(os.getenv("ADMIN_PASSWORD"))
         self.press_login_button()
+
+
+    def is_password_masked(self):
+        if self.get_attribute("type", loc.PASSWORD_FIELD) == "password":
+            return True
+        else:
+            return False
 

@@ -22,8 +22,7 @@ def test_invalid_search_in_shop_returns_no_products_message(main_page):
     main_page.load()
     main_page.search_an_item("HarcodedSearchDataToRemove")
     receive_message = main_page.get_no_products_found_message()
-    assert receive_message == expected_message, \
-        f"Expected no products found message to be {expected_message}, but got {receive_message}"
+    assert receive_message == expected_message
 
 
 def test_reset_search_in_shop_reverts_search(main_page):
@@ -106,6 +105,7 @@ def test_filter_by_price_in_shop_displays_only_items_of_selected_price(main_page
     main_page.load()
     main_page.set_price_filter(min_price, max_price)
     prices = main_page.get_list_of_prices_on_cards()
+    assert len(prices) > 0, f"Expected some items in price range {min_price}-{max_price}, but found none."
     assert all(min_price <= price <= max_price for price in prices), \
         f"Expected prices to be in filter range, but {prices} are not in {min_price}, {max_price} range"
 

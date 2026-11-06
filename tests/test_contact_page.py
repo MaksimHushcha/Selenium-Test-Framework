@@ -9,9 +9,7 @@ def test_sending_message_on_contact_page_with_correct_data_is_successful(contact
 
     expected_message = "Thanks for your message! We will contact you shortly."
     received_message = contact_page.get_success_alert_text()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
-
+    assert received_message == expected_message
 
 def test_first_name_is_mandatory_when_sending_contact_message(contact_page):
     contact_page.load()
@@ -20,8 +18,7 @@ def test_first_name_is_mandatory_when_sending_contact_message(contact_page):
 
     expected_message = "First name is required"
     received_message = contact_page.get_first_name_error_message()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_first_name_121_char_long_is_not_accepted_when_sending_contact_info(contact_page):
@@ -32,8 +29,7 @@ def test_first_name_121_char_long_is_not_accepted_when_sending_contact_info(cont
 
     expected_message = "The name field must not be greater than 120 characters."
     received_message = contact_page.get_help_block_error()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_first_name_120_char_long_is_accepted_when_sending_contact_info(contact_page):
@@ -44,8 +40,7 @@ def test_first_name_120_char_long_is_accepted_when_sending_contact_info(contact_
 
     expected_message = "Thanks for your message! We will contact you shortly."
     received_message = contact_page.get_success_alert_text()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_last_name_is_mandatory_when_sending_contact_message(contact_page):
@@ -55,8 +50,7 @@ def test_last_name_is_mandatory_when_sending_contact_message(contact_page):
 
     expected_message = "Last name is required"
     received_message = contact_page.get_last_name_error_message()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_last_name_121_char_long_is_not_accepted_when_sending_contact_info(contact_page):
@@ -67,8 +61,7 @@ def test_last_name_121_char_long_is_not_accepted_when_sending_contact_info(conta
 
     expected_message = "The name field must not be greater than 120 characters."
     received_message = contact_page.get_help_block_error()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_last_name_120_char_long_is_accepted_when_sending_contact_info(contact_page):
@@ -79,8 +72,7 @@ def test_last_name_120_char_long_is_accepted_when_sending_contact_info(contact_p
 
     expected_message = "Thanks for your message! We will contact you shortly."
     received_message = contact_page.get_success_alert_text()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_email_address_is_mandatory_when_sending_contact_message(contact_page):
@@ -90,8 +82,7 @@ def test_email_address_is_mandatory_when_sending_contact_message(contact_page):
 
     expected_message = "Email is required"
     received_message = contact_page.get_email_error_message()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 # In theory, we can add more email validation tests
 def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_page):
@@ -102,8 +93,7 @@ def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_
 
     expected_message = "Email format is invalid"
     received_message = contact_page.get_email_error_message()
-    assert received_message == expected_message, \
-        f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 # it fails with an invalid format message, I don't know real limits
@@ -115,8 +105,7 @@ def test_long_email_address_are_rejected_when_sending_contact_message(contact_pa
 
     expected_message = "Email is too long"
     received_message = contact_page.get_email_error_message()
-    assert received_message == expected_message, \
-        f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message
 
 
 def test_message_is_mandatory_when_sending_contact_message(contact_page):
@@ -126,9 +115,7 @@ def test_message_is_mandatory_when_sending_contact_message(contact_page):
 
     expected_message = "Message is required"
     received_message = contact_page.get_message_upload_error()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
-
+    assert received_message == expected_message
 
 def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_page):
     contact_page.load()
@@ -138,9 +125,7 @@ def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_
 
     expected_message = "File should be empty."
     received_message = contact_page.get_file_upload_error()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
-
+    assert received_message == expected_message
 
 
 def test_non_txt_are_not_accepted_when_sending_contact_message(contact_page):
@@ -151,5 +136,4 @@ def test_non_txt_are_not_accepted_when_sending_contact_message(contact_page):
 
     expected_message = "File should have a txt extension."
     received_message = contact_page.get_file_upload_error()
-    assert received_message == expected_message, \
-            f"Expected to see {expected_message}, but got {received_message}"
+    assert received_message == expected_message

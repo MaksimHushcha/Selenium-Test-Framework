@@ -5,9 +5,8 @@ def test_go_to_comparison_from_a_comparison_bar_open_comparison_page(components,
     assert components.comparison_bar_is_displayed()
     components.go_to_compare_screen()
     current_url = main_page.get_current_url()
-    current_title = main_page.get_page_title()
     assert current_url == comparison_page.get_expected_page_url()
-    assert current_title == "Product Comparison - Practice Software Testing - Toolshop - v5.0"
+    assert main_page.get_page_title() == "Product Comparison - Practice Software Testing - Toolshop - v5.0"
 
 
 def test_add_to_comparison_on_main_page_displays_comparison_bar(main_page, components):

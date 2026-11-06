@@ -8,7 +8,7 @@ def test_product_page_title_starts_with_product_name(product_page, get_available
     product_page.load(get_available_product_id)
     product_title = product_page.get_product_name()
     page_title = product_page.get_page_title()
-    assert page_title.startswith(product_title), f"Expected page title to start with {product_title}, but got {page_title}"
+    assert page_title.startswith(product_title)
 
 
 def test_user_is_unable_to_add_to_favourites_unauthorized(product_page, components, get_available_product_id):
@@ -17,9 +17,7 @@ def test_user_is_unable_to_add_to_favourites_unauthorized(product_page, componen
     product_page.add_to_favourites()
     toast_text = components.get_toast_text()
     expected_toast_text = "Unauthorized, can not add product to your favorite list."
-    assert toast_text == expected_toast_text, \
-        f"Toast text: {toast_text}, Expected: {expected_toast_text}"
-
+    assert toast_text == expected_toast_text
 
 def test_add_to_favourites_from_product_page(product_page, components, get_available_product_id, authenticated_user, clear_favorites):
 
@@ -82,9 +80,9 @@ def test_items_added_to_comparison_from_main_page_are_visible_in_comparison_page
 
     session_storage = product_page.get_item_from_session_storage("compare_ids")
     assert product_id_1 in session_storage and product_id_2 in session_storage
-    assert components.comparison_bar_is_displayed()
+    assert components.comparison_bar_is_displayed(), f"Expected comparison bar to be displayed"
 
 
 def test_products_on_product_page_have_a_picture(product_page, get_available_product_id):
     product_page.load(get_available_product_id)
-    assert product_page.is_picture_displayed()
+    assert product_page.is_picture_displayed(), f"Expected picture to be displayed"

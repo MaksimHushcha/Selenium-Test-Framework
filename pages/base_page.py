@@ -104,6 +104,11 @@ class BasePage:
         except TimeoutException:
             return False
 
+
+    def get_attribute(self, attribute: str, locator: tuple[str,str]):
+        element = self.locate_element(locator)
+        return element.get_attribute(attribute)
+
     # --- SESSION STORAGE HELPERS ---
 
     def set_item_in_session_storage(self, key, value):
