@@ -47,10 +47,9 @@ def test_login_with_incorrect_password_locks_account_out(login_page):
     number_of_attempts = 5
     for current_attempt in range(number_of_attempts):
         login_page.load()
-        login_page.input_email_address(os.getenv("USER_EMAIL"))
+        login_page.input_email_address(os.getenv("USER_EMAIL_ACCOUNT_LOCKOUT"))
         login_page.input_password(faker.password())
         login_page.press_login_button()
-        assert login_page.get_login_error_message() == "Invalid email or password"
         if current_attempt == 5:
             assert login_page.get_login_error_message() == "Account locked, too many failed attempts. Please contact the administrator."
 

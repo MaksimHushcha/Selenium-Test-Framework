@@ -58,13 +58,13 @@ class LoginPage(BasePage):
     def click_google_sso_button(self):
         self.click_by_locator(loc.GOOGLE_SSO_BUTTON)
         self._change_browser_tab()
-
+        self.wait.until(EC.url_contains("google.com"))
 
     def _change_browser_tab(self):
         original_window_handle = self.driver.current_window_handle
         self.wait.until(EC.number_of_windows_to_be(2))
-        current_handles = self.driver.window_handles
-        new_window_handle = [handle for handle in current_handles if handle != original_window_handle][0]
+        all_handles = self.driver.window_handles
+        new_window_handle = next(handle for handle in all_handles if handle != original_window_handle)
         self.driver.switch_to.window(new_window_handle)
 
 

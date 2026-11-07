@@ -22,6 +22,22 @@ dotenv.load_dotenv()
 
 ARTIFACTS_DIR = Path("test-artifacts")
 
+@pytest.fixture
+def driver():
+    options = Options()
+    if os.getenv("GITHUB_ACTIONS"):
+        options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
+    options.add_experimental_option("detach", True)  # to prevent browser from closing
+    chrome_driver = webdriver.Chrome(options=options)
+    chrome_driver.implicitly_wait(3)
+    chrome_driver.set_window_size(1280, 800)
+    yield chrome_driver
+    chrome_driver.quit()
 
 def safe_filename(nodeid: str) -> str:
     return re.sub(r"[^\w\-_.]", "_", nodeid)
@@ -97,23 +113,7 @@ def pytest_runtest_makereport(item, call):
         except Exception as exc:
             print(f"\nCould not capture browser diagnostics: {exc}")
 
-@pytest.fixture
-def driver():
-    options = Options()
-    if os.getenv("GITHUB_ACTIONS"):
-        options.add_argument("--headless=new")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--window-size=1920,1080")
-    options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
-    options.add_experimental_option("detach", True)  # to prevent browser from closing
-    chrome_driver = webdriver.Chrome(options=options)
-    chrome_driver.implicitly_wait(3)
-    chrome_driver.set_window_size(1280, 800)
-    yield chrome_driver
-    if os.getenv("GITHUB_ACTIONS"):
-        chrome_driver.quit()
+
 
 
 @pytest.fixture
