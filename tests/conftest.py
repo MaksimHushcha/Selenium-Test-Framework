@@ -73,7 +73,7 @@ def pytest_runtest_makereport(item, call):
         try:
             screenshot_path = (str(artifact_dir / "screenshot.png"))
             body = driver.find_element_by_tag_name('body')
-            body.save_screenshot(screenshot_path)
+            body.screenshot(screenshot_path)
             allure.attach.file(screenshot_path, name="Failure Screenshot", attachment_type=allure.attachment_type.PNG)
 
             html_file_path = (artifact_dir / "page.html")
