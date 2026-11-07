@@ -42,18 +42,6 @@ def test_login_with_incorrect_password_displays_a_correct_error(login_page):
         f"Expected user to remain at /login, but the current url is {current_url} "
 
 
-# I don't know the amount of attempts needed, temporary values, to investigate later
-def test_login_with_incorrect_password_locks_account_out(login_page):
-    number_of_attempts = 5
-    for current_attempt in range(number_of_attempts):
-        login_page.load()
-        login_page.input_email_address(os.getenv("USER_EMAIL_ACCOUNT_LOCKOUT"))
-        login_page.input_password(faker.password())
-        login_page.press_login_button()
-        if current_attempt == 5:
-            assert login_page.get_login_error_message() == "Account locked, too many failed attempts. Please contact the administrator."
-
-
 def test_login_with_valid_email_and_no_password_displays_a_correct_error(login_page):
     login_page.load()
     login_page.input_email_address(os.getenv("USER_EMAIL"))
@@ -118,3 +106,16 @@ def test_google_sso_redirect(login_page):
     assert "client_id=" in current_url
     assert "redirect_uri=" in current_url
     assert "response_type=code" in current_url
+
+
+
+# I don't know the amount of attempts needed, temporary values, to investigate later
+def test_login_with_incorrect_password_locks_account_out(login_page):
+    number_of_attempts = 5
+    for current_attempt in range(number_of_attempts):
+        login_page.load()
+        login_page.input_email_address(os.getenv("USER_EMAIL_ACCOUNT_LOCKOUT"))
+        login_page.input_password(faker.password())
+        login_page.press_login_button()
+        if current_attempt == 5:
+            assert login_page.get_login_error_message() == "Account locked, too many failed attempts. Please contact the administrator."

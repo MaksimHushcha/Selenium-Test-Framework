@@ -104,8 +104,8 @@ class AuthManager:
     def _get_a_fresh_token(cls):
         api = ApiRequest()
         request_body = {
-            "email": os.getenv('USER_EMAIL'),
-            "password": os.getenv("USER_PASSWORD")
+            "email": os.getenv('API_USER'),
+            "password": os.getenv("API_USER_PASSWORD")
         }
         request_body = json.dumps(request_body)
         try:

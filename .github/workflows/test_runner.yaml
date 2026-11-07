@@ -92,6 +92,9 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           USER_EMAIL_ACCOUNT_LOCKOUT: ${{ secrets.USER_EMAIL_ACCOUNT_LOCKOUT }}
           USER_PASSWORD_ACCOUNT_LOCKOUT: ${{ secrets.USER_PASSWORD_ACCOUNT_LOCKOUT }}
+          API_USER: ${{ secrets.API_USER }}
+          API_USER_PASSWORD: ${{ secrets.API_USER_PASSWORD }}
+
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
         run: pytest -v --tb=short --durations=0 --timeout=60 -n 4 --alluredir=allure-results
