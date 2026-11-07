@@ -1,9 +1,12 @@
+import json
 import os
-
+import time
+import urllib.parse
 import pytest
 from faker import Faker
 import dotenv
 faker = Faker()
+
 
 dotenv.load_dotenv()
 
@@ -76,7 +79,7 @@ def test_login_without_email_and_no_password_displays_both_messages(login_page):
 def test_user_gets_a_hint_when_password_is_shorter_than_2_symbols(login_page):
     login_page.load()
     login_page.input_email_address(faker.email())
-    login_page.input_email_address("ab")
+    login_page.input_password("ab")
     login_page.press_login_button()
     assert login_page.get_password_error_message() == "Password length is invalid"
 
@@ -105,3 +108,14 @@ def test_show_password_displays_the_password(login_page):
     login_page.show_password()
     assert login_page.is_password_masked() == True, f"Expected password to be unmasked after second show_password"
 
+
+def test_google_sso_redirect(login_page):
+    login_page.load()
+
+    login_page.click_google_sso_button()
+    current_url = login_page.driver.current_url
+
+    assert "accounts.google.com" in current_url
+    assert "client_id=" in current_url
+    assert "redirect_uri=" in current_url
+    assert "response_type=code" in current_url

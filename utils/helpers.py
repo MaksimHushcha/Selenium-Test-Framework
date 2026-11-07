@@ -1,6 +1,5 @@
 
 
-
 def verify_list_is_sorted(list_to_sort: list, reverse_order: bool) -> bool:
     return list_to_sort == sorted(list_to_sort, reverse=reverse_order)
 
@@ -19,3 +18,5 @@ def create_list_of_matching_values_ordered(list1: list, list2: list) -> list:
             first_index += 1
             second_index += 1
     return [matching_values_first_list, matching_values_second_list]
+
+

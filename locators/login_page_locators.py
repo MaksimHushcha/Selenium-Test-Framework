@@ -11,3 +11,7 @@ FORGOT_PASSWORD_LINK = (By.CSS_SELECTOR, "[data-test=forgot-password-link]")
 LOGIN_ERROR = (By.CSS_SELECTOR, "[data-test=login-error]")
 EMAIL_ERROR = (By.CSS_SELECTOR, "[data-test=email-error]")
 PASSWORD_ERROR = (By.CSS_SELECTOR, "[data-test=password-error]")
+
+GOOGLE_SSO_BUTTON = (By.CLASS_NAME, "google-sign-in-button")
+GOOGLE_SSO_INPUT_EMAIL = (By.XPATH, "//input[@type='text']")
+GOOGLE_NEXT_BUTTON = (By.ID, "identifierNext")

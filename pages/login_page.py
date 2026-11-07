@@ -1,5 +1,5 @@
 import os
-
+from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from locators import login_page_locators as loc
 from dotenv import load_dotenv
@@ -53,4 +53,18 @@ class LoginPage(BasePage):
             return True
         else:
             return False
+
+
+    def click_google_sso_button(self):
+        self.click_by_locator(loc.GOOGLE_SSO_BUTTON)
+        self._change_browser_tab()
+
+
+    def _change_browser_tab(self):
+        original_window_handle = self.driver.current_window_handle
+        self.wait.until(EC.number_of_windows_to_be(2))
+        current_handles = self.driver.window_handles
+        new_window_handle = [handle for handle in current_handles if handle != original_window_handle][0]
+        self.driver.switch_to.window(new_window_handle)
+
 
