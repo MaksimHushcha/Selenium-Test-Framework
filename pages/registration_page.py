@@ -1,4 +1,4 @@
-from base_page import BasePage
+from pages.base_page import BasePage
 from locators import registration_page_locators as loc
 from selenium.webdriver.support.select import Select
 from faker import Faker
