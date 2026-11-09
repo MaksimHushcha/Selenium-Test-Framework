@@ -8,7 +8,7 @@ fake = Faker()
 class RegistrationPage(BasePage):
 
     endpoint = "auth/register"
-    select = Select(loc.COUNTRY_DROPDOWN_LOCATOR)
+    #select = Select(loc.COUNTRY_DROPDOWN_LOCATOR)
 
     def input_first_name(self, first_name):
         self.fill_field(loc.FIRST_NAME_LOCATOR, first_name)
@@ -19,9 +19,9 @@ class RegistrationPage(BasePage):
     def input_date_of_birth(self, dob):
         self.fill_field(loc.DOB_LOCATOR, dob)
 
-    def select_country(self, country_code):
-        self.click_by_locator(loc.COUNTRY_DROPDOWN_LOCATOR)
-        self.select.select_by_value(country_code)
+    # def select_country(self, country_code):
+    #     self.click_by_locator(loc.COUNTRY_DROPDOWN_LOCATOR)
+    #     self.select.select_by_value(country_code)
 
     def input_postal_code(self, postal_code):
         self.fill_field(loc.POSTAL_CODE_LOCATOR, postal_code)
