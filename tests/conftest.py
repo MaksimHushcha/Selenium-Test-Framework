@@ -2,6 +2,8 @@ import json
 import os
 import pytest
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+
 from utils.api_utils import get_a_random_valid_product_id, get_measuring_items_for_comparison, get_random_product_ids, AuthManager, FavoritesAPI
 from pages.components import Components
 from pages.comparison_page import ComparisonPage
@@ -10,8 +12,8 @@ from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 from pages.contact_page import ContactPage
 from pages.login_page import LoginPage
+from pages.registration_page import RegistrationPage
 
-import datetime
 from selenium.webdriver.chrome.options import Options
 import dotenv
 import allure
@@ -72,7 +74,7 @@ def pytest_runtest_makereport(item, call):
 
         try:
             screenshot_path = (str(artifact_dir / "screenshot.png"))
-            body = driver.find_element_by_tag_name('body')
+            body = driver.find_element(By.TAG_NAME, "body")
             body.screenshot(screenshot_path)
             allure.attach.file(screenshot_path, name="Failure Screenshot", attachment_type=allure.attachment_type.PNG)
 
@@ -150,6 +152,11 @@ def contact_page(driver):
 @pytest.fixture
 def login_page(driver):
     return LoginPage(driver)
+
+
+@pytest.fixture
+def registration_page(driver):
+    return RegistrationPage(driver)
 
 
 @pytest.fixture

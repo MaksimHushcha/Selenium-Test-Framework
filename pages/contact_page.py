@@ -11,22 +11,17 @@ fake = Faker()
 class ContactPage(BasePage):
     endpoint = "contact"
 
-
     def fill_first_name(self, text: str):
         self.fill_field(loc.FIRST_NAME_FIELD_LOCATOR, text=text)
-
 
     def fill_last_name(self, text: str):
         self.fill_field(loc.LAST_NAME_FIELD_LOCATOR, text=text)
 
-
     def fill_email(self, text: str):
         self.fill_field(loc.EMAIL_FIELD_LOCATOR, text=text)
 
-
     def fill_message(self, text: str):
         self.fill_field(loc.MESSAGE_FIELD_LOCATOR, text=text)
-
 
     def select_subject(self, item_to_click: str):
         self.click_by_locator(loc.SUBJECT_FIELD_LOCATOR)
@@ -46,26 +41,20 @@ class ContactPage(BasePage):
             case _:
                 raise ValueError("Invalid input for select_subject")
 
-
     def select_customer_service_subject(self):
         self.select_subject("Customer Service")
-
 
     def select_webmaster_subject(self):
         self.select_subject("Webmaster")
 
-
     def select_payments_subject(self):
         self.select_subject("Payments")
-
 
     def select_warranty_subject(self):
         self.select_subject("Warranty")
 
-
     def select_status_of_order_subject(self):
         self.select_subject("Status of Order")
-
 
     def upload_file(self, file_name):
         file_input = self.locate_element(loc.ATTACHMENT_FIELD_LOCATOR)
@@ -76,7 +65,6 @@ class ContactPage(BasePage):
             raise ValueError("Invalid file for upload_file")
         file_input.send_keys(absolute_path)
 
-
     def send_message(self):
         self.click_by_locator(loc.SEND_BUTTON_LOCATOR)
 
@@ -84,30 +72,23 @@ class ContactPage(BasePage):
     def get_success_alert_text(self):
         return self.locate_element(loc.ALERT_SUCCESS).text
 
-
     def get_first_name_error_message(self):
         return self.locate_element(loc.FIRST_NAME_ERROR).text
-
 
     def get_last_name_error_message(self):
         return self.locate_element(loc.LAST_NAME_ERROR).text
 
-
     def get_email_error_message(self):
         return self.locate_element(loc.EMAIL_ERROR).text
-
 
     def get_file_upload_error(self):
         return self.locate_element(loc.ATTACHMENT_ERROR).text
 
-
     def get_message_upload_error(self):
         return self.locate_element(loc.MESSAGE_ERROR).text
 
-
     def get_help_block_error(self):
         return self.locate_element(loc.HELP_BLOCK).text
-
 
     def fill_all_contact_data(self, fields_to_exclude=None):
         if fields_to_exclude is None:

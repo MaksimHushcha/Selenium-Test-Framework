@@ -47,13 +47,11 @@ class LoginPage(BasePage):
         self.input_password(os.getenv("ADMIN_PASSWORD"))
         self.press_login_button()
 
-
     def is_password_masked(self):
         if self.get_attribute("type", loc.PASSWORD_FIELD) == "password":
             return True
         else:
             return False
-
 
     def click_google_sso_button(self):
         original_handles = set(self.driver.window_handles)

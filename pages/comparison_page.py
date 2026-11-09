@@ -38,7 +38,6 @@ class ComparisonPage(BasePage):
             for slice_index in range(number_of_items_in_comparison)
         ]
 
-
     def remove_comparison_item(self, order_of_item_to_remove: int):
         if not isinstance(order_of_item_to_remove, int) or order_of_item_to_remove < 1:
             raise ValueError("order_of_item_to_remove must be a positive integer")

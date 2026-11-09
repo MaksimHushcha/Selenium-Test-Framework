@@ -10,6 +10,7 @@ faker = Faker()
 
 dotenv.load_dotenv()
 
+# TODO TO REWRITE WITH get_expected_page_url when account class is available
 def test_successful_login_as_user_forwards_to_user_profile(login_page, components):
     login_page.load()
     login_page.login_as_user()
@@ -20,7 +21,7 @@ def test_successful_login_as_user_forwards_to_user_profile(login_page, component
         f"Expected user to be forwarded to /account upon login, but the current url is {current_url} "
 
 
-
+# TODO TO REWRITE WITH get_expected_page_url when account class is available
 def test_successful_login_as_admin_forwards_to_admin_dashboard(login_page, components):
     login_page.load()
     login_page.login_as_admin()
@@ -37,9 +38,7 @@ def test_login_with_incorrect_password_displays_a_correct_error(login_page):
     login_page.input_password(faker.password())
     login_page.press_login_button()
     assert login_page.get_login_error_message() == "Invalid email or password"
-    current_url = login_page.get_current_url()
-    assert current_url.endswith("/login"), \
-        f"Expected user to remain at /login, but the current url is {current_url} "
+    assert login_page.get_current_url() == login_page.get_expected_page_url()
 
 
 def test_login_with_valid_email_and_no_password_displays_a_correct_error(login_page):
@@ -96,6 +95,7 @@ def test_show_password_displays_the_password(login_page):
     assert login_page.is_password_masked() == True, f"Expected password to be unmasked after second show_password"
 
 
+# E2E is practically impossible, and mocking it E2E is impractical.
 def test_google_sso_redirect(login_page):
     login_page.load()
 
@@ -108,7 +108,6 @@ def test_google_sso_redirect(login_page):
     assert "response_type=code" in current_url
 
 
-
 # I don't know the amount of attempts needed, temporary values, to investigate later
 def test_login_with_incorrect_password_locks_account_out(login_page):
     number_of_attempts = 5
@@ -119,3 +118,9 @@ def test_login_with_incorrect_password_locks_account_out(login_page):
         login_page.press_login_button()
         if current_attempt == 5:
             assert login_page.get_login_error_message() == "Account locked, too many failed attempts. Please contact the administrator."
+
+
+def test_registration_button_forwards_to_registration_page(login_page, registration_page):
+    login_page.load()
+    login_page.press_register_link()
+    assert login_page.get_current_url() == registration_page.get_expected_page_url()

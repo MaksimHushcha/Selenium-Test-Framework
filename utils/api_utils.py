@@ -96,7 +96,7 @@ class AuthManager:
     def get_access_token(cls):
         buffer_seconds = 60
         current_time = time.time()
-        if not cls._token or cls._expires_on - current_time > buffer_seconds:
+        if not cls._token or cls._expires_on - current_time < buffer_seconds:
             cls._get_a_fresh_token()
         return cls._token
 
