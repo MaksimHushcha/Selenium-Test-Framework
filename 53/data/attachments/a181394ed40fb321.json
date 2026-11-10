@@ -1,0 +1,32 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1794344710916
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/me - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1794344710997
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@fs/app/.angular/cache/20.0.4/Toolshop/vite/deps/chunk-QURCENYN.js?v=678dd77b 2554:18 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1794344711025
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:8091/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "source": "network",
+    "timestamp": 1794344712601
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/auth/login - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794344715571
+  }
+]
