@@ -1,0 +1,45 @@
+{
+  "current_url": "http://localhost:4200/auth/login",
+  "page_title": "Login - Practice Software Testing - Toolshop - v5.0",
+  "window_size": {
+    "width": 1280,
+    "height": 800
+  },
+  "viewport_size": {
+    "height": 657,
+    "width": 1280
+  },
+  "capabilities": {
+    "acceptInsecureCerts": false,
+    "browserName": "chrome",
+    "browserVersion": "157.0.8103.50",
+    "chrome": {
+      "chromedriverVersion": "157.0.8103.50 (049750111b1e5c11565c792b2aeed5541f332bad-refs/branch-heads/8103_38@{#8})",
+      "userDataDir": "/tmp/org.chromium.Chromium.scoped_dir.oH3Hxj"
+    },
+    "fedcm:accounts": true,
+    "goog:chromeOptions": {
+      "debuggerAddress": "localhost:34167"
+    },
+    "goog:processID": 8956,
+    "networkConnectionEnabled": false,
+    "pageLoadStrategy": "normal",
+    "platformName": "linux",
+    "proxy": {},
+    "setWindowRect": true,
+    "strictFileInteractability": false,
+    "timeouts": {
+      "implicit": 0,
+      "pageLoad": 300000,
+      "script": 30000
+    },
+    "unhandledPromptBehavior": "dismiss and notify",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "webauthn:extension:cmtgKey": true,
+    "webauthn:extension:credBlob": true,
+    "webauthn:extension:largeBlob": true,
+    "webauthn:extension:minPinLength": true,
+    "webauthn:extension:prf": true,
+    "webauthn:virtualAuthenticators": true
+  }
+}
