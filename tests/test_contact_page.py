@@ -1,3 +1,4 @@
+from pages.contact_page import ContactFields
 from tests.conftest import contact_page
 from faker import Faker
 fake = Faker()
@@ -13,7 +14,7 @@ def test_sending_message_on_contact_page_with_correct_data_is_successful(contact
 
 def test_first_name_is_mandatory_when_sending_contact_message(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["First Name"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.first_name])
     contact_page.send_message()
 
     expected_message = "First name is required"
@@ -23,7 +24,7 @@ def test_first_name_is_mandatory_when_sending_contact_message(contact_page):
 
 def test_first_name_121_char_long_is_not_accepted_when_sending_contact_info(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["First Name"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.first_name])
     contact_page.fill_first_name(121*"a")
     contact_page.send_message()
 
@@ -34,7 +35,7 @@ def test_first_name_121_char_long_is_not_accepted_when_sending_contact_info(cont
 
 def test_first_name_120_char_long_is_accepted_when_sending_contact_info(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["First Name"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.first_name])
     contact_page.fill_first_name(120*"a")
     contact_page.send_message()
 
@@ -45,7 +46,7 @@ def test_first_name_120_char_long_is_accepted_when_sending_contact_info(contact_
 
 def test_last_name_is_mandatory_when_sending_contact_message(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Last Name"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.last_name])
     contact_page.send_message()
 
     expected_message = "Last name is required"
@@ -55,7 +56,7 @@ def test_last_name_is_mandatory_when_sending_contact_message(contact_page):
 
 def test_last_name_121_char_long_is_not_accepted_when_sending_contact_info(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Last Name"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.last_name])
     contact_page.fill_last_name(121*"a")
     contact_page.send_message()
 
@@ -66,7 +67,7 @@ def test_last_name_121_char_long_is_not_accepted_when_sending_contact_info(conta
 
 def test_last_name_120_char_long_is_accepted_when_sending_contact_info(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Last Name"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.last_name])
     contact_page.fill_last_name(120*"a")
     contact_page.send_message()
 
@@ -77,7 +78,7 @@ def test_last_name_120_char_long_is_accepted_when_sending_contact_info(contact_p
 
 def test_email_address_is_mandatory_when_sending_contact_message(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Email"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.email])
     contact_page.send_message()
 
     expected_message = "Email is required"
@@ -87,7 +88,7 @@ def test_email_address_is_mandatory_when_sending_contact_message(contact_page):
 # In theory, we can add more email validation tests
 def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Email"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.email])
     contact_page.fill_email(fake.word() + "." + fake.word())
     contact_page.send_message()
 
@@ -99,7 +100,7 @@ def test_invalid_email_address_is_rejected_when_sending_contact_message(contact_
 # it fails with an invalid format message, I don't know real limits
 def test_long_email_address_are_rejected_when_sending_contact_message(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Email"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.email])
     contact_page.fill_email((120*"a" + "@example.com"))
     contact_page.send_message()
 
@@ -110,7 +111,7 @@ def test_long_email_address_are_rejected_when_sending_contact_message(contact_pa
 
 def test_message_is_mandatory_when_sending_contact_message(contact_page):
     contact_page.load()
-    contact_page.fill_all_contact_data(fields_to_exclude=["Message"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.message])
     contact_page.send_message()
 
     expected_message = "Message is required"
@@ -120,7 +121,7 @@ def test_message_is_mandatory_when_sending_contact_message(contact_page):
 def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.upload_file("non_empty_file.txt")
-    contact_page.fill_all_contact_data(fields_to_exclude=["File"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.file])
     contact_page.send_message()
 
     expected_message = "File should be empty."
@@ -131,7 +132,7 @@ def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_
 def test_non_txt_are_not_accepted_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.upload_file("nontxt.svg")
-    contact_page.fill_all_contact_data(fields_to_exclude=["File"])
+    contact_page.fill_all_contact_data(fields_to_exclude=[ContactFields.file])
     contact_page.send_message()
 
     expected_message = "File should have a txt extension."
