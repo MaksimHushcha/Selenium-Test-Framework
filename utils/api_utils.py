@@ -3,9 +3,8 @@ import random
 import time
 import json
 import jwt
-from selenium.webdriver.common.bidi import Network
 from requests import ConnectionError
-from utils.api_router import ApiRequest
+from utils.api_router import ApiRequest, ApiResponse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -102,16 +101,27 @@ class AuthManager:
 
     @classmethod
     def _get_a_fresh_token(cls):
-        api = ApiRequest()
-        request_body = {
-            "email": os.getenv('API_USER'),
-            "password": os.getenv("API_USER_PASSWORD")
-        }
-        request_body = json.dumps(request_body)
+        email = os.getenv("API_USER")
+        password =  os.getenv("API_USER_PASSWORD")
         try:
-            response_body = api.post(endpoint="users/login", data=request_body).json_data
-            cls._token = response_body.get("access_token")
+            response_body = cls.login(email, password)
+            cls._token = response_body.json_data.get("access_token")
             decoded_token = jwt.decode(cls._token, options={"verify_signature": False})
             cls._expires_on = decoded_token["exp"]
         except jwt.InvalidTokenError:
             print("Invalid token")
+
+    @classmethod
+    def login(cls, email, password) -> ApiResponse:
+        api = ApiRequest()
+        request_body = {
+            "email": email,
+            "password": password
+        }
+        request_body = json.dumps(request_body)
+        try:
+            response_body = api.post(endpoint="users/login", data=request_body)
+            return response_body
+        except ConnectionError as e:
+            raise Exception(f"Error fetching login: {e}")
+

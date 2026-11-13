@@ -17,3 +17,5 @@ SHOW_PASSWORD = (By.CLASS_NAME, "btn-outline-secondary")
 PASSWORD_STRENGTH_LOCATOR = (By.CLASS_NAME, "strength-bar")
 
 SUBMIT_REGISTRATION_LOCATOR = (By.CSS_SELECTOR, "[data-test=register-submit]")
+
+REGISTRATION_ERROR_LOCATOR = (By.CSS_SELECTOR, "[data-test=register-error]")

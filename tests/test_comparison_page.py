@@ -50,11 +50,13 @@ def test_clicking_on_product_picture_opens_product_page(comparison_page, product
     product_page_item_title = product_page.get_product_name()
     assert comparison_page_item_title == product_page_item_title
 
+
 def test_remove_comparison_on_comparison_page_removes_item_from_comparison(comparison_page, seeded_two_comparison_items):
     comparison_page.load()
     comparison_page.remove_comparison_item(order_of_item_to_remove=1)
     pictures_on_the_page = len(comparison_page.get_all_comparison_pictures())
     assert  pictures_on_the_page == 1, f"Expected only 1 picture on the page remaining"
+
 
 def test_show_differences_only_hides_different_specs_on_items(comparison_page, seeded_two_measurements_items):
     comparison_page.load()

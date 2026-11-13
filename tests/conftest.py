@@ -27,8 +27,8 @@ ARTIFACTS_DIR = Path("test-artifacts")
 @pytest.fixture
 def driver():
     options = Options()
-    #if os.getenv("GITHUB_ACTIONS"):
-    options.add_argument("--headless=new")
+    if os.getenv("GITHUB_ACTIONS"):
+        options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")

@@ -57,7 +57,7 @@ class RegistrationPage(BasePage):
         self.click_by_locator(loc.COUNTRY_DROPDOWN_LOCATOR)
         select.select_by_value(country_code)
 
-    def select_random_country(self):
+    def select_random_country(self) -> str | None:
         select_element = self.locate_element(loc.COUNTRY_DROPDOWN_LOCATOR)
         select = Select(select_element)
         self.click_by_locator(loc.COUNTRY_DROPDOWN_LOCATOR)
@@ -91,13 +91,16 @@ class RegistrationPage(BasePage):
     def submit_registration_form(self):
         self.click_by_locator(loc.SUBMIT_REGISTRATION_LOCATOR)
 
+    def get_registration_error(self) -> str:
+        return self.locate_element(loc.REGISTRATION_ERROR_LOCATOR).text
+
     def fill_all_registration_data(self, fields_to_exclude=None):
         if fields_to_exclude is None: fields_to_exclude = []
 
         data = RegistrationFormData(
             first_name = fake.first_name(),
             last_name = fake.last_name(),
-            date_of_birth = fake.date(),
+            date_of_birth = fake.date(end_datetime="-18y"),
             country = None,
             postal_code = fake.postcode(),
             house_number = random.randint(1, 222),
