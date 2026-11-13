@@ -42,16 +42,16 @@ class RegistrationFormData:
 class RegistrationPage(BasePage):
     endpoint = "auth/register"
 
-    def input_first_name(self, first_name):
+    def input_first_name(self, first_name: str):
         self.fill_field(loc.FIRST_NAME_LOCATOR, first_name)
 
-    def input_last_name(self, last_name):
+    def input_last_name(self, last_name: str):
         self.fill_field(loc.LAST_NAME_LOCATOR, last_name)
 
-    def input_date_of_birth(self, dob):
+    def input_date_of_birth(self, dob: str):
         self.fill_field(loc.DOB_LOCATOR, dob)
 
-    def select_country_by_value(self, country_code):
+    def select_country_by_value(self, country_code: str):
         select_element = self.locate_element(loc.COUNTRY_DROPDOWN_LOCATOR)
         select = Select(select_element)
         self.click_by_locator(loc.COUNTRY_DROPDOWN_LOCATOR)
@@ -62,29 +62,30 @@ class RegistrationPage(BasePage):
         select = Select(select_element)
         self.click_by_locator(loc.COUNTRY_DROPDOWN_LOCATOR)
         select.select_by_index(random.randint(1, len(select.options)) - 1)
+        return select.first_selected_option.get_attribute("value")
 
-    def input_postal_code(self, postal_code):
+    def input_postal_code(self, postal_code: str):
         self.fill_field(loc.POSTAL_CODE_LOCATOR, postal_code)
 
-    def input_house_number(self, house_number):
+    def input_house_number(self, house_number: str):
         self.fill_field(loc.HOUSE_NUMBER_LOCATOR, house_number)
 
-    def input_street_address(self, street_address):
+    def input_street_address(self, street_address: str):
         self.fill_field(loc.STREET_FIELD_LOCATOR, street_address)
 
-    def input_city(self, city):
+    def input_city(self, city: str):
         self.fill_field(loc.CITY_LOCATOR, city)
 
-    def input_state(self, state):
+    def input_state(self, state: str):
         self.fill_field(loc.STATE_LOCATOR, state)
 
-    def input_phone_number(self, phone_number):
+    def input_phone_number(self, phone_number: str):
         self.fill_field(loc.PHONE_LOCATOR, phone_number)
 
-    def input_email(self, email):
+    def input_email(self, email: str):
         self.fill_field(loc.EMAIL_ADDRESS, email)
 
-    def input_password(self, password):
+    def input_password(self, password: str):
         self.fill_field(loc.PASSWORD_LOCATOR, password)
 
     def submit_registration_form(self):

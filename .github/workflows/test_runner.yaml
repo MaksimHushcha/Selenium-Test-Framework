@@ -57,6 +57,11 @@ jobs:
             if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
             sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mariadb/g' .env
             sed -i 's/DB_HOST=localhost/DB_HOST=mariadb/g' .env
+          
+            # Inject dummy Google OAuth credentials so the frontend button renders
+            echo 'APP_GOOGLE_ID=dummy-google-client-id.apps.googleusercontent.com' >> .env
+            echo 'APP_GOOGLE_SECRET=dummy-google-client-secret' >> .env
+          
             chmod 666 .env
             chmod -R 777 storage bootstrap/cache
           "
