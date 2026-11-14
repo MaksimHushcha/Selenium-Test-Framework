@@ -15,27 +15,35 @@ class MainBasePage(BasePage):
         self.click_by_locator(product_page_locators.SORT_DROPDOWN_LOCATOR)
         self.click_by_locator(sorting_option_locator)
         self._wait_for_sorting()
+        return self
 
     def sort_items_by_name_desc(self):
         self._sort_by(product_page_locators.SORT_NAME_DESC_LOCATOR)
+        return self
 
     def sort_items_by_name_asc(self):
         self._sort_by(product_page_locators.SORT_NAME_ASC_LOCATOR)
+        return self
 
     def sort_items_by_price_asc(self):
         self._sort_by(product_page_locators.SORT_PRICE_ASC_LOCATOR)
+        return self
 
     def sort_items_by_price_desc(self):
         self._sort_by(product_page_locators.SORT_PRICE_DESC_LOCATOR)
+        return self
 
     def sort_items_by_co2_asc(self):
         self._sort_by(product_page_locators.SORT_CO2_RATING_ASC_LOCATOR)
+        return self
 
     def sort_items_by_co2_desc(self):
         self._sort_by(product_page_locators.SORT_CO2_RATING_DESC_LOCATOR)
+        return self
 
     def _wait_for_sorting(self):
         self.wait.until(EC.presence_of_element_located(product_page_locators.SORTING_COMPLETED_LOCATOR))
+        return self
 
     def _pagination_helper(self, last_button=False, first_button=False):
         old_card = self.driver.find_element(*product_page_locators.CARD_LOCATOR)
@@ -59,9 +67,11 @@ class MainBasePage(BasePage):
 
     def go_to_next_page(self):
         self._pagination_helper(last_button=True, first_button=False)
+        return self
 
     def go_to_previous_page(self):
         self._pagination_helper(last_button=False, first_button=True)
+        return self
 
     def get_current_page_number(self) -> int:
         current_page = self.driver.find_element(*product_page_locators.ACTIVE_PAGE_LOCATOR).text
@@ -95,6 +105,7 @@ class MainBasePage(BasePage):
 
     def select_eco_friendly_products(self):
         self.click_by_locator(product_page_locators.ECO_FRIENDLY_CHECKBOX_LOCATOR)
+        return self
 
     def get_cards_on_the_page(self) -> list:
         located_elements = self.locate_multiple_elements(product_page_locators.CARD_LOCATOR)
@@ -135,11 +146,13 @@ class MainBasePage(BasePage):
         self._queue_price_slider_key_presses(current_min_price, target_min_price, product_page_locators.MIN_PRICE_SLIDER_LOCATOR)
         self._queue_price_slider_key_presses(current_max_price, target_max_price, product_page_locators.MAX_PRICE_SLIDER_LOCATOR)
         self._wait_for_prices_to_be_in_range(target_min_price, target_max_price)
+        return self
 
     def search_an_item(self, search_query):
         self.fill_field(locator=product_page_locators.SEARCH_INPUT_FIELD_LOCATOR, text=search_query)
         self.click_by_locator(product_page_locators.SEARCH_SUBMIT_BUTTON_LOCATOR)
         self.wait.until(EC.presence_of_element_located(product_page_locators.SEARCH_COMPLETED_LOCATOR))
+        return self
 
     def get_search_result_count(self) -> int:
         search_result_count = self.locate_element(product_page_locators.SEARCH_RESULT_COUNT_LOCATOR)
@@ -152,15 +165,18 @@ class MainBasePage(BasePage):
     def reset_search(self):
         self.click_by_locator(product_page_locators.SEARCH_RESET_BUTTON_LOCATOR)
         self.wait.until_not(EC.presence_of_element_located(product_page_locators.SEARCH_SUBMITTED_LOCATOR))
+        return self
 
     def get_no_products_found_message(self) -> str:
         return self.locate_element(product_page_locators.NO_RESULT_MESSAGE_LOCATOR).text
 
     def add_to_comparison_main(self):
         self.click_by_locator(product_page_locators.ADD_TO_COMPARISON_LOCATOR_MAIN)
+        return self
 
     def remove_from_comparison_main(self):
         self.click_by_locator(product_page_locators.ADD_TO_COMPARISON_LOCATOR_MAIN)
+        return self
 
     def _queue_price_slider_key_presses(self, current_price: int, target_price: int, locator: tuple[str,str]):
         if target_price == current_price:
@@ -175,6 +191,7 @@ class MainBasePage(BasePage):
         for _ in range(number_of_key_presses):
             actions.send_keys(key_to_press)
         actions.perform()
+        return self
 
     def _wait_for_prices_to_be_in_range(self, min_price: int, max_price: int, timeout=5):
         def _prices_are_filtered(driver):

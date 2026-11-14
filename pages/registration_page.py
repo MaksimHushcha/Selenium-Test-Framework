@@ -44,12 +44,15 @@ class RegistrationPage(BasePage):
 
     def input_first_name(self, first_name: str):
         self.fill_field(loc.FIRST_NAME_LOCATOR, first_name)
+        return self
 
     def input_last_name(self, last_name: str):
         self.fill_field(loc.LAST_NAME_LOCATOR, last_name)
+        return self
 
     def input_date_of_birth(self, dob: str):
         self.fill_field(loc.DOB_LOCATOR, dob)
+        return self
 
     def select_country_by_value(self, country_code: str):
         select_element = self.locate_element(loc.COUNTRY_DROPDOWN_LOCATOR)
@@ -66,36 +69,43 @@ class RegistrationPage(BasePage):
 
     def input_postal_code(self, postal_code: str):
         self.fill_field(loc.POSTAL_CODE_LOCATOR, postal_code)
+        return self
 
     def input_house_number(self, house_number: str):
         self.fill_field(loc.HOUSE_NUMBER_LOCATOR, house_number)
+        return self
 
     def input_street_address(self, street_address: str):
         self.fill_field(loc.STREET_FIELD_LOCATOR, street_address)
+        return self
 
     def input_city(self, city: str):
         self.fill_field(loc.CITY_LOCATOR, city)
+        return self
 
     def input_state(self, state: str):
         self.fill_field(loc.STATE_LOCATOR, state)
+        return self
 
     def input_phone_number(self, phone_number: str):
         self.fill_field(loc.PHONE_LOCATOR, phone_number)
+        return self
 
     def input_email(self, email: str):
         self.fill_field(loc.EMAIL_ADDRESS, email)
+        return self
 
     def input_password(self, password: str):
         self.fill_field(loc.PASSWORD_LOCATOR, password)
+        return self
 
     def submit_registration_form(self):
         self.click_by_locator(loc.SUBMIT_REGISTRATION_LOCATOR)
+        return self
 
-    def get_registration_error(self) -> str:
-        return self.locate_element(loc.REGISTRATION_ERROR_LOCATOR).text
-
-    def fill_all_registration_data(self, fields_to_exclude=None):
+    def fill_all_registration_data(self, fields_to_exclude: list[str] | None = None) :
         if fields_to_exclude is None: fields_to_exclude = []
+
 
         data = RegistrationFormData(
             first_name = fake.first_name(),
@@ -115,7 +125,8 @@ class RegistrationPage(BasePage):
             RegistrationFields.first_name: (self.input_first_name, data.first_name),
             RegistrationFields.last_name: (self.input_last_name, data.last_name),
             RegistrationFields.date_of_birth: (self.input_date_of_birth, data.date_of_birth),
-            RegistrationFields.country: (lambda _: self.select_random_country(), None),
+            # US is hardcoded, because randomly generated zip code may fail with other countries.
+            RegistrationFields.country: (lambda _: self.select_country_by_value("US"), None),
             RegistrationFields.postal_code: (self.input_postal_code, data.postal_code),
             RegistrationFields.house_number: (self.input_house_number, data.house_number),
             RegistrationFields.street_address: (self.input_street_address, data.street_address),
@@ -132,3 +143,48 @@ class RegistrationPage(BasePage):
                 filled_data[field] = value
                 action(value)
         return filled_data
+
+# TO REFACTOR INTO DICT LOOKUP
+class RegistrationError(BasePage):
+    def get_registration_error(self) -> str:
+        return self.locate_element(loc.REGISTRATION_ERROR_LOCATOR).text
+
+    def get_first_name_error(self) -> str:
+        return self.locate_element(loc.FIRST_NAME_ERROR_LOCATOR).text
+
+    def get_last_name_error(self) -> str:
+        return self.locate_element(loc.LAST_NAME_ERROR_LOCATOR).text
+
+    def get_date_of_birth_error(self) -> str:
+        return self.locate_element(loc.DOB_ERROR_LOCATOR).text
+
+    def get_country_error(self) -> str:
+        return self.locate_element(loc.COUNTRY_ERROR_LOCATOR).text
+
+    def get_postal_code_error(self) -> str:
+        return self.locate_element(loc.POSTAL_CODE_ERROR_LOCATOR).text
+
+    def get_house_number_error(self) -> str:
+        return self.locate_element(loc.HOUSE_NUMBER_ERROR_LOCATOR).text
+
+    def get_street_address_error(self) -> str:
+        return self.locate_element(loc.STREET_ERROR_LOCATOR).text
+
+    def get_city_error(self) -> str:
+        return  self.locate_element(loc.CITY_ERROR_LOCATOR).text
+
+    def get_state_error(self) -> str:
+        return self.locate_element(loc.STATE_ERROR_LOCATOR).text
+
+    def get_phone_number_error(self) -> str:
+        return self.locate_element(loc.PHONE_ERROR_LOCATOR).text
+
+    def get_email_error(self) -> str:
+        return self.locate_element(loc.EMAIL_ERROR_LOCATOR).text
+
+    def get_password_error(self) -> str:
+        return self.locate_element(loc.PASSWORD_ERROR_LOCATOR).text
+
+# Shared interface for tests
+class RegistrationPageSuper(RegistrationError, RegistrationPage):
+    pass

@@ -7,12 +7,15 @@ class ComparisonPage(BasePage):
 
     def clear_comparison(self):
         self.click_by_locator(loc.CLEAR_COMPARISON_BUTTON)
+        return self
 
     def press_browse_products(self):
         self.click_by_locator(loc.BROWSE_PRODUCTS_BUTTON)
+        return self
 
     def click_comparison_image(self):
         self.click_by_locator(loc.COMPARISON_IMAGE)
+        return self
 
     def is_comparison_empty_visible(self):
         return self.wait_for_element_visibility(loc.COMPARISON_EMPTY)
@@ -25,6 +28,7 @@ class ComparisonPage(BasePage):
 
     def show_differences_only(self):
         self.click_by_locator(loc.SHOW_DIFFERENT_ONLY_CHECKBOX)
+        return self
 
     def get_comparison_specs(self, number_of_items_in_comparison: int):
         if not isinstance(number_of_items_in_comparison, int) or isinstance(number_of_items_in_comparison, bool):

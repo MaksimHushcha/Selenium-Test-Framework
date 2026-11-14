@@ -1,3 +1,5 @@
+import time
+from utils.api_utils import AuthManager
 
 
 def verify_list_is_sorted(list_to_sort: list, reverse_order: bool) -> bool:
@@ -20,3 +22,14 @@ def create_list_of_matching_values_ordered(list1: list, list2: list) -> list:
     return [matching_values_first_list, matching_values_second_list]
 
 
+def does_user_exist(email, password):
+    retry_count = 0
+    retry_backoff = 1
+    while retry_count < 2:
+        response = AuthManager.login(email, password)
+        if response.status_code == 200 and isinstance(response.json_data, dict) and len(response.json_data.get("access_token", "")) > 1:
+            return True
+        retry_count += 1
+        time.sleep(retry_backoff)
+        retry_backoff +=1
+    return False

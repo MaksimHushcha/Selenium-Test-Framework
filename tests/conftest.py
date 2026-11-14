@@ -12,7 +12,7 @@ from pages.main_page import MainBasePage
 from pages.product_page import ProductPage
 from pages.contact_page import ContactPage
 from pages.login_page import LoginPage
-from pages.registration_page import RegistrationPage
+from pages.registration_page import RegistrationPageSuper
 
 from selenium.webdriver.chrome.options import Options
 import dotenv
@@ -156,7 +156,7 @@ def login_page(driver):
 
 @pytest.fixture
 def registration_page(driver):
-    return RegistrationPage(driver)
+    return RegistrationPageSuper(driver)
 
 
 @pytest.fixture

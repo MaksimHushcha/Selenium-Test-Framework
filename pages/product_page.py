@@ -19,18 +19,23 @@ class ProductPage(BasePage):
     # Actions with products
     def add_to_favourites(self):
         self.click_by_locator(product_page_locator.ADD_TO_FAVOURITES_BUTTON_LOCATOR)
+        return self
 
     def add_to_cart(self):
         self.click_by_locator(product_page_locator.ADD_TO_CARD_BUTTON_LOCATOR)
+        return self
 
     def increase_quantity(self):
         self.click_by_locator(product_page_locator.INCREASE_QUANTITY_LOCATOR)
+        return self
 
     def decrease_quantity(self):
         self.click_by_locator(product_page_locator.DECREASE_QUANTITY_LOCATOR)
+        return self
 
     def add_to_comparison(self):
         self.click_by_locator(product_page_locator.ADD_TO_COMPARISON_LOCATOR)
+        return self
 
     # Getting info
 

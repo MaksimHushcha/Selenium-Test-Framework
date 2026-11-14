@@ -9,26 +9,24 @@ class Components(BasePage):
     def get_toast_text(self):
         return self.locate_element(loc.TOP_RIGHT_TOST_NOTIFICATION_LOCATOR).text
 
-
     def open_cart(self):
         self.click_by_locator(loc.CARD_BUTTON_LOCATOR)
-
+        return self
 
     def get_number_of_items_on_cart_icon(self):
         return int(self.locate_element(loc.CARD_QUANTITY_LOCATOR).text)
 
-
     def dismiss_toast(self):
         self.click_by_locator(loc.TOP_RIGHT_TOST_NOTIFICATION_LOCATOR)
-
+        return self
 
     def clear_comparison(self):
         self.click_by_locator(loc.CLEAR_COMPARISON_BUTTON)
-
+        return self
 
     def go_to_compare_screen(self):
         self.click_by_locator(loc.COMPARE_NOW_BUTTON)
-
+        return self
 
     def comparison_bar_is_not_visible(self):
         return self.is_element_not_visible(loc.COMPARISON_BAR)

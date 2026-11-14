@@ -47,21 +47,26 @@ class ContactPage(BasePage):
 
     def fill_first_name(self, text: str):
         self.fill_field(loc.FIRST_NAME_FIELD_LOCATOR, text=text)
+        return self
 
     def fill_last_name(self, text: str):
         self.fill_field(loc.LAST_NAME_FIELD_LOCATOR, text=text)
+        return self
 
     def fill_email(self, text: str):
         self.fill_field(loc.EMAIL_FIELD_LOCATOR, text=text)
+        return self
 
     def fill_message(self, text: str):
         self.fill_field(loc.MESSAGE_FIELD_LOCATOR, text=text)
+        return self
 
     def select_subject(self, subject: ContactSubject):
         if subject not in self.SUBJECT_LOCATORS:
             raise ValueError(f"Invalid subject {subject}")
         self.click_by_locator(loc.SUBJECT_FIELD_LOCATOR)
         self.click_by_locator(self.SUBJECT_LOCATORS[subject])
+        return self
 
     def upload_file(self, file_name: str):
         file_input = self.locate_element(loc.ATTACHMENT_FIELD_LOCATOR)
@@ -71,9 +76,11 @@ class ContactPage(BasePage):
         if not os.path.exists(absolute_path):
             raise ValueError("Invalid file for upload_file")
         file_input.send_keys(absolute_path)
+        return self
 
     def send_message(self):
         self.click_by_locator(loc.SEND_BUTTON_LOCATOR)
+        return self
 
     # ALERT MESSAGES
     def get_success_alert_text(self):

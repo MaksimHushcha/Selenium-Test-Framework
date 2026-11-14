@@ -125,3 +125,15 @@ class AuthManager:
         except ConnectionError as e:
             raise Exception(f"Error fetching login: {e}")
 
+
+    # def does_user_exist(self, email, password):
+    #     retry_count = 0
+    #     retry_backoff = 1
+    #     while retry_count < 2:
+    #         response = self.login(email, password)
+    #         if response.status_code == 200 and isinstance(response.json_data, dict) and len(response.json_data.get("access_token", "")) > 1:
+    #             return True
+    #         retry_count += 1
+    #         time.sleep(retry_backoff)
+    #         retry_backoff +=1
+    #     return False

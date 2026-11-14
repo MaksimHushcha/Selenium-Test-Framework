@@ -30,6 +30,13 @@ class BasePage:
     def get_current_url(self) -> str:
         return self.driver.current_url
 
+    def is_user_on_expected_page(self):
+        try:
+            self.wait.until(EC.url_to_be(self.get_expected_page_url()))
+            return True
+        except TimeoutException:
+            return False
+
     def get_page_title(self):
         page_title = self.driver.title
         return page_title

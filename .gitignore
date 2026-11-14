@@ -1,5 +1,6 @@
 .idea
 .venv
 .env
+allure-results/
 test-artifacts/
 __pycache__/
