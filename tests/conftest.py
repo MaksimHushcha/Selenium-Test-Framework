@@ -29,6 +29,7 @@ def driver():
     options = Options()
     if os.getenv("GITHUB_ACTIONS"):
         options.add_argument("--headless=new")
+        options.add_experimental_option("detach", True)  # to prevent browser from closing
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
@@ -37,7 +38,6 @@ def driver():
     options.add_experimental_option("detach", True)  # to prevent browser from closing
     chrome_driver = webdriver.Chrome(options=options)
     chrome_driver.implicitly_wait(3)
-    chrome_driver.set_window_size(1280, 800)
     yield chrome_driver
     chrome_driver.quit()
 
@@ -183,6 +183,8 @@ def authenticated_user(driver):
 def seeded_two_comparison_items(main_page):
     ids_list = get_random_product_ids(number_of_ids=2)
     main_page.load()
+    # Verifying the page loaded before injecting the session to prevents flakiness in CI/CD
+    assert main_page.is_user_on_expected_page()
     main_page.set_compare_ids_session_storage(ids_list)
 
 @pytest.fixture
