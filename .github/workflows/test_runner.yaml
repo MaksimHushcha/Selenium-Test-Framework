@@ -145,6 +145,30 @@ jobs:
             logs --tail=100 web
                 
 
+      - name: Diagnose Application Endpoints
+        if: ${{ always() }}
+        run: |
+          echo "=== NGINX CONFIGURATION ==="
+          docker compose -f practice-app/docker-compose.prod.yml \
+            exec -T web nginx -T 2>&1 | grep -nE 'aio|proxy_pass|fastcgi_pass|listen'
+      
+          echo "=== ANGULAR RESPONSE ==="
+          curl -sS -o /dev/null -w "HTTP %{http_code}\n" \
+            http://localhost:4200/
+      
+          echo "=== NGINX PORT 8091 ==="
+          curl -sS -o /dev/null -w "HTTP %{http_code}\n" \
+            http://localhost:8091/
+      
+          echo "=== NGINX PORT 8000 ==="
+          curl -sS -o /dev/null -w "HTTP %{http_code}\n" \
+            http://localhost:8000/
+      
+          echo "=== CONTAINER ARCHITECTURES ==="
+          docker inspect \
+            --format '{{.Name}} {{.Platform}} {{.Config.Image}}' \
+              $(docker compose -f practice-app/docker-compose.prod.yml ps -q)
+
       - name: Debug Docker Containers and Logs
         if: ${{ always() }}
         run: |
