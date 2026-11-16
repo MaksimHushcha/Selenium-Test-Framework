@@ -1,0 +1,9 @@
+{
+  "auth-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3OTQ4NTk4NTUsImV4cCI6MTc5NDg2MDE1NSwibmJmIjoxNzk0ODU5ODU1LCJqdGkiOiJXb3VqOXgyMVNISVJvQkNtIiwic3ViIjoiMDFNN0paS0JZNkVYNldWR1ZUM1pDRk02QTUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZSI6InVzZXIifQ.6TULrTwu0aw9t-njTl7BQgqGBMG3V5ZUBQzEQbnT_Pk",
+  "clear": {},
+  "getItem": {},
+  "key": {},
+  "length": 1,
+  "removeItem": {},
+  "setItem": {}
+}

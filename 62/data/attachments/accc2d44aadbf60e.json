@@ -1,0 +1,22 @@
+[
+  {
+    "domain": "localhost",
+    "expiry": 1829419838,
+    "httpOnly": false,
+    "name": "_ga",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "GA1.1.673018650.1794859838"
+  },
+  {
+    "domain": "localhost",
+    "expiry": 1829419838,
+    "httpOnly": false,
+    "name": "_ga_0BJFXRKTYC",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "GS2.1.s1794859837$o1$g0$t1794859838$j59$l0$h0"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794859782113
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794859782461
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794859782470
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1794859782485
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/messages - Failed to load resource: the server responded with a status of 422 ()",
+    "source": "network",
+    "timestamp": 1794859783843
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/contact - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794859787026
+  }
+]
