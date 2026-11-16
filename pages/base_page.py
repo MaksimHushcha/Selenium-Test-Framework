@@ -33,6 +33,7 @@ class BasePage:
     def is_user_on_expected_page(self):
         try:
             self.wait.until(EC.url_to_be(self.get_expected_page_url()))
+            self.driver.execute_script('return document.readyState;')
             return True
         except TimeoutException:
             return False

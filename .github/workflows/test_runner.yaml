@@ -91,22 +91,44 @@ jobs:
           echo "=== Angular container status ==="
           docker compose -f docker-compose.prod.yml ps -a angular-ui
 
-          echo "=== Angular container logs ==="
-          docker compose -f docker-compose.prod.yml logs --tail=100 angular-ui
+          echo "=== Waiting for Angular production build ==="
 
-          echo "=== Waiting for Angular ==="
+          SUCCESS_COUNT=0
 
-          for i in $(seq 1 60); do
-            if curl -fsS http://localhost:4200/ > /dev/null; then
-              echo "Angular UI is available."
-              exit 0
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:4200/ -o /tmp/angular-response.html; then
+              SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+              echo "Successful response: $SUCCESS_COUNT/5"
+            else
+              SUCCESS_COUNT=0
+              echo "Angular not ready yet."
             fi
-            sleep 2
+
+            if [ "$SUCCESS_COUNT" -ge 5 ]; then
+              echo "Angular UI is responding consistently."
+              break
+            fi
+
+            sleep 3
           done
 
-          echo "ERROR: Angular UI is unavailable."
-          docker compose -f docker-compose.prod.yml logs --tail=200 angular-ui
-          exit 1
+          if [ "$SUCCESS_COUNT" -lt 5 ]; then
+            echo "ERROR: Angular UI is not stable."
+
+            docker compose -f docker-compose.prod.yml ps -a angular-ui
+            docker compose -f docker-compose.prod.yml logs --tail=300 angular-ui
+
+            exit 1
+          fi
+
+          echo "=== Container restart information ==="
+
+          docker inspect \
+            "$(docker compose -f docker-compose.prod.yml ps -q angular-ui)" \
+            --format 'RestartCount={{.RestartCount}} OOMKilled={{.State.OOMKilled}} ExitCode={{.State.ExitCode}}'
+
+          echo "=== Angular response ==="
+          head -c 500 /tmp/angular-response.html
           
 
       - name: Debug Docker Containers and Logs
