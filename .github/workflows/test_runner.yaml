@@ -132,7 +132,7 @@ jobs:
           
 
       - name: Debug Docker Containers and Logs
-        if: failure()
+        if: ${{ always() }}
         run: |
           cd practice-app
           echo "=== CONTAINER STATUS ==="
