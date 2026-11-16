@@ -129,7 +129,21 @@ jobs:
 
           echo "=== Angular response ==="
           head -c 500 /tmp/angular-response.html
-          
+
+      - name: Verify Nginx
+        if: ${{ always() }}
+        run: |
+          echo "=== NGINX PROCESS STATUS ==="
+          docker compose -f practice-app/docker-compose.prod.yml \
+            exec -T web ps aux
+      
+          echo "=== NGINX HTTP RESPONSE ==="
+          curl -sv http://localhost:8091/ -o /dev/null
+      
+          echo "=== NGINX ERRORS ==="
+          docker compose -f practice-app/docker-compose.prod.yml \
+            logs --tail=100 web
+                
 
       - name: Debug Docker Containers and Logs
         if: ${{ always() }}
@@ -142,7 +156,7 @@ jobs:
           docker compose -f docker-compose.prod.yml logs laravel-api
           
           echo "=== NGINX WEB LOGS ==="
-          docker compose -f docker-compose.prod.yml logs web
+          docker compose exec -T web nginx -T 2>&1 | grep -nE 'aio|directio|thread_pool'      
           
           echo "=== ANGULAR UI LOGS ==="
           docker compose -f docker-compose.prod.yml logs --tail=200 angular-ui
