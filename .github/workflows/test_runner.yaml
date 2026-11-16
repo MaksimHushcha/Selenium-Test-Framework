@@ -82,6 +82,32 @@ jobs:
 
           # Check container status
           docker compose -f docker-compose.prod.yml ps
+          
+          
+
+      - name: Verify Angular UI
+        working-directory: practice-app
+        run: |
+          echo "=== Angular container status ==="
+          docker compose -f docker-compose.prod.yml ps -a angular-ui
+
+          echo "=== Angular container logs ==="
+          docker compose -f docker-compose.prod.yml logs --tail=100 angular-ui
+
+          echo "=== Waiting for Angular ==="
+
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:4200/ > /dev/null; then
+              echo "Angular UI is available."
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "ERROR: Angular UI is unavailable."
+          docker compose -f docker-compose.prod.yml logs --tail=200 angular-ui
+          exit 1
+          
 
       - name: Debug Docker Containers and Logs
         if: failure()
@@ -95,6 +121,9 @@ jobs:
           
           echo "=== NGINX WEB LOGS ==="
           docker compose -f docker-compose.prod.yml logs web
+          
+          echo "=== ANGULAR UI LOGS ==="
+          docker compose -f docker-compose.prod.yml logs --tail=200 angular-ui
 
       - name: Run tests with Allure
         env:
