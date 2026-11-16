@@ -1,0 +1,56 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794859337995
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1794859337995
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7JZ3SXW91NBJ294K4R72MNJ - Failed to load resource: the server responded with a status of 404 ()",
+    "source": "network",
+    "timestamp": 1794859338049
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794859338049
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7JZ3SXW91NBJ294K4R72MNJ/related - Failed to load resource: the server responded with a status of 500 ()",
+    "source": "network",
+    "timestamp": 1794859338102
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794859338102
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794859338155
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7JZ3SXW91NBJ294K4R72MNJ - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794859341162
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7JZ3SXW91NBJ294K4R72MNJ - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794859345964
+  }
+]
