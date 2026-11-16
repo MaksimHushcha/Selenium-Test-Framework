@@ -1,3 +1,4 @@
+
 name: UI tests
 
 on:
@@ -12,6 +13,8 @@ permissions:
 jobs:
   pytest:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+
     steps:
       - name: Checkout test code
         uses: actions/checkout@v4
@@ -25,91 +28,225 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest allure-pytest pytest-xdist
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-xdist pytest-timeout allure-pytest
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
 
       - name: Clone Practice Software Testing App
         uses: actions/checkout@v4
         with:
-          repository: 'testsmith-io/practice-software-testing'
-          path: 'practice-app'
+          repository: testsmith-io/practice-software-testing
+          path: practice-app
           fetch-depth: 1
 
       - name: Set up QEMU for ARM images
         uses: docker/setup-qemu-action@v3
 
-      - name: Spin Up Containers & Verify Services
-        env:
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+      - name: Configure local application
+        working-directory: practice-app
         run: |
-          cd practice-app
-          if [ -f .env.example ]; then cp .env.example .env; fi
-          echo "SPRINT=sprint5" >> .env
+          if [ -f .env.example ]; then
+            cp .env.example .env
+          else
+            touch .env
+          fi
 
-          docker compose -f docker-compose.prod.yml up -d
+          if grep -q '^SPRINT=' .env; then
+            sed -i 's/^SPRINT=.*/SPRINT=sprint5/' .env
+          else
+            echo "SPRINT=sprint5" >> .env
+          fi
+
+          # Override the default Angular development configuration.
+          # Google SSO is rendered only when environment.production is true.
+          cat > docker-compose.ci.yml <<'YAML'
+          services:
+            angular-ui:
+              command: >
+                bash -c "ng serve --configuration production --host 0.0.0.0 --port 4200"
+          YAML
+
+          echo "=== Docker Compose configuration ==="
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml config
+
+      - name: Spin Up Containers & Verify Services
+        working-directory: practice-app
+        run: |
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            up -d --pull missing
 
           echo "Waiting for MariaDB..."
-          until docker compose -f docker-compose.prod.yml exec -T mariadb mysqladmin ping -h localhost -uroot -proot --silent; do
+
+          until docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            exec -T mariadb \
+            mysqladmin ping -h localhost -uroot -proot --silent; do
+              sleep 2
+          done
+
+          echo "MariaDB is ready."
+
+          # Configure Laravel API.
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            exec -u 0 -T laravel-api sh -c '
+              set -e
+
+              cd /var/www
+
+              if [ ! -f .env ] && [ -f .env.example ]; then
+                cp .env.example .env
+              fi
+
+              set_env() {
+                key="$1"
+                value="$2"
+
+                if grep -q "^${key}=" .env; then
+                  sed -i "s|^${key}=.*|${key}=${value}|" .env
+                else
+                  printf "%s=%s\n" "$key" "$value" >> .env
+                fi
+              }
+
+              set_env DB_HOST mariadb
+
+              chmod 666 .env
+              chmod -R 777 storage bootstrap/cache
+            '
+
+          # Generate Laravel application key.
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            exec -T laravel-api \
+            php artisan key:generate --force
+
+          # Clear cached Laravel configuration.
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            exec -T laravel-api \
+            php artisan config:clear
+
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            exec -T laravel-api \
+            php artisan cache:clear
+
+          # Initialize database.
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            exec -T laravel-api \
+            php artisan migrate:fresh --seed --force
+
+          echo "=== Container status ==="
+
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            ps
+
+      - name: Wait for Angular application
+        run: |
+          echo "Waiting for Angular production configuration..."
+
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:4200/ > /dev/null; then
+              echo "Angular application is responding."
+              exit 0
+            fi
+
             sleep 2
           done
 
-          docker compose -f docker-compose.prod.yml exec -u 0 -T laravel-api sh -c "
-            if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
-            sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mariadb/g' .env
-            sed -i 's/DB_HOST=localhost/DB_HOST=mariadb/g' .env
-          
-            # Inject dummy Google OAuth credentials so the frontend button renders
-            echo 'APP_GOOGLE_ID=dummy-google-client-id.apps.googleusercontent.com' >> .env
-            echo 'APP_GOOGLE_SECRET=dummy-google-client-secret' >> .env
-          
-            chmod 666 .env
-            chmod -R 777 storage bootstrap/cache
-          "
-
-          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan key:generate
-          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan config:clear
-          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan cache:clear
-          docker compose -f docker-compose.prod.yml exec -T laravel-api php artisan migrate:fresh --seed --force
-
-          # Check container status
-          docker compose -f docker-compose.prod.yml ps
-
-      - name: Debug Docker Containers and Logs
-        if: failure()
-        run: |
-          cd practice-app
-          echo "=== CONTAINER STATUS ==="
-          docker compose -f docker-compose.prod.yml ps
-          
-          echo "=== LARAVEL API LOGS ==="
-          docker compose -f docker-compose.prod.yml logs laravel-api
-          
-          echo "=== NGINX WEB LOGS ==="
-          docker compose -f docker-compose.prod.yml logs web
+          echo "ERROR: Angular application did not start."
+          exit 1
 
       - name: Run tests with Allure
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          # Always test the locally deployed application.
+          BASE_URL: http://localhost:4200
+          API_BASE_URL: http://localhost:8091
+
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
           USER_EMAIL_ACCOUNT_LOCKOUT: ${{ secrets.USER_EMAIL_ACCOUNT_LOCKOUT }}
           USER_PASSWORD_ACCOUNT_LOCKOUT: ${{ secrets.USER_PASSWORD_ACCOUNT_LOCKOUT }}
+
           API_USER: ${{ secrets.API_USER }}
           API_USER_PASSWORD: ${{ secrets.API_USER_PASSWORD }}
 
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=0 --timeout=60 -n 4 --alluredir=allure-results
-        continue-on-error: true
+
+        run: |
+          mkdir -p allure-results
+
+          pytest -v \
+            --tb=short \
+            --durations=0 \
+            --timeout=60 \
+            -n 4 \
+            --alluredir=allure-results
+
+      - name: Debug Docker Containers and Logs
+        if: failure()
+        run: |
+          cd practice-app
+
+          echo "=== CONTAINER STATUS ==="
+
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            ps
+
+          echo "=== LARAVEL API LOGS ==="
+
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            logs --tail=200 laravel-api
+
+          echo "=== ANGULAR UI LOGS ==="
+
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            logs --tail=200 angular-ui
+
+          echo "=== NGINX WEB LOGS ==="
+
+          docker compose \
+            -f docker-compose.prod.yml \
+            -f docker-compose.ci.yml \
+            logs --tail=200 web
 
       - name: Stop and Clean Up Docker Containers
         if: always()
         run: |
-          cd practice-app
-          docker compose -f docker-compose.prod.yml down -v
+          if [ -d practice-app ]; then
+            cd practice-app
+
+            docker compose \
+              -f docker-compose.prod.yml \
+              -f docker-compose.ci.yml \
+              down -v --remove-orphans || true
+          fi
 
       - name: Upload browser diagnostics
         if: always()
@@ -124,10 +261,12 @@ jobs:
         if: always()
         run: |
           mkdir -p allure-results
+
           cat << EOF > allure-results/environment.properties
           Platform=GitHub Actions
           Python_Version=3.11
-          Base_URL=${{ secrets.BASE_URL }}
+          Base_URL=http://localhost:4200
+          API_URL=http://localhost:8091
           Branch=${{ github.ref_name }}
           Runner_OS=Ubuntu Latest
           Execution_ID=${{ github.run_id }}
@@ -137,6 +276,7 @@ jobs:
         if: always()
         run: |
           mkdir -p allure-results
+
           cat << 'EOF' > allure-results/categories.json
           [
             {
@@ -165,31 +305,35 @@ jobs:
           path: gh-pages-dir
           fetch-depth: 1
 
-      - name: Generate Allure Report Natively
+      - name: Generate Allure Report
         if: always()
         run: |
           if ! command -v allure &> /dev/null; then
-            npm install -g allure-commandline --save-dev
+            npm install -g allure-commandline
           fi
-      
-          # 1. Pull previous history into results to keep trend graphs
+
+          # Restore previous trend history.
           if [ -d "gh-pages-dir/history" ]; then
             mkdir -p allure-results/history
-            cp -r gh-pages-dir/history/* allure-results/history/
+            cp -a gh-pages-dir/history/. allure-results/history/
           fi
-      
-          # 2. Generate current report
+
+          # Generate current report.
           allure generate allure-results --clean -o allure-report
-      
-          # 3. Create run directory and copy this run's report
+
+          # Create directory for this execution.
           mkdir -p "allure-history/${{ github.run_number }}"
-          cp -r allure-report/* "allure-history/${{ github.run_number }}/"
-      
-          # 4. Save latest history for future runs
+
+          cp -a allure-report/. "allure-history/${{ github.run_number }}/"
+
+          # Preserve latest history for subsequent executions.
           mkdir -p allure-history/history
-          cp -r allure-report/history/* allure-history/history/
-      
-          # 5. Root redirect to the latest run
+
+          if [ -d allure-report/history ]; then
+            cp -a allure-report/history/. allure-history/history/
+          fi
+
+          # Root redirect to latest report.
           cat << 'EOF' > allure-history/index.html
           <!DOCTYPE html>
           <meta charset="utf-8">
@@ -198,8 +342,7 @@ jobs:
           <title>Redirecting to latest Allure report...</title>
           <a href="./${{ github.run_number }}/">Click here if not redirected</a>
           EOF
-      
-          # 6. Prevent GitHub Pages from ignoring special files
+
           touch allure-history/.nojekyll
 
       - name: Deploy Allure Report to GitHub Pages
@@ -220,7 +363,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             Workflow: ${{ github.workflow }}
-            Status: ${{ job.status }} 
+            Status: ${{ job.status }}
             Actor: ${{ github.actor }}
             Commit: ${{ github.event.head_commit && github.event.head_commit.message || 'Manual run' }}
             Repository: ${{ github.repository }}
