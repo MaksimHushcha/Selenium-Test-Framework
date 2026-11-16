@@ -185,6 +185,46 @@ jobs:
           echo "=== ANGULAR UI LOGS ==="
           docker compose -f docker-compose.prod.yml logs --tail=200 angular-ui
 
+      - name: Diagnose Docker Environment
+        if: ${{ always() }}
+        run: |
+          cd practice-app
+        
+          echo "========== CONTAINER STATUS =========="
+          docker compose -f docker-compose.prod.yml ps -a || true
+        
+          echo "========== IMAGE ARCHITECTURE =========="
+          docker image inspect testsmith/practice-software-testing-web \
+            --format '{{.Os}}/{{.Architecture}}' || true
+        
+          echo "========== NGINX CONFIGURATION =========="
+          docker compose -f docker-compose.prod.yml exec -T web nginx -T 2>&1 || true
+        
+          echo "========== NGINX LISTENING PORTS =========="
+          docker compose -f docker-compose.prod.yml exec -T web sh -c \
+            'ss -lntp || netstat -lntp' 2>&1 || true
+        
+          echo "========== NGINX PROCESSES =========="
+          docker compose -f docker-compose.prod.yml exec -T web ps aux 2>&1 || true
+        
+          echo "========== ENDPOINT CHECKS =========="
+          for port in 4200 8091 8000; do
+            echo "--- localhost:$port ---"
+            curl -sv --max-time 10 "http://localhost:$port/" -o /dev/null 2>&1 || true
+          done
+        
+          echo "========== LARAVEL API LOGS =========="
+          docker compose -f docker-compose.prod.yml logs --tail=200 laravel-api 2>&1 || true
+        
+          echo "========== NGINX WEB LOGS =========="
+          docker compose -f docker-compose.prod.yml logs --tail=200 web 2>&1 || true
+        
+          echo "========== ANGULAR UI LOGS =========="
+          docker compose -f docker-compose.prod.yml logs --tail=200 angular-ui 2>&1 || true
+        
+          echo "========== DOCKER NETWORKS =========="
+          docker network ls || true
+
       - name: Run tests with Allure
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
