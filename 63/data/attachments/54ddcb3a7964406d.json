@@ -1,0 +1,98 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794860401350
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7K04Z1K7FRAS5F3GYTAYC79 - Failed to load resource: the server responded with a status of 404 ()",
+    "source": "network",
+    "timestamp": 1794860401351
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794860401351
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7K04Z1K7FRAS5F3GYTAYC79/related - Failed to load resource: the server responded with a status of 500 ()",
+    "source": "network",
+    "timestamp": 1794860401351
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794860401351
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794860401511
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1794860401511
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7K04Z1K7FRAS5F3GYTAYC79 - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794860404525
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7K04Z1K7FRAS5F3GYTAYC79 - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794860409112
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error during WebSocket handshake: net::ERR_CONNECTION_RESET",
+    "source": "network",
+    "timestamp": 1794860415132
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_SOCKET_NOT_CONNECTED",
+    "source": "network",
+    "timestamp": 1794860416172
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860417130
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860418531
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860419164
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860420134
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860421185
+  }
+]

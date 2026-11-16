@@ -1,0 +1,140 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794860408451
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7K04Z1G0H4W1DE0R9ZZ2HS9/related - Failed to load resource: the server responded with a status of 500 ()",
+    "source": "network",
+    "timestamp": 1794860408503
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794860408504
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7K04Z1G0H4W1DE0R9ZZ2HS9 - Failed to load resource: the server responded with a status of 404 ()",
+    "source": "network",
+    "timestamp": 1794860408556
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794860408556
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794860408609
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1794860408610
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7K04Z1G0H4W1DE0R9ZZ2HS9 - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794860411622
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_SOCKET_NOT_CONNECTED",
+    "source": "network",
+    "timestamp": 1794860415111
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7K04Z1G0H4W1DE0R9ZZ2HS9 - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794860416106
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_SOCKET_NOT_CONNECTED",
+    "source": "network",
+    "timestamp": 1794860416164
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860417128
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860418530
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860419164
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860420137
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860421136
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860422185
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860423162
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860424202
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860425594
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860426212
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860427209
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860428203
+  }
+]

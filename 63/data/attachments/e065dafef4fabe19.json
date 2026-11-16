@@ -1,0 +1,164 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7K04Z1JBGX4Q31ED691DNCN - Failed to load resource: the server responded with a status of 404 ()",
+    "source": "network",
+    "timestamp": 1794860411796
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794860411796
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/products/01M7K04Z1JBGX4Q31ED691DNCN/related - Failed to load resource: the server responded with a status of 500 ()",
+    "source": "network",
+    "timestamp": 1794860411797
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" ki",
+    "source": "console-api",
+    "timestamp": 1794860411797
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794860412081
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/chunk-JWJ5WWMX.js 6:12810 \"ERROR\" Object",
+    "source": "console-api",
+    "timestamp": 1794860412081
+  },
+  {
+    "level": "SEVERE",
+    "message": "https://api.practicesoftwaretesting.com/users/me - Failed to load resource: the server responded with a status of 401 ()",
+    "source": "network",
+    "timestamp": 1794860412297
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_SOCKET_NOT_CONNECTED",
+    "source": "network",
+    "timestamp": 1794860415184
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7K04Z1JBGX4Q31ED691DNCN - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794860415304
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_SOCKET_NOT_CONNECTED",
+    "source": "network",
+    "timestamp": 1794860416175
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860417141
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860418487
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860419175
+  },
+  {
+    "level": "WARNING",
+    "message": "http://localhost:4200/product/01M7K04Z1JBGX4Q31ED691DNCN - The resource http://localhost:4200/assets/img/barn-2400x1600.avif was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "source": "javascript",
+    "timestamp": 1794860419609
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860420194
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860421190
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860422150
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860423161
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860424186
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860425565
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860426176
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860427172
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860428217
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860429206
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860430235
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860431225
+  },
+  {
+    "level": "SEVERE",
+    "message": "http://localhost:4200/@vite/client 1028 WebSocket connection to 'ws://localhost:4200/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "source": "network",
+    "timestamp": 1794860432191
+  }
+]
