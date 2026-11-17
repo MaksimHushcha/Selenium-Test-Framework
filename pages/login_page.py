@@ -1,4 +1,6 @@
 import os
+
+import pytest
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from locators import login_page_locators as loc
@@ -61,6 +63,10 @@ class LoginPage(BasePage):
         else:
             return False
 
+    @pytest.mark.skipif(
+        os.getenv("CI") == "true",
+        reason="Google SSO is unavailable in the local CI environment"
+    )
     def click_google_sso_button(self):
         original_handles = set(self.driver.window_handles)
 

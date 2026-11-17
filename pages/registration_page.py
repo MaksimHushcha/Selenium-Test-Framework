@@ -144,47 +144,26 @@ class RegistrationPage(BasePage):
                 action(value)
         return filled_data
 
-# TO REFACTOR INTO DICT LOOKUP
-class RegistrationError(BasePage):
-    def get_registration_error(self) -> str:
-        return self.locate_element(loc.REGISTRATION_ERROR_LOCATOR).text
+    def get_field_error_text(self, error_field: RegistrationFields) -> str:
+        locators = {
+            RegistrationFields.first_name: loc.FIRST_NAME_ERROR_LOCATOR,
+            RegistrationFields.last_name: loc.LAST_NAME_ERROR_LOCATOR,
+            RegistrationFields.date_of_birth: loc.DOB_ERROR_LOCATOR,
+            RegistrationFields.country: loc.COUNTRY_ERROR_LOCATOR,
+            RegistrationFields.postal_code: loc.POSTAL_CODE_ERROR_LOCATOR,
+            RegistrationFields.house_number: loc.HOUSE_NUMBER_ERROR_LOCATOR,
+            RegistrationFields.street_address: loc.STREET_ERROR_LOCATOR,
+            RegistrationFields.city: loc.CITY_ERROR_LOCATOR,
+            RegistrationFields.state: loc.STATE_ERROR_LOCATOR,
+            RegistrationFields.phone_number: loc.PHONE_ERROR_LOCATOR,
+            RegistrationFields.email: loc.EMAIL_ERROR_LOCATOR,
+            RegistrationFields.password: loc.PASSWORD_ERROR_LOCATOR
+        }
+        locator = locators.get(error_field)
+        return self.locate_element(locator).text
 
-    def get_first_name_error(self) -> str:
-        return self.locate_element(loc.FIRST_NAME_ERROR_LOCATOR).text
 
-    def get_last_name_error(self) -> str:
-        return self.locate_element(loc.LAST_NAME_ERROR_LOCATOR).text
-
-    def get_date_of_birth_error(self) -> str:
-        return self.locate_element(loc.DOB_ERROR_LOCATOR).text
-
-    def get_country_error(self) -> str:
-        return self.locate_element(loc.COUNTRY_ERROR_LOCATOR).text
-
-    def get_postal_code_error(self) -> str:
-        return self.locate_element(loc.POSTAL_CODE_ERROR_LOCATOR).text
-
-    def get_house_number_error(self) -> str:
-        return self.locate_element(loc.HOUSE_NUMBER_ERROR_LOCATOR).text
-
-    def get_street_address_error(self) -> str:
-        return self.locate_element(loc.STREET_ERROR_LOCATOR).text
-
-    def get_city_error(self) -> str:
-        return  self.locate_element(loc.CITY_ERROR_LOCATOR).text
-
-    def get_state_error(self) -> str:
-        return self.locate_element(loc.STATE_ERROR_LOCATOR).text
-
-    def get_phone_number_error(self) -> str:
-        return self.locate_element(loc.PHONE_ERROR_LOCATOR).text
-
-    def get_email_error(self) -> str:
-        return self.locate_element(loc.EMAIL_ERROR_LOCATOR).text
-
-    def get_password_error(self) -> str:
-        return self.locate_element(loc.PASSWORD_ERROR_LOCATOR).text
-
-# Shared interface for tests
-class RegistrationPageSuper(RegistrationError, RegistrationPage):
-    pass
+        # for field, locator in locators.items():
+        #     if field == error_field:
+        #         return self.locate_element(locator).text
+        # return None
