@@ -161,9 +161,3 @@ class RegistrationPage(BasePage):
         }
         locator = locators.get(error_field)
         return self.locate_element(locator).text
-
-
-        # for field, locator in locators.items():
-        #     if field == error_field:
-        #         return self.locate_element(locator).text
-        # return None

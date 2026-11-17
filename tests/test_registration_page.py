@@ -1,5 +1,4 @@
 import pytest
-
 from pages.registration_page import RegistrationFields
 from tests.conftest import registration_page
 from utils import helpers
@@ -37,47 +36,12 @@ def test_account_registration_with_all_correct_data(registration_page, login_pag
         (RegistrationFields.password, "Password is required\nPassword must be minimal 6 characters long.\nPassword can not include invalid characters."),
     ]
 )
-def test_account_registration_first_name_is_mandatory(registration_page, field, error_message):
+def test_account_registration_fields_are_mandatory(registration_page, field, error_message):
     registration_page.load()
     registration_data = registration_page.fill_all_registration_data(fields_to_exclude=[field])
     registration_page.submit_registration_form()
-
+    assert registration_page.is_user_on_expected_page(), \
+            (f"User is not on registration page page, registration data :"
+             f" {registration_data}, current url is {registration_page.get_current_url()}")
     assert registration_page.get_field_error_text(error_field=field) == error_message, f"{registration_data}"
-    assert registration_page.is_user_on_expected_page(), \
-        (f"User is not on registration page page, registration data :"
-         f" {registration_data}, current url is {registration_page.get_current_url()}")
 
-
-def test_account_registration_last_name_is_mandatory(registration_page):
-    registration_page.load()
-    registration_data = registration_page.fill_all_registration_data(fields_to_exclude=[RegistrationFields.last_name])
-    registration_page.submit_registration_form()
-
-    assert (registration_page.get_field_error_text(error_field=RegistrationFields.last_name)
-            == "Last name is required"), f"{registration_data}"
-    assert registration_page.is_user_on_expected_page(), \
-        (f"User is not on registration page page, registration data : {registration_data},"
-         f" current url is {registration_page.get_current_url()}")
-
-
-def test_account_registration_date_of_birth_is_mandatory(registration_page):
-    registration_page.load()
-    registration_data = registration_page.fill_all_registration_data(fields_to_exclude=[RegistrationFields.date_of_birth])
-    registration_page.submit_registration_form()
-
-    assert (registration_page.get_field_error_text(error_field=RegistrationFields.date_of_birth)
-            == "Please enter a valid date in YYYY-MM-DD format.\nDate of Birth is required"), f"{registration_data}"
-    assert registration_page.is_user_on_expected_page(), \
-        (f"User is not on registration page page, registration data : {registration_data},"
-         f" current url is {registration_page.get_current_url()}")
-
-
-def test_account_registration_country_is_mandatory(registration_page):
-    registration_page.load()
-    registration_data = registration_page.fill_all_registration_data(fields_to_exclude=[RegistrationFields.country])
-    registration_page.submit_registration_form()
-
-    assert (registration_page.get_field_error_text(error_field=RegistrationFields.country)
-            == "Country is required"), f"{registration_data}"
-    assert registration_page.is_user_on_expected_page(), \
-        f"User is not on registration page page, registration data : {registration_data}, current url is {registration_page.get_current_url()}"

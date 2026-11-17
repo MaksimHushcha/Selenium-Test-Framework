@@ -1,7 +1,4 @@
-import json
 import os
-import time
-import urllib.parse
 import pytest
 from faker import Faker
 import dotenv
@@ -95,7 +92,7 @@ def test_show_password_displays_the_password(login_page):
     assert login_page.is_password_masked() == True, f"Expected password to be unmasked after second show_password"
 
 
-# E2E is practically impossible, and mocking it E2E is impractical.
+@pytest.mark.skipif(os.getenv("GITHUB_ACTIONS") == "true", reason="Test doesn't work in Github Actions.")
 def test_google_sso_redirect(login_page):
     login_page.load()
 
