@@ -11,3 +11,13 @@ CLEAR_COMPARISON_BUTTON = (By.CSS_SELECTOR, "[data-test=clear-comparison]")
 COMPARE_NOW_BUTTON = (By.CSS_SELECTOR, "[data-test=compare-link]")
 
 NAV_MENU = (By.CSS_SELECTOR, "[data-test=nav-menu]")
+
+LANGUAGE_SELECT = (By.CSS_SELECTOR, "[data-test=language-select]")
+DE = (By.CSS_SELECTOR, "[data-test=lang-de]")
+EL = (By.CSS_SELECTOR, "[data-test=lang-el]")
+EN = (By.CSS_SELECTOR, "[data-test=lang-en]")
+ES = (By.CSS_SELECTOR, "[data-test=lang-es]")
+FR = (By.CSS_SELECTOR, "[data-test=lang-fr]")
+NL = (By.CSS_SELECTOR, "[data-test=lang-nl]")
+TR = (By.CSS_SELECTOR, "[data-test=lang-tr]")
+LANGUAGE_OPTION_TEMPLATE = (By.CSS_SELECTOR, "[data-test=lang-{locale}]")

@@ -1,0 +1,88 @@
+{
+  "fields": {
+    "first_name": {
+      "label": "Vorname",
+      "placeholder": "Vorname *",
+      "error_messages": {
+        "missing_field": "Vorname ist verpflichtend"
+      }
+    },
+    "last_name": {
+      "label": "Nachname",
+      "placeholder": "Ihr Nachname *",
+      "error_messages": {
+        "missing_field": "Nachname ist verpflichtend"
+      }
+    },
+    "date_of_birth": {
+      "label": "Geburtsdatum *",
+      "placeholder": "YYYY-MM-DD",
+      "error_messages": {
+        "missing_field": "Please enter a valid date in YYYY-MM-DD format.\nGeburtsdatum ist verpflichtend"
+      }
+    },
+    "country": {
+      "label": "Land",
+      "placeholder": "Ihr Land *",
+      "error_messages": {
+        "missing_field": "Land ist verpflichtend"
+      }
+    },
+    "postal_code": {
+      "label": "Postleitzahl",
+      "placeholder": "Ihre Postleitzahl *",
+      "error_messages": {
+        "missing_field": "Postleitzahl ist verpflichtend"
+      }
+    },
+    "house_number": {
+      "label": "Hausnummer",
+      "placeholder": "z.B. 42 *",
+      "error_messages": {
+        "missing_field": "Hausnummer ist verpflichtend"
+      }
+    },
+    "street_address": {
+      "label": "Straße",
+      "placeholder": "Ihre Straße *",
+      "error_messages": {
+        "missing_field": "Straße ist verpflichtend"
+      }
+    },
+    "city": {
+      "label": "Stadt",
+      "placeholder": "Ihre Stadt *",
+      "error_messages": {
+        "missing_field": "Stadt ist verpflichtend"
+      }
+    },
+    "state": {
+      "label": "Bundesland",
+      "placeholder": "Ihr Bundesland *",
+      "error_messages": {
+        "missing_field": "Bundesland ist verpflichtend"
+      }
+    },
+    "phone_number": {
+      "label": "Telefonnummer",
+      "placeholder": "Ihre Telefonnummer *",
+      "error_messages": {
+        "missing_field": "Telefonnummer ist verpflichtend."
+      }
+    },
+    "email": {
+      "label": "Email Adresse",
+      "placeholder": "Ihre EMail *",
+      "error_messages": {
+        "missing_field": "Email ist verpflichtend"
+      }
+    },
+    "password": {
+      "label": "Passwort",
+      "placeholder": "Ihr Passwort",
+      "error_messages": {
+        "missing_field": "Passwort ist verpflichtend\nPasswort muss mindestens 6 Zeichen lang sein.\nDas Passwort darf keine ungültigen Zeichen enthalten."
+      }
+    }
+  }
+}

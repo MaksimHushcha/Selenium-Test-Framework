@@ -1,0 +1,88 @@
+{
+  "fields": {
+    "first_name": {
+      "label": "First Name",
+      "placeholder": "First Name",
+      "error_messages": {
+        "missing_field": "First name is required"
+      }
+    },
+    "last_name": {
+      "label": "Last Name",
+      "placeholder": "Last Name",
+      "error_messages": {
+        "missing_field": "Last name is required"
+      }
+    },
+    "date_of_birth": {
+      "label": "Date of Birth",
+      "placeholder": "YYYY-MM-DD",
+      "error_messages": {
+        "missing_field": "Please enter a valid date in YYYY-MM-DD format.\nDate of Birth is required"
+      }
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Country",
+      "error_messages": {
+        "missing_field": "Country is required"
+      }
+    },
+    "postal_code": {
+      "label": "Postcode",
+      "placeholder": "Postcode",
+      "error_messages": {
+        "missing_field": "Postcode is required"
+      }
+    },
+    "house_number": {
+      "label": "House Number",
+      "placeholder": "House Number",
+      "error_messages": {
+        "missing_field": "House number is required"
+      }
+    },
+    "street_address": {
+      "label": "Street Address",
+      "placeholder": "Street Address",
+      "error_messages": {
+        "missing_field": "Street is required"
+      }
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "City",
+      "error_messages": {
+        "missing_field": "City is required"
+      }
+    },
+    "state": {
+      "label": "State",
+      "placeholder": "State",
+      "error_messages": {
+        "missing_field": "State is required"
+      }
+    },
+    "phone_number": {
+      "label": "Phone Number",
+      "placeholder": "Phone Number",
+      "error_messages": {
+        "missing_field": "Phone is required."
+      }
+    },
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Email Address",
+      "error_messages": {
+        "missing_field": "Email is required"
+      }
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Password",
+      "error_messages": {
+        "missing_field": "Password is required\nPassword must be minimal 6 characters long.\nPassword can not include invalid characters."
+      }
+    }
+  }
+}

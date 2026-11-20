@@ -1,7 +1,27 @@
+import json
+from pathlib import Path
 import pytest
 from pages.registration_page import RegistrationFields
 from tests.conftest import registration_page
 from utils import helpers
+
+LOCALES_DIR = Path(__file__).parent.parent / "locales"
+SUPPORTED_LOCALES = ["en", "de"]
+
+def _load_registration_locales(locale: str):
+    path = LOCALES_DIR / locale / "registration.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _build_mandatory_fields_messages():
+    locales = SUPPORTED_LOCALES
+    params = []
+    for locale in locales:
+        data = _load_registration_locales(locale)
+        for field in RegistrationFields:
+            error_msg = data["fields"][field.name]["error_messages"]["missing_field"]
+            params.append(pytest.param(locale, field, error_msg, id=f"{locale}-{field.name}"))
+    return params
 
 
 def test_account_registration_with_all_correct_data(registration_page, login_page):
@@ -18,26 +38,11 @@ def test_account_registration_with_all_correct_data(registration_page, login_pag
          f"Failed to login with {registration_data}"
 
 
-# TODO Refactor with localization file references
-@pytest.mark.parametrize(
-    "field, error_message",
-    [
-        (RegistrationFields.first_name, "First name is required"),
-        (RegistrationFields.last_name, "Last name is required"),
-        (RegistrationFields.date_of_birth, "Please enter a valid date in YYYY-MM-DD format.\nDate of Birth is required"),
-        (RegistrationFields.country, "Country is required"),
-        (RegistrationFields.postal_code, "Postcode is required"),
-        (RegistrationFields.house_number, "House number is required"),
-        (RegistrationFields.street_address, "Street is required"),
-        (RegistrationFields.city, "City is required"),
-        (RegistrationFields.state, "State is required"),
-        (RegistrationFields.phone_number, "Phone is required."),
-        (RegistrationFields.email, "Email is required"),
-        (RegistrationFields.password, "Password is required\nPassword must be minimal 6 characters long.\nPassword can not include invalid characters."),
-    ]
-)
-def test_account_registration_fields_are_mandatory(registration_page, field, error_message):
+@pytest.mark.parametrize("locale, field, error_message", _build_mandatory_fields_messages())
+def test_account_registration_fields_are_mandatory(registration_page, locale, field, error_message, components):
     registration_page.load()
+    if locale != "en":
+        components.switch_to_locale(locale)
     registration_data = registration_page.fill_all_registration_data(fields_to_exclude=[field])
     registration_page.submit_registration_form()
     assert registration_page.is_user_on_expected_page(), \
