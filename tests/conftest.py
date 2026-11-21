@@ -23,6 +23,9 @@ from pathlib import Path
 dotenv.load_dotenv()
 
 ARTIFACTS_DIR = Path("test-artifacts")
+SUPPORTED_LOCALES = ["de", "el", "en", "es", "fr", "nl", "tr"]
+
+
 
 @pytest.fixture
 def driver():
@@ -41,8 +44,10 @@ def driver():
     yield chrome_driver
     chrome_driver.quit()
 
+
 def safe_filename(nodeid: str) -> str:
     return re.sub(r"[^\w\-_.]", "_", nodeid)
+
 
 def get_safe_log(driver, log_type: str):
     try:
@@ -117,7 +122,13 @@ def pytest_runtest_makereport(item, call):
             print(f"\nCould not capture browser diagnostics: {exc}")
 
 
-
+def pytest_addoption(parser):
+    parser.addoption(
+        "--locales",
+        action="store",
+        default="en",
+        help="Comma-separated list of locales to test",
+    )
 
 @pytest.fixture
 def main_page(driver):
@@ -186,6 +197,7 @@ def seeded_two_comparison_items(main_page):
     # Verifying the page loaded before injecting the session to prevents flakiness in CI/CD
     assert main_page.is_user_on_expected_page()
     main_page.set_compare_ids_session_storage(ids_list)
+
 
 @pytest.fixture
 def seeded_two_measurements_items(main_page):

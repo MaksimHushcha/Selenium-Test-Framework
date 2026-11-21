@@ -1,20 +1,19 @@
 import json
 from pathlib import Path
 import pytest
-from pages.registration_page import RegistrationFields
+from pages.registration_page import RegistrationFields, RegistrationPage
 from tests.conftest import registration_page
 from utils import helpers
 
 LOCALES_DIR = Path(__file__).parent.parent / "locales"
-SUPPORTED_LOCALES = ["en", "de"]
+locales = ["en", "de"]
 
 def _load_registration_locales(locale: str):
     path = LOCALES_DIR / locale / "registration.json"
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _build_mandatory_fields_messages():
-    locales = SUPPORTED_LOCALES
+def _build_mandatory_fields_messages() -> list:
     params = []
     for locale in locales:
         data = _load_registration_locales(locale)

@@ -39,7 +39,7 @@
       "label": "Hausnummer",
       "placeholder": "z.B. 42 *",
       "error_messages": {
-        "missing_field": "Hausnummer ist verpflichtend"
+        "missing_field": "Hausnummer ist erforderlich"
       }
     },
     "street_address": {
