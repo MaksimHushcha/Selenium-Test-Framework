@@ -1,6 +1,6 @@
 import random
 
-from tests.conftest import components
+from fixtures.pages_fixtures import components
 from utils.api_utils import FavoritesAPI
 
 

@@ -39,8 +39,8 @@ class Components(BasePage):
 
 
     def switch_to_locale(self, locale):
-        if locale not in BasePage.SUPPORTED_UI_LOCALES:
-            raise ValueError(f"supplied locale {locale} is not supported, expected one of {BasePage.SUPPORTED_UI_LOCALES}")
+        if locale not in BasePage.SUPPORTED_LOCALES:
+            raise ValueError(f"supplied locale {locale} is not supported, expected one of {BasePage.SUPPORTED_LOCALES}")
 
         BY, SELECTOR = loc.LANGUAGE_OPTION_TEMPLATE
         option_locator = (BY, SELECTOR.format(locale=locale.strip().lower()))

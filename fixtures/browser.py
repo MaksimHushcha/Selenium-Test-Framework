@@ -1,30 +1,14 @@
+from pathlib import Path
 import json
 import os
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
-from utils.api_utils import get_a_random_valid_product_id, get_measuring_items_for_comparison, get_random_product_ids, AuthManager, FavoritesAPI
-from pages.components import Components
-from pages.comparison_page import ComparisonPage
-from pages.checkout_page import Checkout
-from pages.main_page import MainBasePage
-from pages.product_page import ProductPage
-from pages.contact_page import ContactPage
-from pages.login_page import LoginPage
-from pages.registration_page import RegistrationPage
-
 from selenium.webdriver.chrome.options import Options
-import dotenv
 import allure
 import re
-from pathlib import Path
-
-dotenv.load_dotenv()
 
 ARTIFACTS_DIR = Path("test-artifacts")
-SUPPORTED_LOCALES = ["de", "el", "en", "es", "fr", "nl", "tr"]
-
 
 
 @pytest.fixture
@@ -32,13 +16,13 @@ def driver():
     options = Options()
     if os.getenv("GITHUB_ACTIONS"):
         options.add_argument("--headless=new")
-        options.add_experimental_option("detach", True)  # to prevent browser from closing
+    else:
+        options.add_experimental_option("detach", True)
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
-    options.add_experimental_option("detach", True)  # to prevent browser from closing
     chrome_driver = webdriver.Chrome(options=options)
     chrome_driver.implicitly_wait(3)
     yield chrome_driver
@@ -121,101 +105,3 @@ def pytest_runtest_makereport(item, call):
         except Exception as exc:
             print(f"\nCould not capture browser diagnostics: {exc}")
 
-
-def pytest_addoption(parser):
-    parser.addoption(
-        "--locales",
-        action="store",
-        default="en",
-        help="Comma-separated list of locales to test",
-    )
-
-@pytest.fixture
-def main_page(driver):
-    return MainBasePage(driver)
-
-
-@pytest.fixture
-def product_page(driver):
-    return ProductPage(driver)
-
-
-@pytest.fixture
-def components(driver):
-    return Components(driver)
-
-
-@pytest.fixture
-def checkout(driver):
-    return Checkout(driver)
-
-
-@pytest.fixture
-def comparison_page(driver):
-    return ComparisonPage(driver)
-
-
-@pytest.fixture
-def contact_page(driver):
-    return ContactPage(driver)
-
-
-@pytest.fixture
-def login_page(driver):
-    return LoginPage(driver)
-
-
-@pytest.fixture
-def registration_page(driver):
-    return RegistrationPage(driver)
-
-
-@pytest.fixture
-def get_available_product_id():
-    product_id = get_a_random_valid_product_id(amount_of_items=1)
-    product_id = product_id[0]
-    return product_id
-
-
-@pytest.fixture
-def get_two_product_ids():
-    product_id = get_a_random_valid_product_id(amount_of_items=2)
-    return product_id
-
-
-@pytest.fixture
-def authenticated_user(driver):
-    token = AuthManager.get_access_token()
-    driver.get(f"{os.getenv('BASE_URL')}contact")
-    driver.execute_script(f"window.localStorage.setItem('auth-token', '{token}')")
-
-
-@pytest.fixture
-def seeded_two_comparison_items(main_page):
-    ids_list = get_random_product_ids(number_of_ids=2)
-    main_page.load()
-    # Verifying the page loaded before injecting the session to prevents flakiness in CI/CD
-    assert main_page.is_user_on_expected_page()
-    main_page.set_compare_ids_session_storage(ids_list)
-
-
-@pytest.fixture
-def seeded_two_measurements_items(main_page):
-    ids_list = get_measuring_items_for_comparison()
-    main_page.load()
-    main_page.set_compare_ids_session_storage(ids_list)
-
-
-@pytest.fixture
-def seeded_favorite_product(clear_favorites, get_available_product_id):
-    favorites = FavoritesAPI()
-    favorites.add_item_to_favorites(get_available_product_id)
-    return get_available_product_id
-
-
-@pytest.fixture
-def clear_favorites():
-    favorites = FavoritesAPI()
-    favorites.clear_favorites()
-    yield
-    favorites.clear_favorites()

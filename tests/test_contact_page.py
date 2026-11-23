@@ -1,5 +1,5 @@
 from pages.contact_page import ContactFields
-from tests.conftest import contact_page
+from fixtures.pages_fixtures import contact_page
 from faker import Faker
 fake = Faker()
 
