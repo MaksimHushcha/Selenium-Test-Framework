@@ -32,7 +32,7 @@ def test_account_registration_fields_are_mandatory(registration_page, components
         RegistrationFields.postal_code,
     }
     if field in address_fields:
-        fields_to_exclude.append(field)
+        fields_to_exclude.append(RegistrationFields.state)
 
     registration_data = registration_page.fill_all_registration_data(fields_to_exclude=fields_to_exclude)
     registration_page.submit_registration_form()
