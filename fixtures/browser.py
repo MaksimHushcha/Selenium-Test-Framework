@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 import allure
 import re
 
-ARTIFACTS_DIR = Path("test-artifacts")
+ARTIFACTS_DIR = Path("artifacts/test-artifacts")
 
 
 @pytest.fixture
@@ -51,7 +51,7 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and report.failed:
+    if report.failed and report.when in ("setup", "call"):
         driver = item.funcargs.get("driver")
         if driver is None:
             return

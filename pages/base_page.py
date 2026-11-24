@@ -49,10 +49,13 @@ class BasePage:
         try:
             return self.wait.until(EC.visibility_of_element_located(locator))
         except TimeoutException:
-            raise AssertionError("Element couldn't be located within configured timeout")
+            raise AssertionError(f"Element {locator}couldn't be located within configured timeout")
 
     def locate_multiple_elements(self, locator: tuple[str,str]) -> list[WebElement]:
-        return self.wait.until(EC.presence_of_all_elements_located(locator))
+        try:
+            return self.wait.until(EC.presence_of_all_elements_located(locator))
+        except TimeoutException:
+            raise AssertionError(f"Elements {locator} couldn't be located within configured timeout")
 
     def click_by_locator(self, locator: tuple[str, str]):
         self.wait.until(EC.element_to_be_clickable(locator)).click()

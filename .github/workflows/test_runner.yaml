@@ -102,7 +102,7 @@ jobs:
 
           PYTEST_ADDOPTS: "--color=yes"
           PYTHONPATH: "."
-        run: pytest -v --tb=short --durations=0 --timeout=60 -n 4 --alluredir=allure-results
+        run: pytest -vvl --tb=short --durations=0 --timeout=60 -n 4 --alluredir=articats/allure-results --locales=en,de
         continue-on-error: true
 
       - name: Stop and Clean Up Docker Containers
