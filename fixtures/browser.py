@@ -104,4 +104,3 @@ def pytest_runtest_makereport(item, call):
             print(f"\nBrowser diagnostics saved to: {artifact_dir}")
         except Exception as exc:
             print(f"\nCould not capture browser diagnostics: {exc}")
-

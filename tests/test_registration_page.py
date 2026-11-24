@@ -23,7 +23,18 @@ def test_account_registration_fields_are_mandatory(registration_page, components
     registration_page.load()
     if locale != "en":
         components.switch_to_locale(locale)
-    registration_data = registration_page.fill_all_registration_data(fields_to_exclude=[field])
+    fields_to_exclude = [field]
+
+    # these fields are filled automatically when state is selected, so we need to keep state empty as well
+    address_fields = {
+        RegistrationFields.street_address,
+        RegistrationFields.house_number,
+        RegistrationFields.postal_code,
+    }
+    if field in address_fields:
+        fields_to_exclude.append(field)
+
+    registration_data = registration_page.fill_all_registration_data(fields_to_exclude=fields_to_exclude)
     registration_page.submit_registration_form()
     assert registration_page.is_user_on_expected_page(), \
             (f"User is not on registration page page, registration data :"
