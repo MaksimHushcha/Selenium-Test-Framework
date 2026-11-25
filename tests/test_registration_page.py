@@ -31,9 +31,9 @@ def test_account_registration_fields_are_mandatory(registration_page, components
 
     # these fields are filled automatically when state is selected, so we need to keep state empty as well
     address_fields = {
+        RegistrationFields.city,
+        RegistrationFields.state,
         RegistrationFields.street_address,
-        RegistrationFields.house_number,
-        RegistrationFields.postal_code,
     }
     if field in address_fields:
         fields_to_exclude.append(RegistrationFields.country)
