@@ -54,6 +54,13 @@ class RegistrationPage(BasePage):
         self.fill_field(loc.DOB_LOCATOR, dob)
         return self
 
+    def get_password_strength(self) -> str:
+        locator = self.locate_element(loc.PASSWORD_STRENGTH_FILL)
+        classes = locator.get_attribute("class")
+        _, _, fill_class = classes.partition(" ")
+        return fill_class
+
+
     def select_country_by_value(self, country_code: str):
         select_element = self.locate_element(loc.COUNTRY_DROPDOWN_LOCATOR)
         select = Select(select_element)

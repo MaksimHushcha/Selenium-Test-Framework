@@ -15,6 +15,7 @@ EMAIL_ADDRESS = (By.CSS_SELECTOR, "[data-test=email]")
 PASSWORD_LOCATOR = (By.CSS_SELECTOR, "[data-test=password]")
 SHOW_PASSWORD = (By.CLASS_NAME, "btn-outline-secondary")
 PASSWORD_STRENGTH_LOCATOR = (By.CLASS_NAME, "strength-bar")
+PASSWORD_STRENGTH_FILL = (By.CLASS_NAME, "fill")
 
 SUBMIT_REGISTRATION_LOCATOR = (By.CSS_SELECTOR, "[data-test=register-submit]")
 

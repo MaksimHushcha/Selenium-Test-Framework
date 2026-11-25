@@ -19,8 +19,8 @@ def test_user_is_unable_to_add_to_favourites_unauthorized(product_page, componen
     expected_toast_text = "Unauthorized, can not add product to your favorite list."
     assert toast_text == expected_toast_text
 
-def test_add_to_favourites_from_product_page(product_page, components, get_available_product_id, authenticated_user, clear_favorites):
 
+def test_add_to_favourites_from_product_page(product_page, components, get_available_product_id, authenticated_user, clear_favorites):
     product_page.load(get_available_product_id)
     product_page.add_to_favourites()
     toast_text = components.get_toast_text()
@@ -32,7 +32,6 @@ def test_add_to_favourites_from_product_page(product_page, components, get_avail
 
 def test_same_item_cannot_be_added_to_favourites_twice(
         product_page, components, authenticated_user, seeded_favorite_product):
-
     product_page.load(seeded_favorite_product)
     product_page.add_to_favourites()
     toast_text_error = components.get_toast_text()
@@ -40,7 +39,6 @@ def test_same_item_cannot_be_added_to_favourites_twice(
 
 
 def test_adding_multiple_items_to_cart_adds_all_of_them(product_page, components, get_available_product_id, checkout):
-
     product_page.load(get_available_product_id)
     random_amount_to_add = random.randint(2, 6)
     for i in range(random_amount_to_add):

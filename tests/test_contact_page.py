@@ -118,6 +118,7 @@ def test_message_is_mandatory_when_sending_contact_message(contact_page):
     received_message = contact_page.get_message_upload_error()
     assert received_message == expected_message
 
+
 def test_files_above_0_kb_are_not_accepted_when_sending_contact_message(contact_page):
     contact_page.load()
     contact_page.upload_file("non_empty_file.txt")
