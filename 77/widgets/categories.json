@@ -1,0 +1,1 @@
+{"total":2,"items":[{"uid":"0e8246bfc26cde4fffc501aef937caea","name":"Product Defects (Assertion Failures)","statistic":{"failed":4,"broken":0,"skipped":0,"passed":0,"unknown":0,"total":4}},{"uid":"7c0c67d2869d45bee280e2ae702defb9","name":"Ignored/Skipped Tests","statistic":{"failed":0,"broken":0,"skipped":2,"passed":0,"unknown":0,"total":2}}]}
